@@ -1,6 +1,15 @@
+"use client";
+
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, TableHTMLAttributes } from "react";
+import type {
+  AnchorHTMLAttributes,
+  HTMLAttributes,
+  InputHTMLAttributes,
+  ReactNode,
+  TableHTMLAttributes,
+} from "react";
 
 function plainText(node: ReactNode): string {
   if (typeof node === "string") return node;
@@ -29,7 +38,57 @@ function calloutStyle(text: string) {
   return "border-violet-400 bg-violet-50 text-violet-900 dark:border-violet-600 dark:bg-violet-950/30 dark:text-violet-100";
 }
 
-export default function MarkdownRenderer({ source }: { source: string }) {
+export type ChecklistTracker = {
+  stageSlug: string;
+  initialDone: number[];
+};
+
+export default function MarkdownRenderer({
+  source,
+  tracker,
+}: {
+  source: string;
+  /** Kalau diisi, checkbox checklist jadi interaktif & tersimpan per-user. */
+  tracker?: ChecklistTracker;
+}) {
+  const [done, setDone] = useState<Set<number>>(() => new Set(tracker?.initialDone ?? []));
+  const [pending, setPending] = useState<Set<number>>(() => new Set());
+
+  async function toggle(index: number, next: boolean) {
+    if (!tracker) return;
+    setDone((prev) => {
+      const s = new Set(prev);
+      next ? s.add(index) : s.delete(index);
+      return s;
+    });
+    setPending((prev) => new Set(prev).add(index));
+    try {
+      const res = await fetch(`/api/progress/${tracker.stageSlug}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ index, done: next }),
+      });
+      if (!res.ok) throw new Error("failed");
+    } catch {
+      // gagal simpan — kembalikan ke state semula
+      setDone((prev) => {
+        const s = new Set(prev);
+        next ? s.delete(index) : s.add(index);
+        return s;
+      });
+    } finally {
+      setPending((prev) => {
+        const s = new Set(prev);
+        s.delete(index);
+        return s;
+      });
+    }
+  }
+
+  // Counter urutan checkbox — direset tiap render, dipakai sebagai index stabil
+  // selama konten markdown-nya sendiri tidak berubah.
+  let checkboxCounter = 0;
+
   return (
     <div
       className="prose prose-slate dark:prose-invert max-w-none
@@ -88,11 +147,32 @@ export default function MarkdownRenderer({ source }: { source: string }) {
             const isTask = className?.includes("task-list-item");
             return (
               <li
-                className={isTask ? "list-none pl-0 [&>input]:mr-2 [&>input]:accent-orange-500" : className}
+                className={isTask ? "list-none pl-0 [&>input]:mr-2 [&>input]:accent-teal-500" : className}
                 {...props}
               >
                 {children}
               </li>
+            );
+          },
+          input: (props: InputHTMLAttributes<HTMLInputElement>) => {
+            if (props.type !== "checkbox") return <input {...props} />;
+
+            const index = checkboxCounter++;
+
+            if (!tracker) {
+              return <input type="checkbox" checked={!!props.checked} disabled className="accent-teal-500" />;
+            }
+
+            const isDone = done.has(index);
+            const isPending = pending.has(index);
+            return (
+              <input
+                type="checkbox"
+                checked={isDone}
+                disabled={isPending}
+                onChange={(e) => toggle(index, e.target.checked)}
+                className="h-4 w-4 cursor-pointer accent-teal-500 disabled:cursor-wait disabled:opacity-60"
+              />
             );
           },
         }}

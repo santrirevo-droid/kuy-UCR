@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { stages, accentStyles } from "@/lib/stages";
 import ThemeToggle from "@/components/ThemeToggle";
+import UserBadge from "@/components/UserBadge";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-orange-50 dark:bg-slate-950">
       {/* Blob dekoratif — nuansa ceria */}
@@ -13,7 +14,8 @@ export default function Home() {
       </div>
 
       <main className="relative mx-auto max-w-3xl px-5 py-10 sm:py-16">
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-2">
+          <UserBadge />
           <ThemeToggle />
         </div>
 

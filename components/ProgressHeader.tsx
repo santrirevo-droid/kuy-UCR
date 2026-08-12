@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { accentStyles, type Stage } from "@/lib/stages";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -10,11 +10,13 @@ export default function ProgressHeader({
   total,
   stages,
   activeSlug,
+  userBadge,
 }: {
   current: number;
   total: number;
   stages: Stage[];
   activeSlug: string;
+  userBadge?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const pct = Math.round((current / total) * 100);
@@ -29,6 +31,7 @@ export default function ProgressHeader({
           ← Kuy, UCR!
         </Link>
         <div className="flex items-center gap-2">
+          <div className="hidden sm:block">{userBadge}</div>
           <button
             onClick={() => setOpen((v) => !v)}
             className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-600 shadow-sm transition hover:shadow dark:bg-slate-800 dark:text-slate-300"

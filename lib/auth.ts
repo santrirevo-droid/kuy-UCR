@@ -8,3 +8,10 @@ export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "jalan2-citrus-ucrla
 // saat membaca/menyimpan konten dari panel admin.
 export const PAT_COOKIE = "kuyucr_pat";
 export const SESSION_MAX_AGE = 60 * 60 * 6; // 6 jam
+
+// Helper untuk Route Handler admin (kelola user, lihat progres) yang tidak
+// perlu memanggil GitHub API — cukup pastikan admin sudah login (cookie ada).
+export function isAdminRequest(req: Request): boolean {
+  const cookieHeader = req.headers.get("cookie") || "";
+  return cookieHeader.split(";").some((c) => c.trim().startsWith(`${PAT_COOKIE}=`));
+}
