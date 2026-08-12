@@ -7,7 +7,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 export default function LoginPage() {
   const router = useRouter();
   const [password, setPassword] = useState("");
-  const [pat, setPat] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +18,7 @@ export default function LoginPage() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, pat }),
+        body: JSON.stringify({ password }),
       });
       if (!res.ok) {
         const d = await res.json();
@@ -45,9 +44,14 @@ export default function LoginPage() {
         </div>
         <div className="mb-2 text-3xl">🔐</div>
         <h1 className="font-heading text-2xl font-extrabold text-slate-900 dark:text-white">Admin — Kuy, UCR!</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Masuk untuk mengedit konten itinerary.</p>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          Masuk untuk melihat progres peserta, kelola user, dan kelola konten.
+        </p>
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-4 rounded-2xl border border-orange-100 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
+        <form
+          onSubmit={onSubmit}
+          className="mt-6 space-y-4 rounded-2xl border border-orange-100 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/70"
+        >
           <div>
             <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password admin</label>
             <input
@@ -59,23 +63,6 @@ export default function LoginPage() {
               autoFocus
             />
           </div>
-          <div>
-            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">GitHub Personal Access Token</label>
-            <input
-              type="password"
-              value={pat}
-              onChange={(e) => setPat(e.target.value)}
-              placeholder="github_pat_... atau ghp_..."
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-900"
-              required
-            />
-            <p className="mt-1.5 text-xs leading-relaxed text-slate-400">
-              Buat token <em>fine-grained</em> di GitHub → Settings → Developer settings, scope hanya ke repo{" "}
-              <code className="rounded bg-orange-100 px-1 dark:bg-slate-800">kuy-UCR</code>, permission{" "}
-              <strong>Contents: Read and write</strong>. Token hanya disimpan di cookie sesi browser ini (httpOnly),
-              tidak pernah tersimpan di server.
-            </p>
-          </div>
           {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
           <button
             disabled={loading}
@@ -84,6 +71,11 @@ export default function LoginPage() {
             {loading ? "Memproses..." : "Masuk"}
           </button>
         </form>
+
+        <p className="mt-4 text-xs text-slate-400">
+          💡 GitHub Personal Access Token baru akan diminta nanti, khusus saat kamu membuka tab <strong>Kelola Konten</strong> —
+          tidak dibutuhkan untuk melihat progres peserta atau kelola user.
+        </p>
       </div>
     </div>
   );

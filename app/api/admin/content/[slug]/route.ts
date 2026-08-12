@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { PAT_COOKIE } from "@/lib/auth";
+import { isAdminRequest, PAT_COOKIE } from "@/lib/auth";
 import { GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH } from "@/lib/content";
 import { getStage } from "@/lib/stages";
 
@@ -12,12 +12,16 @@ function ghHeaders(pat: string) {
   };
 }
 
-export async function GET(_req: Request, { params }: { params: { slug: string } }) {
+export async function GET(req: Request, { params }: { params: { slug: string } }) {
   const stage = getStage(params.slug);
   if (!stage) return NextResponse.json({ error: "Tahap tidak ditemukan" }, { status: 404 });
 
+  if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const pat = cookies().get(PAT_COOKIE)?.value;
-  if (!pat) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!pat) {
+    return NextResponse.json({ error: "GitHub belum terhubung", code: "NEEDS_GITHUB_TOKEN" }, { status: 428 });
+  }
 
   const path = `content/${params.slug}.md`;
   const res = await fetch(
@@ -42,8 +46,12 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
   const stage = getStage(params.slug);
   if (!stage) return NextResponse.json({ error: "Tahap tidak ditemukan" }, { status: 404 });
 
+  if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const pat = cookies().get(PAT_COOKIE)?.value;
-  if (!pat) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!pat) {
+    return NextResponse.json({ error: "GitHub belum terhubung", code: "NEEDS_GITHUB_TOKEN" }, { status: 428 });
+  }
 
   let body: { content?: string; sha?: string | null };
   try {

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { PAT_COOKIE } from "@/lib/auth";
+import { ADMIN_COOKIE } from "@/lib/auth";
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    const session = req.cookies.get(PAT_COOKIE);
+    const session = req.cookies.get(ADMIN_COOKIE);
     if (!session) {
       const loginUrl = req.nextUrl.clone();
       loginUrl.pathname = "/admin/login";
