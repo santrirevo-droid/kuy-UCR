@@ -4,4 +4,13 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  transition: background-color 0.25s ease, color 0.25s ease;
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import ThemeToggle from "@/components/ThemeToggle";
 import { stages } from "@/lib/stages";
 
 export default function EditStagePage() {
@@ -65,7 +66,7 @@ export default function EditStagePage() {
     return (
       <div className="mx-auto max-w-2xl px-5 py-12">
         <p>Tahap tidak ditemukan.</p>
-        <Link href="/admin" className="text-emerald-700 dark:text-emerald-400">
+        <Link href="/admin" className="text-orange-700 dark:text-orange-400">
           ← Kembali
         </Link>
       </div>
@@ -73,13 +74,14 @@ export default function EditStagePage() {
   }
 
   return (
+    <div className="min-h-screen bg-orange-50/40 dark:bg-slate-950">
     <div className="mx-auto max-w-5xl px-5 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <Link href="/admin" className="text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
             ← Semua tahap
           </Link>
-          <h1 className="mt-1 text-xl font-bold text-slate-900 dark:text-white">
+          <h1 className="mt-1 font-heading text-xl font-bold text-slate-900 dark:text-white">
             {stage.icon} Edit: {stage.title}
           </h1>
         </div>
@@ -95,15 +97,16 @@ export default function EditStagePage() {
           <button
             onClick={onSave}
             disabled={saving || loading}
-            className="rounded-lg bg-emerald-600 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+            className="rounded-lg bg-gradient-to-r from-orange-500 via-pink-500 to-violet-500 px-4 py-1.5 text-sm font-bold text-white shadow-sm transition hover:shadow-md disabled:opacity-50"
           >
             {saving ? "Menyimpan..." : "Simpan"}
           </button>
+          <ThemeToggle />
         </div>
       </div>
 
       {message && (
-        <p className={`mt-3 text-sm ${message.type === "ok" ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
+        <p className={`mt-3 text-sm ${message.type === "ok" ? "text-teal-600 dark:text-teal-400" : "text-red-600 dark:text-red-400"}`}>
           {message.type === "ok" ? "✅" : "❌"} {message.text}
         </p>
       )}
@@ -111,16 +114,20 @@ export default function EditStagePage() {
       <div className="mt-4 flex gap-2 text-sm">
         <button
           onClick={() => setTab("edit")}
-          className={`rounded-full px-3 py-1 transition ${
-            tab === "edit" ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800"
+          className={`rounded-full px-3 py-1 font-medium transition ${
+            tab === "edit"
+              ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-sm"
+              : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-300"
           }`}
         >
           Edit Markdown
         </button>
         <button
           onClick={() => setTab("preview")}
-          className={`rounded-full px-3 py-1 transition ${
-            tab === "preview" ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900" : "bg-slate-100 dark:bg-slate-800"
+          className={`rounded-full px-3 py-1 font-medium transition ${
+            tab === "preview"
+              ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-sm"
+              : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-300"
           }`}
         >
           Preview
@@ -135,10 +142,10 @@ export default function EditStagePage() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             spellCheck={false}
-            className="h-[70vh] w-full rounded-xl border border-slate-300 bg-white p-4 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:border-emerald-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            className="h-[70vh] w-full rounded-xl border border-slate-300 bg-white p-4 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:border-orange-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
           />
         ) : (
-          <div className="h-[70vh] overflow-y-auto rounded-xl border border-slate-200 p-6 dark:border-slate-800">
+          <div className="h-[70vh] overflow-y-auto rounded-xl border border-orange-100 bg-white/60 p-6 dark:border-slate-800 dark:bg-slate-900/60">
             <MarkdownRenderer source={content} />
           </div>
         )}
@@ -148,6 +155,7 @@ export default function EditStagePage() {
         Format: Markdown biasa (heading <code>##</code>, tabel, <code>&gt; teks</code> untuk kotak catatan, checklist{" "}
         <code>- [ ]</code>, dst).
       </p>
+    </div>
     </div>
   );
 }

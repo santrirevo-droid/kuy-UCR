@@ -1,14 +1,26 @@
 import Link from "next/link";
-import { stages } from "@/lib/stages";
+import { stages, accentStyles } from "@/lib/stages";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
-      <main className="mx-auto max-w-3xl px-5 py-16 sm:py-24">
-        <p className="text-sm font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
-          PKUMI–LPDP × UC Riverside
+    <div className="relative min-h-screen overflow-hidden bg-orange-50 dark:bg-slate-950">
+      {/* Blob dekoratif — nuansa ceria */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-20 -top-20 h-72 w-72 animate-blob rounded-full bg-orange-300/40 blur-3xl dark:bg-orange-700/20" />
+        <div className="absolute -right-10 top-40 h-72 w-72 animate-blob rounded-full bg-pink-300/40 blur-3xl [animation-delay:3s] dark:bg-pink-700/20" />
+        <div className="absolute bottom-0 left-1/3 h-72 w-72 animate-blob rounded-full bg-teal-300/40 blur-3xl [animation-delay:6s] dark:bg-teal-700/20" />
+      </div>
+
+      <main className="relative mx-auto max-w-3xl px-5 py-10 sm:py-16">
+        <div className="flex justify-end">
+          <ThemeToggle />
+        </div>
+
+        <p className="mt-6 text-sm font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">
+          ☀️ PKUMI–LPDP × UC Riverside
         </p>
-        <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+        <h1 className="mt-3 font-heading text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
           Kuy, UCR! 🇺🇸📚
         </h1>
         <p className="mt-4 max-w-xl text-lg text-slate-600 dark:text-slate-300">
@@ -19,44 +31,48 @@ export default function Home() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href={`/tahap/${stages[0].slug}`}
-            className="rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700"
+            className="rounded-full bg-gradient-to-r from-orange-500 via-pink-500 to-violet-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/30 transition hover:scale-[1.03] hover:shadow-xl active:scale-[0.98]"
           >
             Mulai baca dari Tahap 1 →
           </Link>
           <Link
             href="/admin"
-            className="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500"
+            className="rounded-full border-2 border-slate-200 bg-white/70 px-6 py-3 text-sm font-bold text-slate-700 backdrop-blur transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200 dark:hover:border-slate-600"
           >
             🔐 Admin
           </Link>
         </div>
 
         <div className="mt-16">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+          <h2 className="font-heading text-sm font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
             Alur perjalanan — {stages.length} tahap
           </h2>
-          <ol className="relative mt-6 space-y-2 border-l-2 border-dashed border-emerald-200 pl-8 dark:border-emerald-900">
-            {stages.map((s, i) => (
-              <li key={s.slug} className="relative">
-                <span className="absolute -left-[2.6rem] flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700 ring-4 ring-white dark:bg-emerald-900 dark:text-emerald-300 dark:ring-slate-950">
-                  {i + 1}
-                </span>
-                <Link
-                  href={`/tahap/${s.slug}`}
-                  className="-ml-3 block rounded-xl border border-transparent p-3 transition hover:border-slate-200 hover:bg-white hover:shadow-sm dark:hover:border-slate-800 dark:hover:bg-slate-900"
-                >
-                  <div className="flex items-center gap-2 font-semibold text-slate-800 dark:text-slate-100">
-                    <span>{s.icon}</span>
-                    {s.title}
-                  </div>
-                  <div className="text-sm text-slate-500 dark:text-slate-400">{s.subtitle}</div>
-                </Link>
-              </li>
-            ))}
+          <ol className="relative mt-6 space-y-3 border-l-2 border-dashed border-orange-300 pl-8 dark:border-orange-800">
+            {stages.map((s, i) => {
+              const accent = accentStyles[s.accent];
+              return (
+                <li key={s.slug} className="relative">
+                  <span
+                    className={`absolute -left-[2.6rem] flex h-9 w-9 items-center justify-center rounded-full text-base font-bold ring-4 ring-orange-50 dark:ring-slate-950 ${accent.badge}`}
+                  >
+                    {s.icon}
+                  </span>
+                  <Link
+                    href={`/tahap/${s.slug}`}
+                    className={`-ml-3 block rounded-2xl border-2 border-transparent bg-white/60 p-3.5 shadow-sm backdrop-blur transition hover:shadow-md dark:bg-slate-900/60 ${accent.hover}`}
+                  >
+                    <div className="flex items-center gap-2 font-heading font-bold text-slate-800 dark:text-slate-100">
+                      {i + 1}. {s.title}
+                    </div>
+                    <div className="text-sm text-slate-500 dark:text-slate-400">{s.subtitle}</div>
+                  </Link>
+                </li>
+              );
+            })}
           </ol>
         </div>
 
-        <footer className="mt-20 border-t border-slate-100 pt-6 text-xs text-slate-400 dark:border-slate-900">
+        <footer className="mt-20 border-t border-orange-200/60 pt-6 text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500">
           Catatan pribadi persiapan PKUMI-LPDP ke UC Riverside — bukan dokumen resmi LPDP/UCR/Kemenag. Selalu cek ulang
           info visa, tanggal, dan biaya ke sumber resmi.
         </footer>
