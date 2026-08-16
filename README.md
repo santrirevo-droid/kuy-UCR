@@ -43,15 +43,21 @@ Ada 3 tab:
 - **📋 Kelola Konten** — edit isi tiap tahap (lihat di bawah)
 - **👥 Kelola User** — buat akun untuk peserta baru (nama + username, password digenerate otomatis dan ditampilkan sekali — sampaikan manual ke pesertanya)
 
-**Login admin** (`/admin/login`) beda dari login peserta (`/masuk`):
-
-1. Buka `/admin/login`
-2. Masukkan **password admin** (lihat catatan keamanan di bawah)
-3. Masukkan **GitHub Personal Access Token** milik kamu sendiri — buat token *fine-grained* di GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens, scope **hanya ke repo `kuy-UCR`**, permission **Contents: Read and write**, beri masa berlaku (mis. 90 hari)
+**Login admin** cuma lewat `/masuk` — pakai username `admin` + password admin (lihat catatan keamanan di bawah), langsung diarahkan ke `/admin`. Tidak ada halaman login admin terpisah.
 
 Khusus tab **Kelola Konten**: pilih tahap yang mau diedit, ubah markdown-nya (ada tab Preview), klik **Simpan** — perubahan otomatis ter-commit ke branch `main` repo ini dan langsung tampil di halaman publik.
 
-**Catatan keamanan:** token GitHub yang kamu masukkan **tidak pernah disimpan di server** — hanya hidup di cookie `httpOnly` sesi browser kamu (kedaluwarsa 6 jam), dan hanya dipakai untuk memanggil GitHub API saat kamu membaca/menyimpan konten. Password admin default ada di `lib/auth.ts` — **ganti secepatnya** dengan cara set environment variable `ADMIN_PASSWORD` di Vercel Project Settings (tidak perlu ubah kode). Password akun peserta di-hash (bcrypt) sebelum disimpan ke database.
+### Setup token GitHub untuk Kelola Konten (sekali saja)
+
+Menyimpan konten butuh commit ke GitHub, jadi server perlu satu token dengan akses tulis ke repo ini. Di-set **sekali** oleh pemilik project — setelahnya **tidak ada admin lain yang perlu tempel token apa pun**:
+
+1. Buat token *fine-grained* di GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens, scope **hanya ke repo `kuy-UCR`**, permission **Contents: Read and write**, beri masa berlaku (mis. 90 hari — perlu diperpanjang manual saat kedaluwarsa)
+2. Buka project di [vercel.com](https://vercel.com) → **Settings → Environment Variables** → tambah `GITHUB_TOKEN` = token tadi (Production, + Preview/Development kalau perlu)
+3. **Redeploy** supaya env var-nya terbaca
+
+Kalau `GITHUB_TOKEN` belum di-set, panel Kelola Konten fallback ke cara lama (tiap admin tempel Personal Access Token miliknya sendiri, tersimpan di cookie sesi 6 jam) — supaya tetap jalan sebelum sempat di-setup.
+
+**Catatan keamanan:** Password admin default ada di `lib/auth.ts` — **ganti secepatnya** dengan cara set environment variable `ADMIN_PASSWORD` di Vercel Project Settings (tidak perlu ubah kode). Password akun peserta di-hash (bcrypt) sebelum disimpan ke database.
 
 ## Menjalankan secara lokal
 
