@@ -1,6 +1,6 @@
 // Password admin. Bisa dioverride via env var ADMIN_PASSWORD di Vercel
 // Project Settings → Environment Variables tanpa perlu ubah kode.
-export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "jalan2-citrus-ucrland-1555";
+export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ADMIN";
 
 // Cookie umum "saya admin" — dibuat begitu password admin benar. Dipakai untuk
 // menjaga semua halaman/route di bawah /admin (dashboard progres, kelola

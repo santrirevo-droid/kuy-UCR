@@ -30,7 +30,7 @@ export default function EditStagePage() {
     try {
       const res = await fetch(`/api/admin/content/${slug}`);
       if (res.status === 401) {
-        router.push("/admin/login");
+        router.push("/masuk");
         return;
       }
       if (res.status === 428) {
