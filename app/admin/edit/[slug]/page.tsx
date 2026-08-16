@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import ThemeToggle from "@/components/ThemeToggle";
+import PasswordInput from "@/components/PasswordInput";
 import { stages } from "@/lib/stages";
 
 export default function EditStagePage() {
@@ -157,8 +158,7 @@ export default function EditStagePage() {
               Mengedit konten butuh GitHub Personal Access Token karena perubahan langsung ter-commit ke repo.
             </p>
             <form onSubmit={onConnectGithub} className="mt-4 space-y-3">
-              <input
-                type="password"
+              <PasswordInput
                 value={pat}
                 onChange={(e) => setPat(e.target.value)}
                 placeholder="github_pat_... atau ghp_..."
