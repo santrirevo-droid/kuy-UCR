@@ -15,6 +15,7 @@ export default function AdminUsersPage() {
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState("");
   const [created, setCreated] = useState<{ name: string; username: string; password: string } | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   async function loadUsers() {
     setLoading(true);
@@ -54,6 +55,17 @@ export default function AdminUsersPage() {
       loadUsers();
     } finally {
       setCreating(false);
+    }
+  }
+
+  async function onDelete(username: string) {
+    if (!confirm(`Hapus akun @${username}? Progres checklist-nya ikut terhapus dan tidak bisa dikembalikan.`)) return;
+    setDeleting(username);
+    try {
+      const res = await fetch(`/api/admin/users/${username}`, { method: "DELETE" });
+      if (res.ok) loadUsers();
+    } finally {
+      setDeleting(null);
     }
   }
 
@@ -134,7 +146,16 @@ export default function AdminUsersPage() {
                 className="flex items-center justify-between rounded-xl border border-orange-100 bg-white/70 px-4 py-2.5 text-sm dark:border-slate-800 dark:bg-slate-900/70"
               >
                 <span className="font-medium text-slate-800 dark:text-slate-100">{u.name}</span>
-                <span className="text-slate-400">@{u.username}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-400">@{u.username}</span>
+                  <button
+                    onClick={() => onDelete(u.username)}
+                    disabled={deleting === u.username}
+                    className="text-xs font-semibold text-red-500 transition hover:text-red-700 disabled:opacity-50 dark:text-red-400 dark:hover:text-red-300"
+                  >
+                    {deleting === u.username ? "..." : "Hapus"}
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
