@@ -37,12 +37,6 @@ export default async function Home() {
           >
             Mulai baca dari Tahap 1 →
           </Link>
-          <Link
-            href="/admin"
-            className="rounded-full border-2 border-slate-200 bg-white/70 px-6 py-3 text-sm font-bold text-slate-700 backdrop-blur transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-200 dark:hover:border-slate-600"
-          >
-            🔐 Admin
-          </Link>
         </div>
 
         <div className="mt-16">

@@ -10,7 +10,7 @@ export default function LogoutButton() {
   async function onLogout() {
     setLoading(true);
     await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin/login");
+    router.push("/masuk");
     router.refresh();
   }
 

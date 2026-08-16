@@ -27,7 +27,8 @@ export default function MasukPage() {
         setError(d.error || "Gagal masuk");
         return;
       }
-      router.push("/");
+      const data = await res.json();
+      router.push(data.admin ? "/admin" : "/");
       router.refresh();
     } finally {
       setLoading(false);
