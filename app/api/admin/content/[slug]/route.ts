@@ -12,13 +12,21 @@ function ghHeaders(pat: string) {
   };
 }
 
+// Token bersama untuk seluruh admin — di-set sekali sebagai env var GITHUB_TOKEN
+// di Vercel, supaya tidak ada admin yang perlu tempel Personal Access Token
+// pribadi lagi. Kalau env var ini belum diisi, fallback ke PAT per-sesi lama
+// (cookie) biar tetap jalan sebelum di-setup.
+function resolveToken(): string | null {
+  return process.env.GITHUB_TOKEN || cookies().get(PAT_COOKIE)?.value || null;
+}
+
 export async function GET(req: Request, { params }: { params: { slug: string } }) {
   const stage = getStage(params.slug);
   if (!stage) return NextResponse.json({ error: "Tahap tidak ditemukan" }, { status: 404 });
 
   if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const pat = cookies().get(PAT_COOKIE)?.value;
+  const pat = resolveToken();
   if (!pat) {
     return NextResponse.json({ error: "GitHub belum terhubung", code: "NEEDS_GITHUB_TOKEN" }, { status: 428 });
   }
@@ -48,7 +56,7 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
 
   if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const pat = cookies().get(PAT_COOKIE)?.value;
+  const pat = resolveToken();
   if (!pat) {
     return NextResponse.json({ error: "GitHub belum terhubung", code: "NEEDS_GITHUB_TOKEN" }, { status: 428 });
   }
