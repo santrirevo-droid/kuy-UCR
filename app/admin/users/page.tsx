@@ -16,6 +16,8 @@ export default function AdminUsersPage() {
   const [createError, setCreateError] = useState("");
   const [created, setCreated] = useState<{ name: string; username: string; password: string } | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [resetting, setResetting] = useState<string | null>(null);
+  const [resetResult, setResetResult] = useState<{ name: string; username: string; password: string } | null>(null);
 
   async function loadUsers() {
     setLoading(true);
@@ -66,6 +68,19 @@ export default function AdminUsersPage() {
       if (res.ok) loadUsers();
     } finally {
       setDeleting(null);
+    }
+  }
+
+  async function onResetPassword(u: PublicUser) {
+    if (!confirm(`Reset password @${u.username}? Password lamanya langsung tidak berlaku.`)) return;
+    setResetting(u.username);
+    setResetResult(null);
+    try {
+      const res = await fetch(`/api/admin/users/${u.username}`, { method: "PUT" });
+      const data = await res.json();
+      if (res.ok) setResetResult({ name: u.name, username: u.username, password: data.password });
+    } finally {
+      setResetting(null);
     }
   }
 
@@ -131,6 +146,16 @@ export default function AdminUsersPage() {
           </div>
         )}
 
+        {resetResult && (
+          <div className="mt-4 rounded-2xl border-2 border-teal-300 bg-teal-50 p-4 text-sm text-teal-900 dark:border-teal-700 dark:bg-teal-950/30 dark:text-teal-100">
+            ✅ Password <strong>{resetResult.name}</strong> di-reset. Sampaikan ke pesertanya (hanya tampil sekali):
+            <div className="mt-2 flex flex-wrap gap-3 font-mono text-sm">
+              <span className="rounded bg-white/70 px-2 py-1 dark:bg-slate-900/70">username: {resetResult.username}</span>
+              <span className="rounded bg-white/70 px-2 py-1 dark:bg-slate-900/70">password: {resetResult.password}</span>
+            </div>
+          </div>
+        )}
+
         <h2 className="mt-8 font-heading text-lg font-bold text-slate-800 dark:text-slate-100">
           Daftar peserta {!loading && `(${users.length})`}
         </h2>
@@ -148,6 +173,13 @@ export default function AdminUsersPage() {
                 <span className="font-medium text-slate-800 dark:text-slate-100">{u.name}</span>
                 <div className="flex items-center gap-3">
                   <span className="text-slate-400">@{u.username}</span>
+                  <button
+                    onClick={() => onResetPassword(u)}
+                    disabled={resetting === u.username}
+                    className="text-xs font-semibold text-orange-500 transition hover:text-orange-700 disabled:opacity-50 dark:text-orange-400 dark:hover:text-orange-300"
+                  >
+                    {resetting === u.username ? "..." : "Reset password"}
+                  </button>
                   <button
                     onClick={() => onDelete(u.username)}
                     disabled={deleting === u.username}
