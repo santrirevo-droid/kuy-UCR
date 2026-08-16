@@ -53,6 +53,15 @@ export async function verifyPassword(username: string, password: string): Promis
   return { username: user.username, name: user.name, createdAt: user.createdAt };
 }
 
+export async function updatePassword(usernameRaw: string, newPassword: string): Promise<PublicUser | null> {
+  const user = await findUser(usernameRaw);
+  if (!user) return null;
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  const updated: StoredUser = { ...user, passwordHash };
+  await getRedis().set(userKey(user.username), updated);
+  return { username: updated.username, name: updated.name, createdAt: updated.createdAt };
+}
+
 export async function deleteUser(usernameRaw: string): Promise<void> {
   const username = normalizeUsername(usernameRaw);
   if (!username) return;

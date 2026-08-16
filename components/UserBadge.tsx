@@ -20,6 +20,13 @@ export default async function UserBadge() {
     <div className="flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50/80 px-3.5 py-1.5 text-sm backdrop-blur dark:border-teal-800 dark:bg-teal-950/40">
       <span className="font-semibold text-teal-700 dark:text-teal-300">👋 {user.name}</span>
       <span className="text-teal-300 dark:text-teal-700">·</span>
+      <Link
+        href="/akun"
+        className="text-slate-400 underline-offset-2 transition hover:text-slate-700 hover:underline dark:hover:text-slate-200"
+      >
+        Akun
+      </Link>
+      <span className="text-teal-300 dark:text-teal-700">·</span>
       <LogoutUserButton />
     </div>
   );
