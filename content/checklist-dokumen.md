@@ -42,6 +42,30 @@ Cetak halaman ini atau centang langsung di sini. Simpan **scan digital** semua d
 - [ ] SIM card/roaming AS direncanakan
 - [ ] Packing list (tahap **Persiapan Sebelum Berangkat**) selesai dicentang
 
+## Dokumen administrasi & pendaftaran (tracker panitia)
+
+Kategori dokumen yang dikumpulkan panitia lewat Google Drive bersama, per peserta (S2/S3). Status ✅ = sudah ada peserta yang lengkap kumpulkan; sisanya masih dikejar panitia — cek ke **Bidang Kerja Sama Internasional** kalau statusmu sendiri belum yakin.
+
+- [x] CV
+- [x] Draft Proposal
+- [x] Paspor
+- [x] Sertifikat Bahasa
+- [x] UCR Bio Form
+- [ ] Bukti Pembayaran SEVIS
+- [ ] DS-160
+- [ ] Electronic Copy DS-2019
+- [ ] Foto
+- [ ] Janji Temu Reguler (jadwal wawancara visa)
+- [ ] LOA (Letter of Acceptance)
+- [ ] Log (catatan/log korespondensi)
+- [ ] References and Readings
+- [ ] Reimbursement
+- [ ] Rekomendasi
+- [ ] UCR General Activity Waiver
+- [ ] Verification DS-2019
+
+> 💡 Checklist ini beda dari checklist "barang bawaan" di atas — ini soal **berkas administrasi pendaftaran** yang dikumpulkan panitia sebelum keberangkatan. Upload dokumenmu ke folder Drive sesuai kategori & nama kamu.
+
 ## Info rombongan PKUMI-LPDP
 
 ⬜ **TODO — lengkapi tabel ini bersama koordinator rombongan:**
