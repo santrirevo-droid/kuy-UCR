@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Children, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type {
@@ -143,14 +143,52 @@ export default function MarkdownRenderer({
             />
           ),
           hr: () => <hr className="my-10 border-orange-200 dark:border-slate-800" />,
-          li: ({ children, className, ...props }: HTMLAttributes<HTMLLIElement>) => {
-            const isTask = className?.includes("task-list-item");
+          // Checklist ("- [ ] ...") dirender sebagai kartu terpisah dengan baris
+          // bergaris pemisah — bukan bullet list biasa — supaya tiap section
+          // checklist kelihatan rapi & jadi satu unit visual.
+          ul: ({ children, className, ...props }: HTMLAttributes<HTMLUListElement>) => {
+            if (!className?.includes("contains-task-list")) {
+              return (
+                <ul className={className} {...props}>
+                  {children}
+                </ul>
+              );
+            }
             return (
-              <li
-                className={isTask ? "list-none pl-0 [&>input]:mr-2 [&>input]:accent-teal-500" : className}
+              <ul
+                className="not-prose my-5 divide-y divide-orange-100 overflow-hidden rounded-2xl border border-orange-100 bg-white/70 shadow-sm backdrop-blur dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900/70"
                 {...props}
               >
                 {children}
+              </ul>
+            );
+          },
+          li: ({ children, className, ...props }: HTMLAttributes<HTMLLIElement>) => {
+            const isTask = className?.includes("task-list-item");
+            if (!isTask) {
+              return (
+                <li className={className} {...props}>
+                  {children}
+                </li>
+              );
+            }
+
+            // Anak pertama dari <li> checklist selalu checkbox-nya (dari
+            // remark-gfm) — dipisah supaya bisa ditaruh di kanan lewat flex,
+            // sementara urutan DOM tetap checkbox-lalu-teks (aksesibel, dan
+            // bikin selector peer-checked di bawah bisa jalan).
+            const items = Children.toArray(children);
+            const [checkbox, ...rest] = items;
+
+            return (
+              <li
+                className="group flex flex-row-reverse items-center gap-3 px-4 py-3 transition hover:bg-orange-50/60 has-[:checked]:bg-teal-50/50 dark:hover:bg-slate-800/40 dark:has-[:checked]:bg-teal-950/20"
+                {...props}
+              >
+                {checkbox}
+                <span className="flex-1 text-sm leading-relaxed text-slate-700 peer-checked:text-slate-400 peer-checked:line-through dark:text-slate-200 dark:peer-checked:text-slate-500">
+                  {rest}
+                </span>
               </li>
             );
           },
@@ -158,9 +196,11 @@ export default function MarkdownRenderer({
             if (props.type !== "checkbox") return <input {...props} />;
 
             const index = checkboxCounter++;
+            const boxClass =
+              "peer h-6 w-6 shrink-0 cursor-pointer rounded-md border-2 border-slate-300 accent-teal-500 disabled:cursor-wait disabled:opacity-60 dark:border-slate-600";
 
             if (!tracker) {
-              return <input type="checkbox" checked={!!props.checked} disabled className="accent-teal-500" />;
+              return <input type="checkbox" checked={!!props.checked} disabled className={boxClass} />;
             }
 
             const isDone = done.has(index);
@@ -171,7 +211,7 @@ export default function MarkdownRenderer({
                 checked={isDone}
                 disabled={isPending}
                 onChange={(e) => toggle(index, e.target.checked)}
-                className="h-4 w-4 cursor-pointer accent-teal-500 disabled:cursor-wait disabled:opacity-60"
+                className={boxClass}
               />
             );
           },
