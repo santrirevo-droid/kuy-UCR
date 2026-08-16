@@ -49,7 +49,7 @@ export default async function Home() {
               return (
                 <li key={s.slug} className="relative">
                   <span
-                    className={`absolute -left-[2.6rem] flex h-9 w-9 items-center justify-center rounded-full text-base font-bold ring-4 ring-orange-50 dark:ring-slate-950 ${accent.badge}`}
+                    className={`absolute -left-[2.6rem] top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-base font-bold ring-4 ring-orange-50 dark:ring-slate-950 ${accent.badge}`}
                   >
                     {s.icon}
                   </span>
