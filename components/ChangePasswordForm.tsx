@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function ChangePasswordForm() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -48,8 +49,7 @@ export default function ChangePasswordForm() {
     >
       <div>
         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password saat ini</label>
-        <input
-          type="password"
+        <PasswordInput
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900"
@@ -59,8 +59,7 @@ export default function ChangePasswordForm() {
       </div>
       <div>
         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password baru</label>
-        <input
-          type="password"
+        <PasswordInput
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900"
@@ -70,8 +69,7 @@ export default function ChangePasswordForm() {
       </div>
       <div>
         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Konfirmasi password baru</label>
-        <input
-          type="password"
+        <PasswordInput
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900"
