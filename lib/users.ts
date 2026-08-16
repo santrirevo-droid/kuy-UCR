@@ -53,6 +53,14 @@ export async function verifyPassword(username: string, password: string): Promis
   return { username: user.username, name: user.name, createdAt: user.createdAt };
 }
 
+export async function deleteUser(usernameRaw: string): Promise<void> {
+  const username = normalizeUsername(usernameRaw);
+  if (!username) return;
+  const redis = getRedis();
+  await redis.del(userKey(username));
+  await redis.srem(USERS_SET, username);
+}
+
 export async function getAllUsers(): Promise<PublicUser[]> {
   const redis = getRedis();
   const usernames = (await redis.smembers(USERS_SET)) as string[] | null;
