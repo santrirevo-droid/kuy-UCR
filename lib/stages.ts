@@ -1,4 +1,4 @@
-export type AccentKey = "violet" | "sky" | "orange" | "teal" | "pink" | "amber" | "indigo" | "red" | "emerald";
+export type AccentKey = "violet" | "sky" | "orange" | "teal" | "pink" | "amber" | "indigo" | "red" | "emerald" | "cyan";
 
 export type Stage = {
   slug: string;
@@ -17,6 +17,13 @@ export const stages: Stage[] = [
     subtitle: "Gambaran umum program & progress tracker",
     icon: "🎯",
     accent: "violet",
+  },
+  {
+    slug: "struktur-kepengurusan",
+    title: "Struktur Kepengurusan & Job Description",
+    subtitle: "Bagan organisasi, personalia, dan tugas pokok tiap bidang",
+    icon: "🧑‍🤝‍🧑",
+    accent: "cyan",
   },
   {
     slug: "pra-keberangkatan",
@@ -153,5 +160,12 @@ export const accentStyles: Record<
     activeText: "text-emerald-700 dark:text-emerald-300",
     activeBg: "bg-emerald-50 dark:bg-emerald-950/40",
     ring: "ring-emerald-200 dark:ring-emerald-900",
+  },
+  cyan: {
+    badge: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/60 dark:text-cyan-300",
+    hover: "hover:border-cyan-300 hover:bg-cyan-50/70 dark:hover:border-cyan-700 dark:hover:bg-cyan-950/30",
+    activeText: "text-cyan-700 dark:text-cyan-300",
+    activeBg: "bg-cyan-50 dark:bg-cyan-950/40",
+    ring: "ring-cyan-200 dark:ring-cyan-900",
   },
 };
