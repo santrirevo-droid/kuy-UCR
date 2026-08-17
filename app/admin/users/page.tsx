@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import AdminNav from "@/components/AdminNav";
 
-type PublicUser = { username: string; name: string; createdAt: number };
+type PublicUser = { username: string; name: string; createdAt: number; mustChangePassword?: boolean };
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<PublicUser[]>([]);
@@ -170,7 +170,17 @@ export default function AdminUsersPage() {
                 key={u.username}
                 className="flex items-center justify-between rounded-xl border border-orange-100 bg-white/70 px-4 py-2.5 text-sm dark:border-slate-800 dark:bg-slate-900/70"
               >
-                <span className="font-medium text-slate-800 dark:text-slate-100">{u.name}</span>
+                <span className="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
+                  {u.name}
+                  {u.mustChangePassword && (
+                    <span
+                      title="Belum ganti password default"
+                      className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+                    >
+                      ⏳ belum ganti password
+                    </span>
+                  )}
+                </span>
                 <div className="flex items-center gap-3">
                   <span className="text-slate-400">@{u.username}</span>
                   <button

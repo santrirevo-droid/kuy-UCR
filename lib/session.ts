@@ -31,7 +31,7 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
     if (!username) return null;
     const user = await findUser(username);
     if (!user) return null;
-    return { username: user.username, name: user.name, createdAt: user.createdAt };
+    return { username: user.username, name: user.name, createdAt: user.createdAt, mustChangePassword: user.mustChangePassword };
   } catch {
     // KV belum terhubung (mis. dev lokal tanpa env var) — anggap tidak login
     return null;

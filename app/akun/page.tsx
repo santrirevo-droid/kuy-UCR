@@ -24,11 +24,20 @@ export default async function AkunPage() {
           Masuk sebagai <strong>{user.name}</strong> (@{user.username}). Ganti password akunmu di bawah ini.
         </p>
 
-        <ChangePasswordForm />
+        {user.mustChangePassword && (
+          <div className="mt-4 rounded-xl border-2 border-dashed border-amber-400 bg-amber-50 p-3.5 text-sm text-amber-800 dark:border-amber-600 dark:bg-amber-950/30 dark:text-amber-200">
+            ⚠️ Password kamu masih password default dari admin. Ganti dulu ke password barumu sendiri sebelum lanjut
+            pakai situs ini.
+          </div>
+        )}
 
-        <Link href="/" className="mt-6 text-center text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-          ← Kembali ke beranda
-        </Link>
+        <ChangePasswordForm forced={user.mustChangePassword} />
+
+        {!user.mustChangePassword && (
+          <Link href="/" className="mt-6 text-center text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            ← Kembali ke beranda
+          </Link>
+        )}
       </div>
     </div>
   );

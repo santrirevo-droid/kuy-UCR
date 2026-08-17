@@ -16,6 +16,17 @@ export default async function UserBadge() {
     );
   }
 
+  if (user.mustChangePassword) {
+    return (
+      <Link
+        href="/akun"
+        className="flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50/90 px-3.5 py-1.5 text-sm font-semibold text-amber-700 backdrop-blur transition hover:bg-amber-100 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+      >
+        ⚠️ Ganti password dulu →
+      </Link>
+    );
+  }
+
   return (
     <div className="flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50/80 px-3.5 py-1.5 text-sm backdrop-blur dark:border-teal-800 dark:bg-teal-950/40">
       <span className="font-semibold text-teal-700 dark:text-teal-300">👋 {user.name}</span>
