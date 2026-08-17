@@ -6,18 +6,26 @@ export type StoredUser = {
   name: string;
   passwordHash: string;
   createdAt: number;
+  // true kalau password-nya di-set/reset oleh admin (bukan dipilih sendiri
+  // oleh pesertanya) — dipakai buat maksa ganti password saat login berikutnya.
+  mustChangePassword?: boolean;
 };
 
 export type PublicUser = {
   username: string;
   name: string;
   createdAt: number;
+  mustChangePassword?: boolean;
 };
 
 const USERS_SET = "users:all";
 
 function userKey(username: string) {
   return `user:${username}`;
+}
+
+function toPublicUser(u: StoredUser): PublicUser {
+  return { username: u.username, name: u.name, createdAt: u.createdAt, mustChangePassword: u.mustChangePassword };
 }
 
 export function normalizeUsername(raw: string): string {
@@ -39,10 +47,18 @@ export async function createUser(name: string, usernameRaw: string, password: st
   if (existing) throw new Error("Username sudah dipakai");
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user: StoredUser = { username, name: name.trim() || username, passwordHash, createdAt: Date.now() };
+  // Password akun baru selalu di-set admin (bukan dipilih sendiri oleh
+  // pesertanya) — wajib diganti begitu pertama kali login.
+  const user: StoredUser = {
+    username,
+    name: name.trim() || username,
+    passwordHash,
+    createdAt: Date.now(),
+    mustChangePassword: true,
+  };
   await redis.set(userKey(username), user);
   await redis.sadd(USERS_SET, username);
-  return { username: user.username, name: user.name, createdAt: user.createdAt };
+  return toPublicUser(user);
 }
 
 export async function verifyPassword(username: string, password: string): Promise<PublicUser | null> {
@@ -50,16 +66,20 @@ export async function verifyPassword(username: string, password: string): Promis
   if (!user) return null;
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) return null;
-  return { username: user.username, name: user.name, createdAt: user.createdAt };
+  return toPublicUser(user);
 }
 
-export async function updatePassword(usernameRaw: string, newPassword: string): Promise<PublicUser | null> {
+export async function updatePassword(
+  usernameRaw: string,
+  newPassword: string,
+  mustChangePassword = false
+): Promise<PublicUser | null> {
   const user = await findUser(usernameRaw);
   if (!user) return null;
   const passwordHash = await bcrypt.hash(newPassword, 10);
-  const updated: StoredUser = { ...user, passwordHash };
+  const updated: StoredUser = { ...user, passwordHash, mustChangePassword };
   await getRedis().set(userKey(user.username), updated);
-  return { username: updated.username, name: updated.name, createdAt: updated.createdAt };
+  return toPublicUser(updated);
 }
 
 export async function deleteUser(usernameRaw: string): Promise<void> {
@@ -77,7 +97,7 @@ export async function getAllUsers(): Promise<PublicUser[]> {
   const users = await Promise.all(usernames.map((u) => redis.get<StoredUser>(userKey(u))));
   return users
     .filter((u): u is StoredUser => Boolean(u))
-    .map((u) => ({ username: u.username, name: u.name, createdAt: u.createdAt }))
+    .map(toPublicUser)
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 

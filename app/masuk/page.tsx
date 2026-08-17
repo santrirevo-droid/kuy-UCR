@@ -29,7 +29,13 @@ export default function MasukPage() {
         return;
       }
       const data = await res.json();
-      router.push(data.admin ? "/admin" : "/");
+      if (data.admin) {
+        router.push("/admin");
+      } else if (data.user?.mustChangePassword) {
+        router.push("/akun");
+      } else {
+        router.push("/");
+      }
       router.refresh();
     } finally {
       setLoading(false);

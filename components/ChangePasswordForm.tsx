@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/PasswordInput";
 
-export default function ChangePasswordForm() {
+export default function ChangePasswordForm({ forced = false }: { forced?: boolean }) {
+  const router = useRouter();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -37,6 +39,12 @@ export default function ChangePasswordForm() {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      if (forced) {
+        setTimeout(() => {
+          router.push("/");
+          router.refresh();
+        }, 1200);
+      }
     } finally {
       setLoading(false);
     }
@@ -78,7 +86,11 @@ export default function ChangePasswordForm() {
         />
       </div>
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-      {success && <p className="text-sm text-teal-600 dark:text-teal-400">✅ Password berhasil diubah.</p>}
+      {success && (
+        <p className="text-sm text-teal-600 dark:text-teal-400">
+          ✅ Password berhasil diubah.{forced && " Mengarahkan ke beranda..."}
+        </p>
+      )}
       <button
         disabled={loading}
         className="w-full rounded-lg bg-gradient-to-r from-teal-500 to-sky-500 px-4 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg disabled:opacity-50"

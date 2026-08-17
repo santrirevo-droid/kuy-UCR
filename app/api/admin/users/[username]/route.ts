@@ -4,16 +4,26 @@ import { deleteUser, normalizeUsername, updatePassword, generateTempPassword } f
 import { getRedis } from "@/lib/kv";
 import { stages } from "@/lib/stages";
 
-// Reset password seorang user — dipakai admin kalau ada peserta lupa password-nya.
+// Reset password seorang user — dipakai admin kalau ada peserta lupa password-nya
+// (atau untuk reset massal ke password default). Body opsional { password }
+// buat set password tertentu; kalau kosong, digenerate acak seperti biasa.
+// Password hasil reset admin selalu wajib diganti peserta saat login berikutnya.
 export async function PUT(req: Request, { params }: { params: { username: string } }) {
   if (!isAdminRequest(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const username = normalizeUsername(params.username);
   if (!username) return NextResponse.json({ error: "Username tidak valid" }, { status: 400 });
 
-  const newPassword = generateTempPassword();
+  let body: { password?: string } = {};
   try {
-    const user = await updatePassword(username, newPassword);
+    body = await req.json();
+  } catch {
+    // body kosong itu valid — generate password acak seperti biasa
+  }
+
+  const newPassword = body.password?.trim() || generateTempPassword();
+  try {
+    const user = await updatePassword(username, newPassword, true);
     if (!user) return NextResponse.json({ error: "User tidak ditemukan" }, { status: 404 });
     return NextResponse.json({ ok: true, user, password: newPassword });
   } catch (err) {
