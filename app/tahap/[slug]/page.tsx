@@ -4,7 +4,9 @@ import { stages, getStageIndex, accentStyles } from "@/lib/stages";
 import { getStageMarkdown } from "@/lib/content";
 import { getCurrentUser } from "@/lib/session";
 import { getStageProgress, countChecklistItems } from "@/lib/progress";
+import { getPersonalData } from "@/lib/personal";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import PersonalSpace from "@/components/PersonalSpace";
 import StageNav from "@/components/StageNav";
 import ProgressHeader from "@/components/ProgressHeader";
 import UserBadge from "@/components/UserBadge";
@@ -25,6 +27,7 @@ export default async function StagePage({ params }: { params: { slug: string } }
   const totalItems = countChecklistItems(content);
   const user = await getCurrentUser();
   const doneItems = user ? await getStageProgress(user.username, stage.slug).catch(() => []) : [];
+  const personalData = user ? await getPersonalData(user.username, stage.slug) : null;
 
   return (
     <div className="min-h-screen bg-orange-50/40 dark:bg-slate-950">
@@ -66,6 +69,18 @@ export default async function StagePage({ params }: { params: { slug: string } }
           source={content}
           tracker={user ? { stageSlug: stage.slug, initialDone: doneItems } : undefined}
         />
+
+        {personalData ? (
+          <PersonalSpace stageSlug={stage.slug} initialData={personalData} />
+        ) : (
+          <Link
+            href="/masuk"
+            className="not-prose my-8 flex items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-slate-200 bg-white/60 p-5 text-sm font-semibold text-slate-500 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400 dark:hover:border-indigo-700 dark:hover:text-indigo-300"
+          >
+            🔒 Masuk untuk punya checklist &amp; catatan pribadimu sendiri di tahap ini →
+          </Link>
+        )}
+
         <StageNav prev={prev} next={next} />
       </main>
     </div>
