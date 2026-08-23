@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Baloo_2, Plus_Jakarta_Sans } from "next/font/google";
+import PwaRegister from "@/components/PwaRegister";
 import "./globals.css";
 
 const heading = Baloo_2({
@@ -20,6 +21,26 @@ export const metadata: Metadata = {
   title: "Kuy, UCR! 🇺🇸📚",
   description:
     "Panduan operasional short course PKUMI-LPDP di UC Riverside, California — dari persiapan keberangkatan sampai pulang lagi.",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icons/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icons/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Kuy, UCR!",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#fb923c",
 };
 
 // Set class 'dark' sebelum React hydrate supaya tidak ada flash tema salah
@@ -44,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-orange-50 font-sans text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100">
         {children}
+        <PwaRegister />
       </body>
     </html>
   );
