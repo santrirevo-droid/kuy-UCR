@@ -1,11 +1,12 @@
-export type AccentKey = "violet" | "sky" | "orange" | "teal" | "pink" | "amber" | "indigo" | "red" | "emerald" | "cyan";
+import type { IconName } from "@/components/Icon";
 
 export type Stage = {
   slug: string;
   title: string;
+  /** Judul ringkas untuk nav & header tabel yang sempit. */
+  shortTitle: string;
   subtitle: string;
-  icon: string;
-  accent: AccentKey;
+  icon: IconName;
 };
 
 // Urutan "tahapan" perjalanan — dari persiapan sampai pulang.
@@ -14,72 +15,72 @@ export const stages: Stage[] = [
   {
     slug: "ringkasan",
     title: "Ringkasan Program",
+    shortTitle: "Ringkasan",
     subtitle: "Gambaran umum program & progress tracker",
-    icon: "🎯",
-    accent: "violet",
+    icon: "compass",
   },
   {
     slug: "struktur-kepengurusan",
     title: "Struktur Kepengurusan & Job Description",
+    shortTitle: "Kepengurusan",
     subtitle: "Bagan organisasi, personalia, dan tugas pokok tiap bidang",
-    icon: "🧑‍🤝‍🧑",
-    accent: "cyan",
+    icon: "users",
   },
   {
     slug: "pra-keberangkatan",
     title: "Persiapan Sebelum Berangkat",
+    shortTitle: "Pra-keberangkatan",
     subtitle: "Visa, tiket, asuransi, vaksin, packing list",
-    icon: "🧳",
-    accent: "sky",
+    icon: "suitcase",
   },
   {
     slug: "hari-keberangkatan",
     title: "Hari Keberangkatan & Perjalanan",
+    shortTitle: "Keberangkatan",
     subtitle: "Jakarta → transit → tiba di California",
-    icon: "✈️",
-    accent: "orange",
+    icon: "plane",
   },
   {
     slug: "akomodasi-riverside",
     title: "Akomodasi & Kehidupan di Riverside",
+    shortTitle: "Akomodasi",
     subtitle: "Tempat tinggal, transportasi, makanan halal",
-    icon: "🏠",
-    accent: "teal",
+    icon: "building",
   },
   {
     slug: "itinerary-mingguan",
     title: "Itinerary Mingguan",
+    shortTitle: "Itinerary",
     subtitle: "13 minggu — akademik + eksplorasi akhir pekan",
-    icon: "🗺️",
-    accent: "pink",
+    icon: "calendar",
   },
   {
     slug: "budget-keuangan",
     title: "Budget & Keuangan",
+    shortTitle: "Budget",
     subtitle: "Estimasi biaya hidup, wisata, dan dana LPDP",
-    icon: "💰",
-    accent: "amber",
+    icon: "wallet",
   },
   {
     slug: "kepulangan",
     title: "Kepulangan & Pelaporan",
+    shortTitle: "Kepulangan",
     subtitle: "Checkout, packing, laporan akhir LPDP",
-    icon: "🏁",
-    accent: "indigo",
+    icon: "flag",
   },
   {
     slug: "kontak-darurat",
     title: "Kontak Darurat",
+    shortTitle: "Kontak Darurat",
     subtitle: "KJRI, kampus, asuransi, keluarga",
-    icon: "🆘",
-    accent: "red",
+    icon: "lifebuoy",
   },
   {
     slug: "checklist-dokumen",
     title: "Checklist Dokumen",
+    shortTitle: "Dokumen",
     subtitle: "Semua dokumen yang wajib dibawa & disiapkan",
-    icon: "📋",
-    accent: "emerald",
+    icon: "clipboard-check",
   },
 ];
 
@@ -91,81 +92,7 @@ export function getStageIndex(slug: string): number {
   return stages.findIndex((s) => s.slug === slug);
 }
 
-// Kelas Tailwind lengkap per warna aksen — ditulis literal (bukan digabung dari
-// string) supaya kescan oleh Tailwind JIT. Dipakai untuk badge ikon, hover
-// kartu, dan highlight nav aktif di seluruh halaman.
-export const accentStyles: Record<
-  AccentKey,
-  { badge: string; hover: string; activeText: string; activeBg: string; ring: string }
-> = {
-  violet: {
-    badge: "bg-violet-100 text-violet-700 dark:bg-violet-900/60 dark:text-violet-300",
-    hover: "hover:border-violet-300 hover:bg-violet-50/70 dark:hover:border-violet-700 dark:hover:bg-violet-950/30",
-    activeText: "text-violet-700 dark:text-violet-300",
-    activeBg: "bg-violet-50 dark:bg-violet-950/40",
-    ring: "ring-violet-200 dark:ring-violet-900",
-  },
-  sky: {
-    badge: "bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300",
-    hover: "hover:border-sky-300 hover:bg-sky-50/70 dark:hover:border-sky-700 dark:hover:bg-sky-950/30",
-    activeText: "text-sky-700 dark:text-sky-300",
-    activeBg: "bg-sky-50 dark:bg-sky-950/40",
-    ring: "ring-sky-200 dark:ring-sky-900",
-  },
-  orange: {
-    badge: "bg-orange-100 text-orange-700 dark:bg-orange-900/60 dark:text-orange-300",
-    hover: "hover:border-orange-300 hover:bg-orange-50/70 dark:hover:border-orange-700 dark:hover:bg-orange-950/30",
-    activeText: "text-orange-700 dark:text-orange-300",
-    activeBg: "bg-orange-50 dark:bg-orange-950/40",
-    ring: "ring-orange-200 dark:ring-orange-900",
-  },
-  teal: {
-    badge: "bg-teal-100 text-teal-700 dark:bg-teal-900/60 dark:text-teal-300",
-    hover: "hover:border-teal-300 hover:bg-teal-50/70 dark:hover:border-teal-700 dark:hover:bg-teal-950/30",
-    activeText: "text-teal-700 dark:text-teal-300",
-    activeBg: "bg-teal-50 dark:bg-teal-950/40",
-    ring: "ring-teal-200 dark:ring-teal-900",
-  },
-  pink: {
-    badge: "bg-pink-100 text-pink-700 dark:bg-pink-900/60 dark:text-pink-300",
-    hover: "hover:border-pink-300 hover:bg-pink-50/70 dark:hover:border-pink-700 dark:hover:bg-pink-950/30",
-    activeText: "text-pink-700 dark:text-pink-300",
-    activeBg: "bg-pink-50 dark:bg-pink-950/40",
-    ring: "ring-pink-200 dark:ring-pink-900",
-  },
-  amber: {
-    badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300",
-    hover: "hover:border-amber-300 hover:bg-amber-50/70 dark:hover:border-amber-700 dark:hover:bg-amber-950/30",
-    activeText: "text-amber-700 dark:text-amber-300",
-    activeBg: "bg-amber-50 dark:bg-amber-950/40",
-    ring: "ring-amber-200 dark:ring-amber-900",
-  },
-  indigo: {
-    badge: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300",
-    hover: "hover:border-indigo-300 hover:bg-indigo-50/70 dark:hover:border-indigo-700 dark:hover:bg-indigo-950/30",
-    activeText: "text-indigo-700 dark:text-indigo-300",
-    activeBg: "bg-indigo-50 dark:bg-indigo-950/40",
-    ring: "ring-indigo-200 dark:ring-indigo-900",
-  },
-  red: {
-    badge: "bg-red-100 text-red-700 dark:bg-red-900/60 dark:text-red-300",
-    hover: "hover:border-red-300 hover:bg-red-50/70 dark:hover:border-red-700 dark:hover:bg-red-950/30",
-    activeText: "text-red-700 dark:text-red-300",
-    activeBg: "bg-red-50 dark:bg-red-950/40",
-    ring: "ring-red-200 dark:ring-red-900",
-  },
-  emerald: {
-    badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300",
-    hover: "hover:border-emerald-300 hover:bg-emerald-50/70 dark:hover:border-emerald-700 dark:hover:bg-emerald-950/30",
-    activeText: "text-emerald-700 dark:text-emerald-300",
-    activeBg: "bg-emerald-50 dark:bg-emerald-950/40",
-    ring: "ring-emerald-200 dark:ring-emerald-900",
-  },
-  cyan: {
-    badge: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/60 dark:text-cyan-300",
-    hover: "hover:border-cyan-300 hover:bg-cyan-50/70 dark:hover:border-cyan-700 dark:hover:bg-cyan-950/30",
-    activeText: "text-cyan-700 dark:text-cyan-300",
-    activeBg: "bg-cyan-50 dark:bg-cyan-950/40",
-    ring: "ring-cyan-200 dark:ring-cyan-900",
-  },
-};
+/** Nomor tahap dua digit ("01", "02", …) — dipakai sebagai penanda visual. */
+export function stageNumber(index: number): string {
+  return String(index + 1).padStart(2, "0");
+}

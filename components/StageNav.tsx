@@ -1,41 +1,53 @@
 import Link from "next/link";
-import { accentStyles, type Stage } from "@/lib/stages";
+import { getStageIndex, stageNumber, type Stage } from "@/lib/stages";
+import Icon from "@/components/Icon";
 
 export default function StageNav({ prev, next }: { prev: Stage | null; next: Stage | null }) {
   return (
-    <div className="mt-14 flex flex-col gap-3 border-t border-orange-100 pt-8 dark:border-slate-800 sm:flex-row sm:justify-between">
+    <nav className="mt-16 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">
       {prev ? (
         <Link
           href={`/tahap/${prev.slug}`}
-          className={`flex-1 rounded-2xl border-2 border-transparent bg-white/70 p-4 shadow-sm backdrop-blur transition hover:shadow-md dark:bg-slate-900/70 ${accentStyles[prev.accent].hover}`}
+          className="group flex flex-col gap-1 bg-surface px-5 py-4 transition hover:bg-surface-2"
         >
-          <div className="text-xs font-semibold text-slate-400">← Sebelumnya</div>
-          <div className="mt-1 font-heading font-bold text-slate-800 dark:text-slate-100">
-            {prev.icon} {prev.title}
-          </div>
+          <span className="inline-flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+            <Icon name="arrow-left" className="h-3 w-3 transition-transform group-hover:-translate-x-0.5" />
+            Sebelumnya
+          </span>
+          <span className="font-display text-[0.95rem] font-semibold text-ink group-hover:text-brand">
+            <span className="tnum mr-2 text-ink-subtle">{stageNumber(getStageIndex(prev.slug))}</span>
+            {prev.title}
+          </span>
         </Link>
       ) : (
-        <div className="flex-1" />
+        <div className="hidden bg-surface sm:block" />
       )}
+
       {next ? (
         <Link
           href={`/tahap/${next.slug}`}
-          className={`flex-1 rounded-2xl border-2 border-transparent bg-white/70 p-4 text-right shadow-sm backdrop-blur transition hover:shadow-md dark:bg-slate-900/70 ${accentStyles[next.accent].hover}`}
+          className="group flex flex-col items-end gap-1 bg-surface px-5 py-4 text-right transition hover:bg-surface-2"
         >
-          <div className="text-xs font-semibold text-slate-400">Selanjutnya →</div>
-          <div className="mt-1 font-heading font-bold text-slate-800 dark:text-slate-100">
-            {next.icon} {next.title}
-          </div>
+          <span className="inline-flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+            Selanjutnya
+            <Icon name="arrow-right" className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+          </span>
+          <span className="font-display text-[0.95rem] font-semibold text-ink group-hover:text-brand">
+            <span className="tnum mr-2 text-ink-subtle">{stageNumber(getStageIndex(next.slug))}</span>
+            {next.title}
+          </span>
         </Link>
       ) : (
-        <Link
-          href="/"
-          className="flex-1 rounded-2xl border-2 border-dashed border-orange-300 bg-gradient-to-r from-orange-50 to-pink-50 p-4 text-right dark:border-orange-800 dark:from-orange-950/20 dark:to-pink-950/20"
-        >
-          <div className="text-xs font-semibold text-orange-600 dark:text-orange-400">🎉 Selesai</div>
-          <div className="mt-1 font-heading font-bold text-slate-800 dark:text-slate-100">Kembali ke ringkasan</div>
+        <Link href="/" className="group flex flex-col items-end gap-1 bg-surface px-5 py-4 text-right transition hover:bg-surface-2">
+          <span className="inline-flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-gold">
+            <Icon name="check" className="h-3 w-3" />
+            Tahap terakhir
+          </span>
+          <span className="font-display text-[0.95rem] font-semibold text-ink group-hover:text-brand">
+            Kembali ke daftar tahapan
+          </span>
         </Link>
       )}
-    </div>
+    </nav>
   );
 }

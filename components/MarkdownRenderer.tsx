@@ -1,8 +1,9 @@
 "use client";
 
-import { Children, useState } from "react";
+import { Children, cloneElement, isValidElement, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Icon, { type IconName } from "@/components/Icon";
 import type {
   AnchorHTMLAttributes,
   HTMLAttributes,
@@ -22,20 +23,73 @@ function plainText(node: ReactNode): string {
   return "";
 }
 
-// Kotak catatan otomatis berganti warna sesuai emoji di awal teks:
-// ⚠️ = peringatan (amber/merah), 💡 = tips (sky/teal), lainnya = netral (violet).
-function calloutStyle(text: string) {
+// Kotak catatan ditulis di markdown sebagai blockquote yang diawali emoji.
+// Emoji itu cuma penanda jenis: di layar ia dibuang dan diganti ikon garis +
+// label, supaya tampilannya seragam dan tidak bergantung font emoji OS.
+type Callout = { prefix: string; icon: IconName; label: string; tone: string };
+
+const CALLOUTS: Callout[] = [
+  {
+    prefix: "⚠️",
+    icon: "alert",
+    label: "Perhatian",
+    tone: "border-warn/35 bg-warn-soft [--callout:var(--c-warn)]",
+  },
+  {
+    prefix: "💡",
+    icon: "bulb",
+    label: "Tips",
+    tone: "border-brand/30 bg-brand-soft [--callout:var(--c-brand)]",
+  },
+  {
+    prefix: "🕐",
+    icon: "clock",
+    label: "Jadwal",
+    tone: "border-gold/35 bg-gold-soft [--callout:var(--c-gold)]",
+  },
+  {
+    prefix: "🎉",
+    icon: "check",
+    label: "Catatan baik",
+    tone: "border-success/30 bg-success-soft [--callout:var(--c-success)]",
+  },
+];
+
+const DEFAULT_CALLOUT: Callout = {
+  prefix: "",
+  icon: "info",
+  label: "Catatan",
+  tone: "border-line bg-surface-2 [--callout:var(--c-ink-subtle)]",
+};
+
+function matchCallout(text: string): Callout {
   const t = text.trim();
-  if (t.startsWith("⚠️")) {
-    return "border-amber-400 bg-amber-50 text-amber-900 dark:border-amber-600 dark:bg-amber-950/30 dark:text-amber-100";
+  return CALLOUTS.find((c) => t.startsWith(c.prefix)) ?? DEFAULT_CALLOUT;
+}
+
+/** Buang emoji penanda di awal teks pertama — sisanya dibiarkan apa adanya. */
+function stripPrefix(node: ReactNode, prefix: string): ReactNode {
+  if (!prefix) return node;
+  let stripped = false;
+
+  function walk(n: ReactNode): ReactNode {
+    if (stripped) return n;
+    if (typeof n === "string") {
+      const trimmed = n.replace(/^\s+/, "");
+      if (!trimmed.startsWith(prefix)) return n;
+      stripped = true;
+      return trimmed.slice(prefix.length).replace(/^[\s:]+/, "");
+    }
+    if (Array.isArray(n)) return n.map(walk);
+    if (isValidElement(n)) {
+      const children = (n.props as { children?: ReactNode }).children;
+      if (children === undefined) return n;
+      return cloneElement(n, undefined, walk(children));
+    }
+    return n;
   }
-  if (t.startsWith("💡")) {
-    return "border-sky-400 bg-sky-50 text-sky-900 dark:border-sky-600 dark:bg-sky-950/30 dark:text-sky-100";
-  }
-  if (t.startsWith("🕐") || t.startsWith("🎉")) {
-    return "border-teal-400 bg-teal-50 text-teal-900 dark:border-teal-600 dark:bg-teal-950/30 dark:text-teal-100";
-  }
-  return "border-violet-400 bg-violet-50 text-violet-900 dark:border-violet-600 dark:bg-violet-950/30 dark:text-violet-100";
+
+  return walk(node);
 }
 
 export type ChecklistTracker = {
@@ -91,49 +145,54 @@ export default function MarkdownRenderer({
 
   return (
     <div
-      className="prose prose-slate dark:prose-invert max-w-none
-        prose-headings:scroll-mt-28 prose-headings:font-heading prose-headings:font-bold
-        prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-orange-200 prose-h2:pb-2 prose-h2:text-2xl dark:prose-h2:border-slate-800
-        prose-h3:mt-8 prose-h3:text-lg
-        prose-p:leading-relaxed
-        prose-li:marker:text-orange-500
-        prose-strong:text-slate-900 dark:prose-strong:text-white
-        prose-a:font-semibold prose-a:text-orange-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-orange-400
-        prose-pre:rounded-2xl prose-pre:bg-slate-900 prose-pre:text-slate-100
-        prose-code:rounded prose-code:bg-orange-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-normal prose-code:text-orange-800 prose-code:before:content-none prose-code:after:content-none dark:prose-code:bg-slate-800 dark:prose-code:text-orange-300
-        prose-img:rounded-xl"
+      className="prose max-w-none
+        prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight
+        prose-h2:mb-5 prose-h2:mt-14 prose-h2:border-b prose-h2:border-line prose-h2:pb-3 prose-h2:text-2xl
+        prose-h3:mb-3 prose-h3:mt-10 prose-h3:text-lg
+        prose-h4:mt-8 prose-h4:text-base
+        prose-p:leading-[1.75]
+        prose-a:font-medium prose-a:underline prose-a:decoration-brand/30 prose-a:underline-offset-[3px] hover:prose-a:decoration-brand
+        prose-li:leading-[1.7] prose-li:marker:text-ink-subtle
+        prose-hr:my-12 prose-hr:border-line
+        prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:border-line prose-pre:text-[0.82rem] prose-pre:leading-relaxed
+        prose-code:rounded prose-code:border prose-code:border-line prose-code:bg-surface-2 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.85em] prose-code:font-medium prose-code:before:content-none prose-code:after:content-none
+        prose-img:rounded-lg prose-img:border prose-img:border-line
+        [&_pre_code]:border-0 [&_pre_code]:bg-transparent [&_pre_code]:p-0"
     >
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
+          // Tabel tanpa judul kolom (ditulis "| | |" di markdown) tidak perlu
+          // strip header kosong — thead-nya disembunyikan lewat :has().
           table: (props: TableHTMLAttributes<HTMLTableElement>) => (
-            <div className="not-prose my-6 overflow-x-auto rounded-2xl border border-orange-100 shadow-sm dark:border-slate-700">
+            <div className="not-prose my-7 overflow-x-auto rounded-lg border border-line bg-surface [&_thead:has(th:empty)]:hidden">
               <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
             </div>
           ),
-          thead: (props: HTMLAttributes<HTMLTableSectionElement>) => (
-            <thead className="bg-orange-50 dark:bg-slate-800" {...props} />
-          ),
+          thead: (props: HTMLAttributes<HTMLTableSectionElement>) => <thead className="bg-surface-2" {...props} />,
           th: (props: HTMLAttributes<HTMLTableCellElement>) => (
             <th
-              className="border-b border-orange-100 px-4 py-2.5 text-left font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200"
+              className="border-b border-line px-4 py-3 text-left text-[0.68rem] font-semibold uppercase tracking-eyebrow text-ink-muted"
               {...props}
             />
           ),
           td: (props: HTMLAttributes<HTMLTableCellElement>) => (
-            <td
-              className="border-b border-orange-50 px-4 py-2.5 align-top text-slate-600 dark:border-slate-800 dark:text-slate-300"
-              {...props}
-            />
+            <td className="border-b border-line px-4 py-3 align-top leading-relaxed text-ink-muted" {...props} />
           ),
-          blockquote: ({ children, ...props }: HTMLAttributes<HTMLQuoteElement>) => (
-            <blockquote
-              className={`not-italic my-6 rounded-r-xl border-l-4 px-5 py-3 shadow-sm [&>p]:my-1 ${calloutStyle(plainText(children))}`}
-              {...props}
-            >
-              {children}
-            </blockquote>
-          ),
+          blockquote: ({ children }: HTMLAttributes<HTMLQuoteElement>) => {
+            const callout = matchCallout(plainText(children));
+            return (
+              <aside className={`not-prose my-7 rounded-lg border px-5 py-4 ${callout.tone}`}>
+                <div className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-[rgb(var(--callout))]">
+                  <Icon name={callout.icon} className="h-3.5 w-3.5" />
+                  {callout.label}
+                </div>
+                <div className="mt-2 space-y-2 text-[0.95rem] leading-relaxed text-ink [&_a]:font-medium [&_a]:text-brand [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded [&_code]:bg-surface/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
+                  {stripPrefix(children, callout.prefix)}
+                </div>
+              </aside>
+            );
+          },
           a: ({ href, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
             <a
               href={href}
@@ -142,10 +201,9 @@ export default function MarkdownRenderer({
               {...props}
             />
           ),
-          hr: () => <hr className="my-10 border-orange-200 dark:border-slate-800" />,
-          // Checklist ("- [ ] ...") dirender sebagai kartu terpisah dengan baris
-          // bergaris pemisah — bukan bullet list biasa — supaya tiap section
-          // checklist kelihatan rapi & jadi satu unit visual.
+          // Checklist dirender sebagai kartu tersendiri dengan baris bergaris
+          // pemisah — bukan bullet list biasa — supaya tiap blok checklist jadi
+          // satu unit visual yang jelas.
           ul: ({ children, className, ...props }: HTMLAttributes<HTMLUListElement>) => {
             if (!className?.includes("contains-task-list")) {
               return (
@@ -156,7 +214,7 @@ export default function MarkdownRenderer({
             }
             return (
               <ul
-                className="not-prose my-5 divide-y divide-orange-100 overflow-hidden rounded-2xl border border-orange-100 bg-white/70 shadow-sm backdrop-blur dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900/70"
+                className="not-prose my-6 divide-y divide-line overflow-hidden rounded-lg border border-line bg-surface"
                 {...props}
               >
                 {children}
@@ -174,19 +232,17 @@ export default function MarkdownRenderer({
             }
 
             // Anak pertama dari <li> checklist selalu checkbox-nya (dari
-            // remark-gfm) — dipisah supaya bisa ditaruh di kanan lewat flex,
-            // sementara urutan DOM tetap checkbox-lalu-teks (aksesibel, dan
-            // bikin selector peer-checked di bawah bisa jalan).
+            // remark-gfm) — dipisah supaya bisa dibungkus markup sendiri.
             const items = Children.toArray(children);
             const [checkbox, ...rest] = items;
 
             return (
               <li
-                className="group flex flex-row-reverse items-center gap-3 px-4 py-3 transition hover:bg-orange-50/60 has-[:checked]:bg-teal-50/50 dark:hover:bg-slate-800/40 dark:has-[:checked]:bg-teal-950/20"
+                className="group flex items-start gap-3 px-4 py-3 transition-colors hover:bg-surface-2/60 has-[:checked]:bg-success-soft/50"
                 {...props}
               >
                 {checkbox}
-                <span className="flex-1 text-sm leading-relaxed text-slate-700 peer-checked:text-slate-400 peer-checked:line-through dark:text-slate-200 dark:peer-checked:text-slate-500">
+                <span className="flex-1 text-sm leading-relaxed text-ink transition-colors group-has-[:checked]:text-ink-subtle group-has-[:checked]:line-through">
                   {rest}
                 </span>
               </li>
@@ -196,23 +252,24 @@ export default function MarkdownRenderer({
             if (props.type !== "checkbox") return <input {...props} />;
 
             const index = checkboxCounter++;
-            const boxClass =
-              "peer h-6 w-6 shrink-0 cursor-pointer rounded-md border-2 border-slate-300 accent-teal-500 disabled:cursor-wait disabled:opacity-60 dark:border-slate-600";
+            const isDone = tracker ? done.has(index) : !!props.checked;
+            const isPending = tracker ? pending.has(index) : false;
 
-            if (!tracker) {
-              return <input type="checkbox" checked={!!props.checked} disabled className={boxClass} />;
-            }
-
-            const isDone = done.has(index);
-            const isPending = pending.has(index);
             return (
-              <input
-                type="checkbox"
-                checked={isDone}
-                disabled={isPending}
-                onChange={(e) => toggle(index, e.target.checked)}
-                className={boxClass}
-              />
+              <span className="relative mt-0.5 flex h-[1.15rem] w-[1.15rem] shrink-0 items-center justify-center">
+                <input
+                  type="checkbox"
+                  checked={isDone}
+                  disabled={!tracker || isPending}
+                  onChange={tracker ? (e) => toggle(index, e.target.checked) : undefined}
+                  className="peer h-full w-full cursor-pointer appearance-none rounded border border-line-strong bg-surface transition checked:border-brand checked:bg-brand disabled:cursor-default"
+                />
+                <Icon
+                  name="check"
+                  strokeWidth={3}
+                  className="pointer-events-none absolute h-3 w-3 text-brand-on opacity-0 transition-opacity peer-checked:opacity-100"
+                />
+              </span>
             );
           },
         }}

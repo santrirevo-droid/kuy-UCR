@@ -39,9 +39,9 @@ Tanpa database, situs tetap jalan normal untuk pembaca publik — hanya fitur ma
 
 Ada 3 tab:
 
-- **📊 Progres Peserta** — tabel rekap checklist yang sudah dicentang tiap peserta, per tahap
-- **📋 Kelola Konten** — edit isi tiap tahap (lihat di bawah)
-- **👥 Kelola User** — buat akun untuk peserta baru (nama + username, password digenerate otomatis dan ditampilkan sekali — sampaikan manual ke pesertanya)
+- **Progres Peserta** — tabel rekap checklist yang sudah dicentang tiap peserta, per tahap
+- **Kelola Konten** — edit isi tiap tahap (lihat di bawah)
+- **Kelola User** — buat akun untuk peserta baru (nama + username, password digenerate otomatis dan ditampilkan sekali — sampaikan manual ke pesertanya)
 
 **Login admin** cuma lewat `/masuk` — pakai username `admin` + password admin (lihat catatan keamanan di bawah), langsung diarahkan ke `/admin`. Tidak ada halaman login admin terpisah.
 
@@ -58,6 +58,17 @@ Menyimpan konten butuh commit ke GitHub, jadi server perlu satu token dengan aks
 Kalau `GITHUB_TOKEN` belum di-set, panel Kelola Konten fallback ke cara lama (tiap admin tempel Personal Access Token miliknya sendiri, tersimpan di cookie sesi 6 jam) — supaya tetap jalan sebelum sempat di-setup.
 
 **Catatan keamanan:** Password admin default ada di `lib/auth.ts` — **ganti secepatnya** dengan cara set environment variable `ADMIN_PASSWORD` di Vercel Project Settings (tidak perlu ubah kode). Password akun peserta di-hash (bcrypt) sebelum disimpan ke database.
+
+## Desain & tema
+
+Tampilannya dibangun di atas satu set **design token** — bukan warna Tailwind mentah yang ditulis per komponen.
+
+- `app/globals.css` mendefinisikan semua warna sebagai CSS variable (triplet RGB) untuk tema terang **dan** gelap: permukaan (`--c-canvas`, `--c-surface`), garis (`--c-line`), tinta (`--c-ink`, `--c-ink-muted`), warna merek navy (`--c-brand`), aksen emas (`--c-gold`), plus status sukses/peringatan/bahaya.
+- `tailwind.config.ts` memetakan token itu ke nama semantik, jadi satu kelas seperti `bg-surface`, `text-ink-muted`, atau `border-line` otomatis benar di kedua tema — tidak perlu lagi menulis pasangan `dark:` di tiap elemen. **Ganti warna cukup di satu tempat**, yaitu variabel di `globals.css`.
+- Tipografi: **Fraunces** (serif) hanya untuk judul & angka lewat `font-display`, **Inter** untuk sisanya. Ukuran judul memakai skala `text-display-sm/md/lg`.
+- Ikon: tidak memakai emoji di antarmuka. Semua ikon garis ada di `components/Icon.tsx` dan dipanggil dengan `<Icon name="..." />`. Tiap tahap memilih ikonnya lewat field `icon` di `lib/stages.ts`.
+- Kelas form & tombol yang berulang dikumpulkan di `lib/ui.ts` (`btnPrimary`, `input`, `card`, dst.) supaya konsisten lintas halaman.
+- Di konten markdown, blockquote yang diawali emoji `⚠️`, `💡`, `🕐`, atau `🎉` dirender jadi kotak catatan berlabel (Perhatian / Tips / Jadwal / Catatan baik). Emojinya otomatis dibuang dari tampilan — cukup tetap ditulis di markdown sebagai penanda jenis.
 
 ## Menjalankan secara lokal
 

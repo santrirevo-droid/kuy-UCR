@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Icon from "@/components/Icon";
 
 export default function ThemeToggle({ className = "" }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
@@ -27,10 +28,10 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
       onClick={toggle}
       aria-label="Ganti tema gelap/terang"
       title="Ganti tema gelap/terang"
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white/80 text-base shadow-sm backdrop-blur transition hover:scale-105 hover:shadow-md active:scale-95 dark:border-slate-700 dark:bg-slate-900/80 ${className}`}
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-line bg-surface text-ink-muted transition hover:border-line-strong hover:text-ink ${className}`}
     >
-      <span aria-hidden="true" suppressHydrationWarning>
-        {mounted ? (dark ? "☀️" : "🌙") : "🌙"}
+      <span suppressHydrationWarning>
+        <Icon name={mounted && dark ? "sun" : "moon"} className="h-[1.05rem] w-[1.05rem]" />
       </span>
     </button>
   );
