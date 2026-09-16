@@ -27,6 +27,13 @@ export const stages: Stage[] = [
     icon: "users",
   },
   {
+    slug: "checklist-dokumen",
+    title: "Checklist Dokumen",
+    shortTitle: "Dokumen",
+    subtitle: "Semua dokumen yang wajib dibawa & disiapkan",
+    icon: "clipboard-check",
+  },
+  {
     slug: "pra-keberangkatan",
     title: "Persiapan Sebelum Berangkat",
     shortTitle: "Pra-keberangkatan",
@@ -74,13 +81,6 @@ export const stages: Stage[] = [
     shortTitle: "Kontak Darurat",
     subtitle: "KJRI, kampus, asuransi, keluarga",
     icon: "lifebuoy",
-  },
-  {
-    slug: "checklist-dokumen",
-    title: "Checklist Dokumen",
-    shortTitle: "Dokumen",
-    subtitle: "Semua dokumen yang wajib dibawa & disiapkan",
-    icon: "clipboard-check",
   },
 ];
 
