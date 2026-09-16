@@ -42,7 +42,7 @@ Cetak halaman ini atau centang langsung di sini. Simpan **scan digital** semua d
 - [ ] Housing di Riverside terkonfirmasi
 - [ ] Rekening bank Indonesia aktif untuk terima transfer LPDP
 - [ ] SIM card/roaming AS direncanakan
-- [ ] Packing list (tahap **Persiapan Sebelum Berangkat**) selesai dicentang
+- [ ] Checklist barang bawaan & aturan bagasi (tahap **Persiapan Sebelum Berangkat**) selesai dicentang
 
 ## Dokumen administrasi & pendaftaran (tracker panitia)
 
