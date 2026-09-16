@@ -19,11 +19,13 @@ CGK (Jakarta) ──✈──▶ Transit (mis. NRT/ICN/TPE/DOH) ──✈──�
 - [ ] Pamitan keluarga, informasikan jadwal & kontak selama perjalanan
 - [ ] Cek cuaca Riverside untuk pakaian di tas kabin
 
+> ⚠️ **Sebelum koper ditutup — cek empat hal ini:** (1) **power bank & baterai lithium cadangan wajib pindah ke tas kabin**, tidak boleh di bagasi check-in; (2) cairan di tas kabin semua ≤100 ml dan masuk satu kantong transparan; (3) bubuk (kopi, bumbu, tepung) ≥350 g dipindah ke bagasi; (4) tiap koper ≤22 kg supaya aman dari selisih timbangan bandara. Detail lengkap ada di tahap **Persiapan Sebelum Berangkat**.
+
 ## Hari-H di bandara CGK
 
 1. Tiba di bandara **minimal 3 jam** sebelum keberangkatan internasional
 2. Berkumpul dengan rombongan LPDP di meeting point yang disepakati
-3. Check-in bagasi & drop baggage
+3. Check-in bagasi & *drop baggage* — di sini juga tersedia jasa *wrapping* koper (±Rp 80.000/koper) kalau belum dibungkus dari rumah
 4. Imigrasi keberangkatan
 5. Tunggu di gate, terakhir kali pakai SIM Indonesia sebelum ganti mode roaming/airplane
 
@@ -38,7 +40,7 @@ CGK (Jakarta) ──✈──▶ Transit (mis. NRT/ICN/TPE/DOH) ──✈──�
 
 1. **Imigrasi AS (CBP)** — antre jalur *Visitor/Non-immigrant*, siapkan paspor + visa J-1, DS-2019, LoA UCR, alamat tujuan di Riverside, tujuan kunjungan ("academic short course exchange program at UC Riverside")
 2. Ambil bagasi di *baggage claim*
-3. **Customs declaration** — deklarasikan makanan/bumbu yang dibawa jika diminta
+3. **Customs declaration** — **deklarasikan dengan jujur** semua makanan/bumbu yang dibawa. Menyembunyikan lalu ketahuan jauh lebih berisiko (denda) daripada barangnya sekadar disita
 4. Keluar ke area kedatangan, aktifkan SIM card lokal / roaming
 
 ## Transportasi dari bandara ke Riverside

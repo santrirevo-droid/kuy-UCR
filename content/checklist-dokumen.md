@@ -2,6 +2,8 @@ Cetak halaman ini atau centang langsung di sini. Simpan **scan digital** semua d
 
 ## Dibawa di tas kabin (jangan taruh di bagasi!)
 
+> ⚠️ Selain dokumen, **power bank & baterai lithium cadangan juga wajib di tas kabin** — dilarang masuk bagasi check-in. Laptop, HP, dan kamera pun sebaiknya dibawa ke kabin.
+
 - [ ] Paspor asli (berlaku ≥6 bulan setelah kepulangan)
 - [ ] Visa J-1 (tertempel di paspor)
 - [ ] Form **DS-2019** asli
@@ -13,7 +15,7 @@ Cetak halaman ini atau centang langsung di sini. Simpan **scan digital** semua d
 - [ ] Bukti asuransi kesehatan/perjalanan
 - [ ] Pas foto cadangan (4–6 lembar, spek visa AS: 5x5 cm, background putih)
 - [ ] Kartu debit/kredit internasional
-- [ ] Uang tunai USD secukupnya
+- [ ] Uang tunai USD (arahan PJ Operasional: **$1.000–1.500**, lihat tahap **Budget & Keuangan**)
 - [ ] Fotokopi seluruh dokumen di atas (1 set terpisah dari aslinya)
 - [ ] Surat keterangan sehat/hasil lab (jika diminta)
 - [ ] Kartu vaksinasi/*immunization record*
