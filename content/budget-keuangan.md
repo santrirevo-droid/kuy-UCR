@@ -32,6 +32,21 @@
 | Perlengkapan awal (SIM card, alat masak/rumah tangga dasar) | $100 – $200 |
 | Asuransi tambahan (jika di luar tanggungan LPDP/UCR) | bervariasi |
 
+## Dana tunai USD yang dibawa dari Indonesia
+
+Arahan **PJ Operasional** rombongan: bawa **USD 1.000–1.500** tunai dari Indonesia.
+
+Angka ini **bukan tambahan** di luar tabel *one-time* di atas, melainkan **uang tunai yang harus sudah ada di tangan saat mendarat** untuk menutup pengeluaran awal sebelum *living allowance* LPDP cair:
+
+- Iuran kamar / pembayaran awal akomodasi
+- Uang jaminan (deposit housing)
+- Belanja keperluan rumah di minggu pertama
+- Biaya hidup harian sampai dana LPDP turun
+
+> 💡 Saran Pak SC: **semakin banyak membawa Dollar, semakin baik.** Lebih aman punya sisa daripada kekurangan di minggu-minggu pertama, saat rekening bank lokal belum ada dan pola pengeluaran di sana belum terbaca.
+
+⬜ **TODO:** konfirmasi ke koordinator berapa besar iuran kamar & uang jaminan yang harus dibayar di awal, supaya angka yang dibawa bisa lebih presisi.
+
 ## Total estimasi kasar 3 bulan
 
 ```
