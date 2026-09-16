@@ -88,6 +88,8 @@ Short course akademik seperti ini pada umumnya menggunakan **visa J-1 (Exchange 
 - Khawatir koper lecet/rusak? Bisa dibungkus (*wrapping*) dari rumah atau di bandara, biayanya sekitar **Rp 80.000/koper**.
 - Beri tanda pengenal pada koper (nama, nomor HP, pita/stiker warna) supaya mudah dikenali di *baggage claim*. Opsional, tapi sangat membantu saat rombongan.
 
+**Checklist bagasi:**
+
 - [ ] Koper ditimbang di rumah, masing-masing ≤ 22 kg
 - [ ] Ukuran koper ≤ 28 inci
 - [ ] Tas kabin ≤ 10 kg, sudah dipisah dari laptop & dokumen
@@ -97,22 +99,22 @@ Short course akademik seperti ini pada umumnya menggunakan **visa J-1 (Exchange 
 
 ## Barang: boleh di kabin atau bagasi?
 
-Keterangan: **Ya** = umumnya boleh · **Hati-hati** = bersyarat/tergantung pemeriksaan · **Tidak** = jangan ditaruh di situ.
+Keterangan: **Ya** = umumnya boleh · **Cek dulu** = bersyarat, tergantung pemeriksaan · **Tidak** = jangan ditaruh di situ.
 
 ### Elektronik & baterai
 
 | Barang | Kabin | Bagasi | Catatan |
 |---|---|---|---|
-| Laptop | Ya | Hati-hati | Barang elektronik berharga sebaiknya di kabin |
-| HP/tablet | Ya | Hati-hati | Sebaiknya kabin |
-| Kamera | Ya | Hati-hati | Sebaiknya kabin |
+| Laptop | Ya | Cek dulu | Barang elektronik berharga sebaiknya di kabin |
+| HP/tablet | Ya | Cek dulu | Sebaiknya kabin |
+| Kamera | Ya | Cek dulu | Sebaiknya kabin |
 | Charger HP/laptop | Ya | Ya | Kabin lebih disarankan |
 | **Power bank ≤100 Wh** (±10.000–20.000 mAh) | **Wajib kabin** | **Tidak** | Korean Air mensyaratkan power bank dibawa sebagai *carry-on* dan **melarang penggunaan/pengisian selama penerbangan** |
 | Power bank 100–160 Wh | Perlu persetujuan maskapai | Tidak | Aturan jumlah & approval berbeda tiap maskapai |
 | Power bank >160 Wh | Tidak | Tidak | Dilarang |
 | Baterai lithium cadangan | Ya | Tidak | Lindungi terminal dari korsleting |
 | Baterai AA/AAA biasa | Ya | Ya | |
-| Koper pintar (*smart luggage*) berbaterai | Hati-hati | Hati-hati | Baterai sering harus bisa dilepas — cek spesifikasi |
+| Koper pintar (*smart luggage*) berbaterai | Cek dulu | Cek dulu | Baterai sering harus bisa dilepas — cek spesifikasi |
 | Catokan rambut | Ya | Ya | Pastikan sudah dingin |
 | Hair dryer | Ya | Ya | |
 | Termometer digital | Ya | Ya | |
@@ -132,7 +134,7 @@ Keterangan: **Ya** = umumnya boleh · **Hati-hati** = bersyarat/tergantung pemer
 | Pasta gigi ≤100 ml | Ya | Ya | Dihitung sebagai cairan/gel |
 | Sabun batang | Ya | Ya | |
 | Obat tablet pribadi | Ya | Ya | Obat penting sebaiknya di kabin |
-| Obat cair >100 ml | Hati-hati | Ya | Obat medis bisa dapat pengecualian — **bawa resep/dokumen dokter** |
+| Obat cair >100 ml | Cek dulu | Ya | Obat medis bisa dapat pengecualian — **bawa resep/dokumen dokter** |
 | Air/minuman >100 ml | Tidak | Ya | Beli saja setelah melewati security |
 
 ### Benda tajam & barang berbahaya
@@ -140,16 +142,16 @@ Keterangan: **Ya** = umumnya boleh · **Hati-hati** = bersyarat/tergantung pemer
 | Barang | Kabin | Bagasi | Catatan |
 |---|---|---|---|
 | Pemotong kuku | Ya | Ya | Umumnya aman |
-| Gunting kuku | Hati-hati | Ya | Lebih aman di bagasi |
-| Gunting kecil | Hati-hati | Ya | Tergantung ukuran/desain & petugas security |
+| Gunting kuku | Cek dulu | Ya | Lebih aman di bagasi |
+| Gunting kecil | Cek dulu | Ya | Tergantung ukuran/desain & petugas security |
 | Pinset | Ya | Ya | |
 | Pisau cukur *disposable* | Ya | Ya | |
 | Razor/*blade* lepas | Tidak | Ya | Masukkan bagasi |
 | Cutter | Tidak | Ya | Jangan di kabin |
 | Pisau dapur | Tidak | Ya | Tergantung aturan maskapai & jenisnya |
-| Lilin | Hati-hati | Ya | Tergantung bentuk/bahan |
+| Lilin | Cek dulu | Ya | Tergantung bentuk/bahan |
 | Korek api / *lighter* | Sangat terbatas | Tidak | Korean Air: maks. 1 dan harus dibawa di badan; aturan beda tiap negara |
-| Korek elektrik/*arc lighter* | Hati-hati | Tidak | Bisa terkena pembatasan khusus |
+| Korek elektrik/*arc lighter* | Cek dulu | Tidak | Bisa terkena pembatasan khusus |
 | Alkohol 24–70% | Terbatas | Terbatas | Korean Air: maks. 5 L/orang di bagasi check-in |
 | Bensin/thinner/cat mudah terbakar | Tidak | Tidak | Dilarang |
 | Gas/butane | Tidak | Tidak | Dilarang |
@@ -162,14 +164,14 @@ Masalah utama pada kategori ini **bukan maskapai, melainkan pemeriksaan *customs
 | Barang | Kabin | Bagasi | Catatan |
 |---|---|---|---|
 | Makanan kemasan pabrik (biskuit, wafer, mie instan, kopi sachet, energen) | Ya | Ya | Tetap harus memenuhi aturan masuk AS |
-| Bumbu bubuk kemasan (Indofood, Royco, dll.) | Hati-hati | Ya | Bubuk **≥350 g wajib di bagasi**; deklarasikan bila diminta |
-| Kopi bubuk | Hati-hati | Ya | ≥350 g/12 oz wajib bagasi & bisa kena pemeriksaan tambahan |
-| Makanan olahan berbahan daging (abon, rendang, sosis, nugget) | Hati-hati | **Sangat dibatasi** | Untung-untungan — kadang dibolehkan, sering disita. **Sebaiknya jangan dibawa** |
-| Buah segar & sayuran | Hati-hati | **Sangat dibatasi** | Bermasalah saat masuk AS |
+| Bumbu bubuk kemasan (Indofood, Royco, dll.) | Cek dulu | Ya | Bubuk **≥350 g wajib di bagasi**; deklarasikan bila diminta |
+| Kopi bubuk | Cek dulu | Ya | ≥350 g/12 oz wajib bagasi & bisa kena pemeriksaan tambahan |
+| Makanan olahan berbahan daging (abon, rendang, sosis, nugget) | Cek dulu | **Sangat dibatasi** | Untung-untungan — kadang dibolehkan, sering disita. **Sebaiknya jangan dibawa** |
+| Buah segar & sayuran | Cek dulu | **Sangat dibatasi** | Bermasalah saat masuk AS |
 | Daging mentah | Tidak | Tidak | Dilarang masuk AS |
-| Beras mentah | Hati-hati | Hati-hati | Deklarasikan; cek aturan USDA/CBP |
-| Kacang-kacangan mentah (mis. kacang hijau) | Hati-hati | Hati-hati | Dianggap benih — berisiko ditahan |
-| Rimpang/umbi mentah (jahe gelondongan, bawang merah) | Hati-hati | Hati-hati | Dianggap bibit tanaman — berisiko ditahan |
+| Beras mentah | Cek dulu | Cek dulu | Deklarasikan; cek aturan USDA/CBP |
+| Kacang-kacangan mentah (mis. kacang hijau) | Cek dulu | Cek dulu | Dianggap benih — berisiko ditahan |
+| Rimpang/umbi mentah (jahe gelondongan, bawang merah) | Cek dulu | Cek dulu | Dianggap bibit tanaman — berisiko ditahan |
 | Benih & tanaman | Tidak | Tidak | Dapat dibatasi/ditahan di AS |
 
 > ⚠️ **Aturan praktis soal makanan:** bawa yang **kemasan pabrik & tersegel**, hindari yang **mentah, segar, atau berbahan daging**. Kalau ragu, tinggalkan di rumah — risiko disita (bahkan didenda) tidak sebanding dengan nilai barangnya. Apa pun yang kamu bawa, **deklarasikan dengan jujur** di formulir *customs* saat mendarat.
