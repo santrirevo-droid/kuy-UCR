@@ -1,50 +1,54 @@
 import Link from "next/link";
-import { stages, accentStyles } from "@/lib/stages";
+import { stages, stageNumber } from "@/lib/stages";
 import AdminNav from "@/components/AdminNav";
+import Icon from "@/components/Icon";
+import { eyebrow } from "@/lib/ui";
+
+export const metadata = { title: "Kelola Konten" };
 
 export default function AdminKontenPage() {
   return (
-    <div className="min-h-screen bg-orange-50/40 dark:bg-slate-950">
-      <div className="mx-auto max-w-2xl px-5 py-8">
-        <AdminNav />
+    <div className="min-h-screen bg-canvas">
+      <AdminNav />
 
-        <h1 className="mt-6 font-heading text-2xl font-extrabold text-slate-900 dark:text-white">📋 Kelola Konten</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          Pilih tahap yang ingin diedit. Perubahan langsung tersimpan ke GitHub &amp; tampil di halaman publik dalam
-          hitungan detik — tanpa perlu redeploy.
-        </p>
-
-        <ul className="mt-6 space-y-2">
-          {stages.map((s) => {
-            const accent = accentStyles[s.accent];
-            return (
-              <li key={s.slug}>
-                <Link
-                  href={`/admin/edit/${s.slug}`}
-                  className={`flex items-center justify-between rounded-2xl border-2 border-transparent bg-white/70 px-4 py-3 shadow-sm backdrop-blur transition hover:shadow-md dark:bg-slate-900/70 ${accent.hover}`}
-                >
-                  <span className="flex items-center gap-3 font-semibold text-slate-800 dark:text-slate-100">
-                    <span className={`flex h-9 w-9 items-center justify-center rounded-full text-base ${accent.badge}`}>
-                      {s.icon}
-                    </span>
-                    {s.title}
-                  </span>
-                  <span className="text-sm text-slate-400">Edit →</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="mt-8">
-          <Link
-            href="/"
-            className="text-sm font-medium text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
-          >
-            ← Lihat situs publik
-          </Link>
+      <main className="mx-auto max-w-3xl px-6 py-10">
+        <div className="border-b border-line pb-6">
+          <p className={eyebrow}>Editor</p>
+          <h1 className="mt-2.5 font-display text-display-sm font-semibold text-ink">Kelola konten</h1>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">
+            Pilih tahap yang ingin diedit. Perubahan tersimpan ke GitHub dan tampil di halaman publik dalam hitungan
+            detik — tanpa perlu redeploy.
+          </p>
         </div>
-      </div>
+
+        <ul className="mt-2">
+          {stages.map((s, i) => (
+            <li key={s.slug}>
+              <Link
+                href={`/admin/edit/${s.slug}`}
+                className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-line px-2 py-4 transition-colors hover:bg-surface"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="tnum font-display text-sm font-semibold text-ink-subtle group-hover:text-gold">
+                    {stageNumber(i)}
+                  </span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-md border border-line bg-surface text-ink-muted transition-colors group-hover:border-brand/40 group-hover:bg-brand-soft group-hover:text-brand">
+                    <Icon name={s.icon} className="h-4 w-4" />
+                  </span>
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate font-medium text-ink">{s.title}</span>
+                  <span className="block truncate text-xs text-ink-subtle">content/{s.slug}.md</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-subtle transition group-hover:text-brand">
+                  <Icon name="pencil" className="h-4 w-4" />
+                  <span className="hidden sm:inline">Edit</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </main>
     </div>
   );
 }

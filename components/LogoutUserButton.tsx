@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Icon from "@/components/Icon";
 
 export default function LogoutUserButton() {
   const router = useRouter();
@@ -18,9 +19,11 @@ export default function LogoutUserButton() {
     <button
       onClick={onLogout}
       disabled={loading}
-      className="text-slate-400 underline-offset-2 transition hover:text-slate-700 hover:underline disabled:opacity-50 dark:hover:text-slate-200"
+      aria-label="Keluar"
+      title="Keluar"
+      className="flex h-7 w-7 items-center justify-center rounded text-ink-subtle transition hover:bg-surface-2 hover:text-danger disabled:opacity-50"
     >
-      Keluar
+      <Icon name="log-out" className="h-4 w-4" />
     </button>
   );
 }

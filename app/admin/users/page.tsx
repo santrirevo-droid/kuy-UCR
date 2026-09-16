@@ -2,8 +2,39 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import AdminNav from "@/components/AdminNav";
+import Icon from "@/components/Icon";
+import { btnPrimary, card, eyebrow, input, label } from "@/lib/ui";
 
 type PublicUser = { username: string; name: string; createdAt: number; mustChangePassword?: boolean };
+type Credential = { name: string; username: string; password: string };
+
+// Kredensial hanya tampil sekali setelah dibuat/di-reset — ditonjolkan sebagai
+// kartu tersendiri dengan teks monospace supaya gampang disalin & tidak
+// tertukar karakternya.
+function CredentialCard({ title, cred }: { title: string; cred: Credential }) {
+  return (
+    <div className="mt-4 rounded-lg border border-success/30 bg-success-soft px-5 py-4">
+      <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-success">
+        <Icon name="check" className="h-3.5 w-3.5" />
+        {title}
+      </p>
+      <p className="mt-2 text-sm text-ink">
+        Sampaikan kredensial ini ke <strong className="font-semibold">{cred.name}</strong> — hanya ditampilkan sekali.
+      </p>
+      <dl className="mt-3 grid gap-2 sm:grid-cols-2">
+        {[
+          { k: "Username", v: cred.username },
+          { k: "Password", v: cred.password },
+        ].map((row) => (
+          <div key={row.k} className="rounded-md border border-line bg-surface px-3 py-2">
+            <dt className="text-[0.6rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">{row.k}</dt>
+            <dd className="mt-1 select-all font-mono text-sm text-ink">{row.v}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<PublicUser[]>([]);
@@ -14,10 +45,10 @@ export default function AdminUsersPage() {
   const [username, setUsername] = useState("");
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState("");
-  const [created, setCreated] = useState<{ name: string; username: string; password: string } | null>(null);
+  const [created, setCreated] = useState<Credential | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [resetting, setResetting] = useState<string | null>(null);
-  const [resetResult, setResetResult] = useState<{ name: string; username: string; password: string } | null>(null);
+  const [resetResult, setResetResult] = useState<Credential | null>(null);
 
   async function loadUsers() {
     setLoading(true);
@@ -85,124 +116,123 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-orange-50/40 dark:bg-slate-950">
-      <div className="mx-auto max-w-2xl px-5 py-8">
-        <AdminNav />
+    <div className="min-h-screen bg-canvas">
+      <AdminNav />
 
-        <h1 className="mt-6 font-heading text-2xl font-extrabold text-slate-900 dark:text-white">👥 Kelola User</h1>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          Buatkan akun untuk tiap peserta rombongan. Mereka pakai akun ini untuk masuk & mencentang progres
-          persiapannya sendiri di setiap tahap.
-        </p>
+      <main className="mx-auto max-w-3xl px-6 py-10">
+        <div className="border-b border-line pb-6">
+          <p className={eyebrow}>Manajemen akun</p>
+          <h1 className="mt-2.5 font-display text-display-sm font-semibold text-ink">Kelola user</h1>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">
+            Buatkan akun untuk tiap peserta rombongan. Akun ini dipakai untuk masuk dan mencentang progres
+            persiapannya sendiri di setiap tahap.
+          </p>
+        </div>
 
         {dbError && (
-          <div className="mt-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
-            ⚠️ {dbError}
+          <div className="mt-6 flex items-start gap-3 rounded-lg border border-warn/35 bg-warn-soft px-5 py-4 text-sm leading-relaxed text-ink">
+            <Icon name="alert" className="mt-0.5 h-4 w-4 shrink-0 text-warn" />
+            <span>{dbError}</span>
           </div>
         )}
 
-        <form
-          onSubmit={onCreate}
-          className="mt-6 space-y-3 rounded-2xl border border-orange-100 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/70"
-        >
-          <div className="grid gap-3 sm:grid-cols-2">
+        <form onSubmit={onCreate} className={`${card} mt-8 p-6`}>
+          <h2 className="font-display text-lg font-semibold text-ink">Tambah peserta</h2>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Nama peserta</label>
+              <label htmlFor="name" className={label}>
+                Nama peserta
+              </label>
               <input
+                id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Budi Santoso"
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-900"
+                className={`${input} mt-2`}
                 required
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Username</label>
+              <label htmlFor="new-username" className={label}>
+                Username
+              </label>
               <input
+                id="new-username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="budi (huruf kecil, tanpa spasi)"
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-900"
+                placeholder="budi"
+                className={`${input} mt-2`}
                 required
               />
+              <p className="mt-2 text-xs text-ink-subtle">Huruf kecil, tanpa spasi.</p>
             </div>
           </div>
-          {createError && <p className="text-sm text-red-600 dark:text-red-400">{createError}</p>}
-          <button
-            disabled={creating}
-            className="rounded-lg bg-gradient-to-r from-orange-500 via-pink-500 to-violet-500 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:shadow-md disabled:opacity-50"
-          >
-            {creating ? "Membuat..." : "+ Buat akun"}
+          {createError && (
+            <p className="mt-4 flex items-start gap-2 rounded-md border border-danger/30 bg-danger-soft px-3 py-2.5 text-sm text-danger">
+              <Icon name="alert" className="mt-0.5 h-4 w-4 shrink-0" />
+              {createError}
+            </p>
+          )}
+          <button disabled={creating} className={`${btnPrimary} mt-5`}>
+            <Icon name="plus" className="h-4 w-4" />
+            {creating ? "Membuat…" : "Buat akun"}
           </button>
         </form>
 
-        {created && (
-          <div className="mt-4 rounded-2xl border-2 border-teal-300 bg-teal-50 p-4 text-sm text-teal-900 dark:border-teal-700 dark:bg-teal-950/30 dark:text-teal-100">
-            ✅ Akun <strong>{created.name}</strong> dibuat. Sampaikan kredensial ini ke pesertanya (hanya tampil sekali):
-            <div className="mt-2 flex flex-wrap gap-3 font-mono text-sm">
-              <span className="rounded bg-white/70 px-2 py-1 dark:bg-slate-900/70">username: {created.username}</span>
-              <span className="rounded bg-white/70 px-2 py-1 dark:bg-slate-900/70">password: {created.password}</span>
-            </div>
-          </div>
-        )}
+        {created && <CredentialCard title="Akun dibuat" cred={created} />}
+        {resetResult && <CredentialCard title="Password di-reset" cred={resetResult} />}
 
-        {resetResult && (
-          <div className="mt-4 rounded-2xl border-2 border-teal-300 bg-teal-50 p-4 text-sm text-teal-900 dark:border-teal-700 dark:bg-teal-950/30 dark:text-teal-100">
-            ✅ Password <strong>{resetResult.name}</strong> di-reset. Sampaikan ke pesertanya (hanya tampil sekali):
-            <div className="mt-2 flex flex-wrap gap-3 font-mono text-sm">
-              <span className="rounded bg-white/70 px-2 py-1 dark:bg-slate-900/70">username: {resetResult.username}</span>
-              <span className="rounded bg-white/70 px-2 py-1 dark:bg-slate-900/70">password: {resetResult.password}</span>
-            </div>
-          </div>
-        )}
+        <div className="mt-10 flex items-baseline justify-between gap-3 border-b border-line pb-3">
+          <h2 className="font-display text-lg font-semibold text-ink">Daftar peserta</h2>
+          {!loading && <span className="tnum text-xs font-medium text-ink-subtle">{users.length} akun</span>}
+        </div>
 
-        <h2 className="mt-8 font-heading text-lg font-bold text-slate-800 dark:text-slate-100">
-          Daftar peserta {!loading && `(${users.length})`}
-        </h2>
         {loading ? (
-          <p className="mt-2 text-sm text-slate-400">Memuat...</p>
+          <p className="py-6 text-sm text-ink-subtle">Memuat…</p>
         ) : users.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-400">Belum ada akun peserta.</p>
+          <p className="py-6 text-sm text-ink-subtle">Belum ada akun peserta.</p>
         ) : (
-          <ul className="mt-3 space-y-2">
+          <ul>
             {users.map((u) => (
               <li
                 key={u.username}
-                className="flex items-center justify-between rounded-xl border border-orange-100 bg-white/70 px-4 py-2.5 text-sm dark:border-slate-800 dark:bg-slate-900/70"
+                className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-2 py-4"
               >
-                <span className="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-100">
-                  {u.name}
-                  {u.mustChangePassword && (
-                    <span
-                      title="Belum ganti password default"
-                      className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
-                    >
-                      ⏳ belum ganti password
-                    </span>
-                  )}
+                <span className="min-w-0">
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="font-medium text-ink">{u.name}</span>
+                    {u.mustChangePassword && (
+                      <span className="inline-flex items-center gap-1 rounded border border-warn/35 bg-warn-soft px-1.5 py-0.5 text-[0.65rem] font-semibold text-warn">
+                        <Icon name="clock" className="h-3 w-3" />
+                        belum ganti password
+                      </span>
+                    )}
+                  </span>
+                  <span className="mt-0.5 block text-xs text-ink-subtle">@{u.username}</span>
                 </span>
-                <div className="flex items-center gap-3">
-                  <span className="text-slate-400">@{u.username}</span>
+                <span className="flex items-center gap-1">
                   <button
                     onClick={() => onResetPassword(u)}
                     disabled={resetting === u.username}
-                    className="text-xs font-semibold text-orange-500 transition hover:text-orange-700 disabled:opacity-50 dark:text-orange-400 dark:hover:text-orange-300"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-semibold text-ink-muted transition hover:bg-surface-2 hover:text-brand disabled:opacity-50"
                   >
-                    {resetting === u.username ? "..." : "Reset password"}
+                    <Icon name="key" className="h-3.5 w-3.5" />
+                    {resetting === u.username ? "Mereset…" : "Reset password"}
                   </button>
                   <button
                     onClick={() => onDelete(u.username)}
                     disabled={deleting === u.username}
-                    className="text-xs font-semibold text-red-500 transition hover:text-red-700 disabled:opacity-50 dark:text-red-400 dark:hover:text-red-300"
+                    className="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-semibold text-ink-muted transition hover:bg-danger-soft hover:text-danger disabled:opacity-50"
                   >
-                    {deleting === u.username ? "..." : "Hapus"}
+                    <Icon name="x" className="h-3.5 w-3.5" />
+                    {deleting === u.username ? "Menghapus…" : "Hapus"}
                   </button>
-                </div>
+                </span>
               </li>
             ))}
           </ul>
         )}
-      </div>
+      </main>
     </div>
   );
 }

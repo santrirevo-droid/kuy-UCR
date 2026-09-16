@@ -2,15 +2,133 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+/*
+  Design tokens — satu sumber kebenaran untuk warna di seluruh app.
+  Disimpan sebagai triplet RGB mentah supaya modifier opacity Tailwind
+  (mis. `bg-surface/70`) tetap jalan lewat rgb(var(--x) / <alpha-value>).
+
+  Palet: navy institusional + aksen emas tembaga di atas kertas hangat.
+*/
+:root {
   color-scheme: light;
+
+  --c-canvas: 246 245 242;
+  --c-surface: 255 255 255;
+  --c-surface-2: 240 239 234;
+  --c-line: 226 223 216;
+  --c-line-strong: 205 201 192;
+
+  --c-ink: 22 25 29;
+  --c-ink-muted: 91 96 105;
+  --c-ink-subtle: 138 143 152;
+
+  --c-brand: 27 58 92;
+  --c-brand-hover: 20 45 73;
+  --c-brand-on: 255 255 255;
+  --c-brand-soft: 233 239 246;
+
+  --c-gold: 150 114 40;
+  --c-gold-soft: 245 238 224;
+
+  --c-success: 30 103 74;
+  --c-success-soft: 228 241 235;
+  --c-warn: 140 97 20;
+  --c-warn-soft: 250 240 220;
+  --c-danger: 163 57 49;
+  --c-danger-soft: 250 233 231;
+
+  --shadow-color: 24 30 40;
 }
 
 html.dark {
   color-scheme: dark;
+
+  --c-canvas: 12 15 19;
+  --c-surface: 20 24 30;
+  --c-surface-2: 28 33 41;
+  --c-line: 39 45 54;
+  --c-line-strong: 57 65 77;
+
+  --c-ink: 233 235 238;
+  --c-ink-muted: 154 162 173;
+  --c-ink-subtle: 115 124 135;
+
+  --c-brand: 143 180 220;
+  --c-brand-hover: 173 202 233;
+  --c-brand-on: 12 20 30;
+  --c-brand-soft: 24 36 51;
+
+  --c-gold: 216 178 106;
+  --c-gold-soft: 45 38 25;
+
+  --c-success: 111 191 154;
+  --c-success-soft: 18 38 31;
+  --c-warn: 224 180 95;
+  --c-warn-soft: 45 36 18;
+  --c-danger: 232 139 132;
+  --c-danger-soft: 48 25 24;
+
+  --shadow-color: 0 0 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-feature-settings: "cv05" 1, "ss01" 1;
+}
+
+/* Angka rata lebar — penting buat tabel progres & penomoran tahap. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background-color: rgb(var(--c-brand) / 0.18);
+  color: rgb(var(--c-ink));
+}
+
+/* Ring fokus konsisten: hanya muncul untuk navigasi keyboard. */
+:focus-visible {
+  outline: 2px solid rgb(var(--c-brand));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Scrollbar yang menyatu dengan permukaan, bukan default abu-abu OS. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--c-line-strong)) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--c-line-strong));
+  border: 3px solid rgb(var(--c-canvas));
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

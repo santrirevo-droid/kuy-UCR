@@ -1,24 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Baloo_2, Plus_Jakarta_Sans } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import PwaRegister from "@/components/PwaRegister";
 import "./globals.css";
 
-const heading = Baloo_2({
+// Fraunces — serif editorial dengan kontras tinggi, dipakai khusus untuk judul
+// & angka besar. Inter untuk seluruh teks antarmuka.
+const display = Fraunces({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-heading",
+  variable: "--font-display",
   display: "swap",
 });
 
-const body = Plus_Jakarta_Sans({
+const body = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   variable: "--font-body",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Kuy, UCR! 🇺🇸📚",
+  title: {
+    default: "Kuy, UCR! — Panduan Program PKUMI–LPDP di UC Riverside",
+    template: "%s · Kuy, UCR!",
+  },
   description:
     "Panduan operasional short course PKUMI-LPDP di UC Riverside, California — dari persiapan keberangkatan sampai pulang lagi.",
   manifest: "/manifest.webmanifest",
@@ -40,7 +43,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#fb923c",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f5f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0f13" },
+  ],
 };
 
 // Set class 'dark' sebelum React hydrate supaya tidak ada flash tema salah
@@ -59,11 +65,11 @@ const noFlashThemeScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${heading.variable} ${body.variable}`}>
+    <html lang="id" className={`${display.variable} ${body.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: noFlashThemeScript }} />
       </head>
-      <body className="bg-orange-50 font-sans text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100">
+      <body className="bg-canvas font-sans text-ink antialiased">
         {children}
         <PwaRegister />
       </body>

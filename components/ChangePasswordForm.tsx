@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/PasswordInput";
+import Icon from "@/components/Icon";
+import { btnPrimary, card, input, label } from "@/lib/ui";
 
 export default function ChangePasswordForm({ forced = false }: { forced?: boolean }) {
   const router = useRouter();
@@ -51,51 +53,63 @@ export default function ChangePasswordForm({ forced = false }: { forced?: boolea
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="mt-6 space-y-4 rounded-2xl border border-orange-100 bg-white/70 p-5 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/70"
-    >
+    <form onSubmit={onSubmit} className={`${card} mt-8 space-y-5 p-6`}>
       <div>
-        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password saat ini</label>
+        <label htmlFor="current-password" className={label}>
+          Password saat ini
+        </label>
         <PasswordInput
+          id="current-password"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900"
+          className={`${input} mt-2`}
           required
           autoFocus
         />
       </div>
       <div>
-        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password baru</label>
+        <label htmlFor="new-password" className={label}>
+          Password baru
+        </label>
         <PasswordInput
+          id="new-password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900"
+          className={`${input} mt-2`}
           required
           minLength={6}
         />
+        <p className="mt-2 text-xs text-ink-subtle">Minimal 6 karakter.</p>
       </div>
       <div>
-        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Konfirmasi password baru</label>
+        <label htmlFor="confirm-password" className={label}>
+          Konfirmasi password baru
+        </label>
         <PasswordInput
+          id="confirm-password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-900"
+          className={`${input} mt-2`}
           required
           minLength={6}
         />
       </div>
-      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-      {success && (
-        <p className="text-sm text-teal-600 dark:text-teal-400">
-          ✅ Password berhasil diubah.{forced && " Mengarahkan ke beranda..."}
+
+      {error && (
+        <p className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger-soft px-3 py-2.5 text-sm text-danger">
+          <Icon name="alert" className="mt-0.5 h-4 w-4 shrink-0" />
+          {error}
         </p>
       )}
-      <button
-        disabled={loading}
-        className="w-full rounded-lg bg-gradient-to-r from-teal-500 to-sky-500 px-4 py-2.5 text-sm font-bold text-white shadow-md transition hover:shadow-lg disabled:opacity-50"
-      >
-        {loading ? "Menyimpan..." : "Ganti Password"}
+      {success && (
+        <p className="flex items-start gap-2 rounded-md border border-success/30 bg-success-soft px-3 py-2.5 text-sm text-success">
+          <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0" />
+          Password berhasil diubah.{forced && " Mengarahkan ke beranda…"}
+        </p>
+      )}
+
+      <button disabled={loading} className={`${btnPrimary} w-full`}>
+        {loading ? "Menyimpan…" : "Ganti password"}
       </button>
     </form>
   );

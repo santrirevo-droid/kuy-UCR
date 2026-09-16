@@ -6,7 +6,9 @@ import Link from "next/link";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import ThemeToggle from "@/components/ThemeToggle";
 import PasswordInput from "@/components/PasswordInput";
-import { stages } from "@/lib/stages";
+import Icon from "@/components/Icon";
+import { stages, getStageIndex, stageNumber } from "@/lib/stages";
+import { btnPrimary, btnSecondary, card, input } from "@/lib/ui";
 
 export default function EditStagePage() {
   const params = useParams<{ slug: string }>();
@@ -93,7 +95,7 @@ export default function EditStagePage() {
         return;
       }
       setSha(data.sha);
-      setMessage({ type: "ok", text: "Tersimpan! Perubahan langsung tampil di halaman publik." });
+      setMessage({ type: "ok", text: "Tersimpan. Perubahan langsung tampil di halaman publik." });
     } catch {
       setMessage({ type: "err", text: "Gagal terhubung ke server" });
     } finally {
@@ -103,81 +105,85 @@ export default function EditStagePage() {
 
   if (!stage) {
     return (
-      <div className="mx-auto max-w-2xl px-5 py-12">
-        <p>Tahap tidak ditemukan.</p>
-        <Link href="/admin/konten" className="text-orange-700 dark:text-orange-400">
-          ← Kembali
+      <div className="mx-auto max-w-2xl px-6 py-16">
+        <h1 className="font-display text-display-sm font-semibold text-ink">Tahap tidak ditemukan</h1>
+        <Link href="/admin/konten" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand">
+          <Icon name="arrow-left" className="h-4 w-4" />
+          Kembali ke daftar tahap
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-orange-50/40 dark:bg-slate-950">
-      <div className="mx-auto max-w-5xl px-5 py-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <Link href="/admin/konten" className="text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-              ← Semua tahap
+    <div className="min-h-screen bg-canvas">
+      <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-3.5">
+          <div className="min-w-0">
+            <Link
+              href="/admin/konten"
+              className="group inline-flex items-center gap-1.5 text-xs font-medium text-ink-subtle transition hover:text-ink"
+            >
+              <Icon name="arrow-left" className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+              Semua tahap
             </Link>
-            <h1 className="mt-1 font-heading text-xl font-bold text-slate-900 dark:text-white">
-              {stage.icon} Edit: {stage.title}
+            <h1 className="mt-1 flex items-center gap-2.5 truncate font-display text-base font-semibold text-ink">
+              <span className="tnum text-ink-subtle">{stageNumber(getStageIndex(stage.slug))}</span>
+              {stage.title}
             </h1>
           </div>
-          <div className="flex gap-2">
-            <a
-              href={`/tahap/${slug}`}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700"
-            >
-              Lihat halaman ↗
+          <div className="flex items-center gap-2">
+            <a href={`/tahap/${slug}`} target="_blank" rel="noreferrer" className={`${btnSecondary} h-9 py-0`}>
+              <span className="hidden sm:inline">Lihat halaman</span>
+              <Icon name="arrow-up-right" className="h-3.5 w-3.5" />
             </a>
             {!needsGithub && (
-              <button
-                onClick={onSave}
-                disabled={saving || loading}
-                className="rounded-lg bg-gradient-to-r from-orange-500 via-pink-500 to-violet-500 px-4 py-1.5 text-sm font-bold text-white shadow-sm transition hover:shadow-md disabled:opacity-50"
-              >
-                {saving ? "Menyimpan..." : "Simpan"}
+              <button onClick={onSave} disabled={saving || loading} className={`${btnPrimary} h-9 py-0`}>
+                {saving ? "Menyimpan…" : "Simpan"}
               </button>
             )}
             <ThemeToggle />
           </div>
         </div>
+      </header>
 
+      <main className="mx-auto max-w-5xl px-6 py-8">
         {loading ? (
-          <div className="mt-6 flex h-[50vh] items-center justify-center text-slate-400">Memuat...</div>
+          <div className="flex h-[50vh] items-center justify-center text-sm text-ink-subtle">Memuat…</div>
         ) : needsGithub ? (
-          <div className="mx-auto mt-8 max-w-md rounded-2xl border border-orange-100 bg-white/70 p-6 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/70">
-            <div className="text-2xl">🔗</div>
-            <h2 className="mt-2 font-heading text-lg font-bold text-slate-900 dark:text-white">
-              Sambungkan GitHub dulu
-            </h2>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          <div className={`${card} mx-auto mt-8 max-w-md p-6`}>
+            <span className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-surface-2 text-brand">
+              <Icon name="link" className="h-5 w-5" />
+            </span>
+            <h2 className="mt-4 font-display text-lg font-semibold text-ink">Sambungkan GitHub dulu</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink-muted">
               Mengedit konten butuh GitHub Personal Access Token karena perubahan langsung ter-commit ke repo.
             </p>
-            <form onSubmit={onConnectGithub} className="mt-4 space-y-3">
+            <form onSubmit={onConnectGithub} className="mt-5 space-y-3">
               <PasswordInput
                 value={pat}
                 onChange={(e) => setPat(e.target.value)}
-                placeholder="github_pat_... atau ghp_..."
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 dark:border-slate-700 dark:bg-slate-900"
+                placeholder="github_pat_… atau ghp_…"
+                className={`${input} font-mono`}
                 required
                 autoFocus
               />
-              <p className="text-xs leading-relaxed text-slate-400">
+              <p className="text-xs leading-relaxed text-ink-subtle">
                 Buat token <em>fine-grained</em> di GitHub → Settings → Developer settings, scope hanya ke repo{" "}
-                <code className="rounded bg-orange-100 px-1 dark:bg-slate-800">kuy-UCR</code>, permission{" "}
-                <strong>Contents: Read and write</strong>. Tersimpan di cookie sesi ini saja (6 jam), tidak pernah di
-                server.
+                <code className="rounded border border-line bg-surface-2 px-1 py-0.5 font-mono text-[0.75rem] text-ink">
+                  kuy-UCR
+                </code>
+                , permission <strong className="font-semibold text-ink-muted">Contents: Read and write</strong>.
+                Tersimpan di cookie sesi ini saja (6 jam), tidak pernah di server.
               </p>
-              {connectError && <p className="text-sm text-red-600 dark:text-red-400">{connectError}</p>}
-              <button
-                disabled={connecting}
-                className="w-full rounded-lg bg-gradient-to-r from-orange-500 via-pink-500 to-violet-500 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:shadow-md disabled:opacity-50"
-              >
-                {connecting ? "Memeriksa..." : "Sambungkan"}
+              {connectError && (
+                <p className="flex items-start gap-2 rounded-md border border-danger/30 bg-danger-soft px-3 py-2.5 text-sm text-danger">
+                  <Icon name="alert" className="mt-0.5 h-4 w-4 shrink-0" />
+                  {connectError}
+                </p>
+              )}
+              <button disabled={connecting} className={`${btnPrimary} w-full`}>
+                {connecting ? "Memeriksa…" : "Sambungkan"}
               </button>
             </form>
           </div>
@@ -185,57 +191,64 @@ export default function EditStagePage() {
           <>
             {message && (
               <p
-                className={`mt-3 text-sm ${message.type === "ok" ? "text-teal-600 dark:text-teal-400" : "text-red-600 dark:text-red-400"}`}
+                className={`mb-4 flex items-start gap-2 rounded-md border px-3 py-2.5 text-sm ${
+                  message.type === "ok"
+                    ? "border-success/30 bg-success-soft text-success"
+                    : "border-danger/30 bg-danger-soft text-danger"
+                }`}
               >
-                {message.type === "ok" ? "✅" : "❌"} {message.text}
+                <Icon name={message.type === "ok" ? "check" : "alert"} className="mt-0.5 h-4 w-4 shrink-0" />
+                {message.text}
               </p>
             )}
 
-            <div className="mt-4 flex gap-2 text-sm">
-              <button
-                onClick={() => setTab("edit")}
-                className={`rounded-full px-3 py-1 font-medium transition ${
-                  tab === "edit"
-                    ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-sm"
-                    : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                }`}
-              >
-                Edit Markdown
-              </button>
-              <button
-                onClick={() => setTab("preview")}
-                className={`rounded-full px-3 py-1 font-medium transition ${
-                  tab === "preview"
-                    ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-sm"
-                    : "bg-white text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                }`}
-              >
-                Preview
-              </button>
+            <div className="flex items-center justify-between gap-3 border-b border-line">
+              <div className="-mb-px flex gap-1">
+                {(
+                  [
+                    { id: "edit", label: "Markdown" },
+                    { id: "preview", label: "Pratinjau" },
+                  ] as const
+                ).map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setTab(t.id)}
+                    className={`border-b-2 px-3 py-2.5 text-sm transition ${
+                      tab === t.id
+                        ? "border-brand font-semibold text-brand"
+                        : "border-transparent font-medium text-ink-muted hover:border-line-strong hover:text-ink"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              <span className="tnum hidden text-xs text-ink-subtle sm:block">{content.length} karakter</span>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-5">
               {tab === "edit" ? (
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   spellCheck={false}
-                  className="h-[70vh] w-full rounded-xl border border-slate-300 bg-white p-4 font-mono text-sm leading-relaxed text-slate-800 outline-none focus:border-orange-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                  className={`${input} h-[70vh] resize-none font-mono text-[0.82rem] leading-relaxed`}
                 />
               ) : (
-                <div className="h-[70vh] overflow-y-auto rounded-xl border border-orange-100 bg-white/60 p-6 dark:border-slate-800 dark:bg-slate-900/60">
+                <div className={`${card} h-[70vh] overflow-y-auto px-6 py-6 sm:px-10`}>
                   <MarkdownRenderer source={content} />
                 </div>
               )}
             </div>
 
-            <p className="mt-3 text-xs text-slate-400">
-              Format: Markdown biasa (heading <code>##</code>, tabel, <code>&gt; teks</code> untuk kotak catatan,
-              checklist <code>- [ ]</code>, dst).
+            <p className="mt-4 text-xs leading-relaxed text-ink-subtle">
+              Format: Markdown biasa — heading <code className="font-mono">##</code>, tabel,{" "}
+              <code className="font-mono">&gt; teks</code> untuk kotak catatan, checklist{" "}
+              <code className="font-mono">- [ ]</code>, dan seterusnya.
             </p>
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 }

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
-import { accentStyles, type Stage } from "@/lib/stages";
+import { stageNumber, type Stage } from "@/lib/stages";
+import Icon from "@/components/Icon";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function ProgressHeader({
@@ -22,53 +23,63 @@ export default function ProgressHeader({
   const pct = Math.round((current / total) * 100);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-orange-100/80 bg-orange-50/85 backdrop-blur dark:border-slate-800 dark:bg-slate-950/85">
-      <div className="mx-auto flex max-w-3xl items-center justify-between gap-2 px-5 py-3">
+    <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-3xl items-center justify-between gap-2 px-6 py-3">
         <Link
           href="/"
-          className="text-sm font-bold text-slate-500 transition hover:text-slate-800 dark:text-slate-400 dark:hover:text-white"
+          className="group inline-flex items-center gap-2 text-sm font-semibold text-ink-muted transition hover:text-ink"
         >
-          ← Kuy, UCR!
+          <Icon name="arrow-left" className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+          <span className="font-display tracking-tight">Kuy, UCR!</span>
         </Link>
+
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">{userBadge}</div>
           <button
             onClick={() => setOpen((v) => !v)}
-            className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-sm font-semibold text-slate-600 shadow-sm transition hover:shadow dark:bg-slate-800 dark:text-slate-300"
+            aria-expanded={open}
+            className="inline-flex h-9 items-center gap-2 rounded-md border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-line-strong"
           >
-            Tahap {current} dari {total}
-            <span className={`transition-transform ${open ? "rotate-180" : ""}`}>⌄</span>
+            <span className="tnum">
+              Tahap <span className="font-display font-semibold">{stageNumber(current - 1)}</span>
+              <span className="text-ink-subtle"> / {stageNumber(total - 1)}</span>
+            </span>
+            <Icon
+              name="chevron-down"
+              className={`h-3.5 w-3.5 text-ink-subtle transition-transform ${open ? "rotate-180" : ""}`}
+            />
           </button>
           <ThemeToggle />
         </div>
       </div>
-      <div className="h-1.5 w-full bg-orange-100 dark:bg-slate-800">
-        <div
-          className="h-1.5 bg-gradient-to-r from-orange-400 via-pink-500 to-violet-500 transition-all duration-300"
-          style={{ width: `${pct}%` }}
-        />
+
+      {/* Indikator posisi — garis tipis, bukan bar tebal berwarna. */}
+      <div className="h-px w-full bg-line">
+        <div className="h-px bg-brand transition-all duration-500 ease-out" style={{ width: `${pct}%` }} />
       </div>
+
       {open && (
-        <nav className="border-t border-orange-100 bg-orange-50 dark:border-slate-800 dark:bg-slate-950">
-          <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-1 px-5 py-3 sm:grid-cols-2">
+        <nav className="animate-fade border-t border-line bg-surface shadow-card">
+          <ul className="mx-auto grid max-w-3xl grid-cols-1 gap-0.5 px-4 py-3 sm:grid-cols-2">
             {stages.map((s, i) => {
-              const accent = accentStyles[s.accent];
               const isActive = s.slug === activeSlug;
               return (
                 <li key={s.slug}>
                   <Link
                     href={`/tahap/${s.slug}`}
                     onClick={() => setOpen(false)}
-                    className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
-                      isActive
-                        ? `${accent.activeBg} ${accent.activeText} font-bold`
-                        : "text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-900"
+                    aria-current={isActive ? "page" : undefined}
+                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${
+                      isActive ? "bg-brand-soft text-brand" : "text-ink-muted hover:bg-surface-2 hover:text-ink"
                     }`}
                   >
-                    <span>{s.icon}</span>
-                    <span>
-                      {i + 1}. {s.title}
+                    <span
+                      className={`tnum font-display text-xs font-semibold ${isActive ? "text-brand" : "text-ink-subtle"}`}
+                    >
+                      {stageNumber(i)}
                     </span>
+                    <Icon name={s.icon} className="h-4 w-4 shrink-0" />
+                    <span className={`truncate ${isActive ? "font-semibold" : "font-medium"}`}>{s.shortTitle}</span>
                   </Link>
                 </li>
               );
