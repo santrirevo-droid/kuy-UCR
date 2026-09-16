@@ -45,4 +45,4 @@ Pasca-kepulangan
 - [ ] Rencana akhir pekan bulan 1–3 dibuat
 - [ ] Laporan akhir & sertifikat pasca-program
 
-Siap? Lanjut ke tahap berikutnya: **Persiapan Sebelum Berangkat** →
+Siap? Mulai dari **Checklist Dokumen** — pastikan semua berkas beres dulu — lalu lanjut ke **Persiapan Sebelum Berangkat**.
