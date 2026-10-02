@@ -74,7 +74,7 @@ export const houses: House[] = [
     lng: -117.3456902,
     note: "Kompleks apartemen di kawasan Canyon Crest.",
     residents: [
-      { name: "Muhammad Syamsur Rijal", nickname: "Syamsur" },
+      { name: "Muhammad Syamsur Rijal", nickname: "Rijal" },
       { name: "Dannu Akbar", nickname: "Dannu" },
       { name: "Saepul", nickname: "Saepul" },
       { name: "Ahmad Sayyid Al Adam", nickname: "Sayyid" },
