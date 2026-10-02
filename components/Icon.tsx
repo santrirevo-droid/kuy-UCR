@@ -32,6 +32,18 @@ const paths: Record<string, JSX.Element> = {
       <path d="M7.5 8.5v0M7.5 12v0M7.5 15.5v0M16.5 13v0M16.5 16.5v0" strokeLinecap="round" />
     </>
   ),
+  home: (
+    <>
+      <path d="M3.5 11 12 4l8.5 7" />
+      <path d="M5.5 9.5V20h13V9.5M10 20v-5.5h4V20" />
+    </>
+  ),
+  "map-pin": (
+    <>
+      <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" />
+      <circle cx="12" cy="10" r="2.3" />
+    </>
+  ),
   calendar: (
     <>
       <rect x="3.5" y="5" width="17" height="15.5" rx="2" />

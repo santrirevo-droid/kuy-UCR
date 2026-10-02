@@ -11,7 +11,7 @@ UC Riverside terletak di **Riverside, California**, bagian dari kawasan **Inland
 | **Airbnb/short-term rental** | Fleksibel, cocok untuk 3 bulan | Harga per malam lebih mahal dari sewa bulanan |
 | **Homestay/kos bersama komunitas Indonesia/Muslim lokal** | Suasana kekeluargaan | Perlu jaringan/rekomendasi senior LPDP/PPI |
 
-⬜ **TODO:** konfirmasi ke ISSO UCR / koordinator PKUMI-LPDP apakah program menyediakan akomodasi kolektif untuk rombongan.
+> 🎉 Housing rombongan sudah didapat — **5 rumah untuk 25 peserta**. Alamat, titik Google Maps, dan daftar penghuni tiap rumah ada di [Laporan Housing](/housing).
 
 **Tips mencari housing:**
 - Cek grup **PPI (Perhimpunan Pelajar Indonesia) Riverside/Inland Empire** di media sosial untuk rekomendasi

@@ -1,0 +1,128 @@
+// Data penempatan housing rombongan di Riverside. Nama lengkap mengikuti
+// daftar personalia di content/struktur-kepengurusan.md; koordinat dari
+// OpenStreetMap (titik bangunan/nomor rumah), dipakai untuk link Google Maps.
+// Ubah file ini (+ redeploy) kalau ada perpindahan anggota atau alamat.
+
+export type House = {
+  id: string;
+  /** Nama pendek rumah — biasanya nama jalannya. */
+  name: string;
+  street: string;
+  city: string;
+  lat: number;
+  lng: number;
+  residents: { name: string; nickname: string }[];
+  note?: string;
+};
+
+/** UCR Bell Tower — titik acuan jarak ke kampus. */
+export const UCR_CAMPUS = { name: "UCR Bell Tower", lat: 33.97353, lng: -117.32819 };
+
+export const houses: House[] = [
+  {
+    id: "barret",
+    name: "Barret Road",
+    street: "212 Barret Road",
+    city: "Riverside, CA 92507",
+    lat: 33.9744118,
+    lng: -117.3161787,
+    residents: [
+      { name: "Umiatu Rohmah", nickname: "Umiatu" },
+      { name: "Putri Salsabila Azkya", nickname: "Putri" },
+      { name: "Ibnatul Mardiah", nickname: "Ibna" },
+      { name: "Enok Ghosiyah", nickname: "Enok" },
+      { name: "Siti Nurkholilah", nickname: "Kholilah" },
+      { name: "Risma Hikmawati", nickname: "Risma" },
+    ],
+  },
+  {
+    id: "mission-inn",
+    name: "Mission Inn Avenue",
+    street: "3050 Mission Inn Avenue",
+    city: "Riverside, CA 92507",
+    lat: 33.9789812,
+    lng: -117.3654355,
+    residents: [
+      { name: "Muhammad Taufik Hudaya", nickname: "Taufik" },
+      { name: "Arif Al Anang", nickname: "Arif" },
+      { name: "Zaeni Anwar", nickname: "Zaeni" },
+      { name: "Al Fahrizal", nickname: "Fahrizal" },
+      { name: "Moh. Fadllurrahman", nickname: "Fadlurrahman" },
+    ],
+  },
+  {
+    id: "olivewood",
+    name: "Olivewood Avenue",
+    street: "5470 Olivewood Avenue",
+    city: "Riverside, CA 92506",
+    lat: 33.9631064,
+    lng: -117.3828218,
+    residents: [
+      { name: "Intihaul Fudola", nickname: "Fudola" },
+      { name: "Tharekh Era Elraisy", nickname: "Tharekh" },
+      { name: "Kiki Adnan Muzaki", nickname: "Kiki" },
+      { name: "Nurul", nickname: "Nurul" },
+      { name: "Makmunzir", nickname: "Munzir" },
+    ],
+  },
+  {
+    id: "canyon-crest",
+    name: "Canyon Crest",
+    street: "1550 Central Avenue",
+    city: "Riverside, CA 92507",
+    lat: 33.955212,
+    lng: -117.3456902,
+    note: "Kompleks apartemen di kawasan Canyon Crest.",
+    residents: [
+      { name: "Muhammad Syamsur Rijal", nickname: "Syamsur" },
+      { name: "Dannu Akbar", nickname: "Dannu" },
+      { name: "Saepul", nickname: "Saepul" },
+      { name: "Ahmad Sayyid Al Adam", nickname: "Sayyid" },
+      { name: "Azhar Ahmad Falahan", nickname: "Azhar" },
+      { name: "Mahmud Salim", nickname: "Mahmud" },
+      { name: "M. Syukrillah", nickname: "Syukri" },
+    ],
+  },
+  {
+    id: "flanders",
+    name: "Flanders Road",
+    street: "2935 Flanders Road",
+    city: "Riverside, CA 92507",
+    lat: 33.9863136,
+    lng: -117.3229057,
+    residents: [
+      { name: "Muhammad Hidayat", nickname: "Dayat" },
+      { name: "Davik Ihsan Purnama", nickname: "Davik" },
+    ],
+  },
+];
+
+export function fullAddress(h: House): string {
+  return `${h.street}, ${h.city}`;
+}
+
+/** Link Google Maps yang membuka titik koordinat rumah. */
+export function mapsUrl(h: House): string {
+  return `https://www.google.com/maps/search/?api=1&query=${h.lat},${h.lng}`;
+}
+
+/** Link petunjuk arah dari rumah ke kampus UCR. */
+export function directionsToCampusUrl(h: House): string {
+  return `https://www.google.com/maps/dir/?api=1&origin=${h.lat},${h.lng}&destination=${UCR_CAMPUS.lat},${UCR_CAMPUS.lng}`;
+}
+
+/** Peta tersemat (tanpa API key) berpusat di titik rumah. */
+export function mapsEmbedUrl(h: House): string {
+  return `https://maps.google.com/maps?q=${h.lat},${h.lng}&z=16&output=embed`;
+}
+
+/** Jarak garis lurus ke kampus dalam km (haversine) — bukan jarak tempuh jalan. */
+export function distanceToCampusKm(h: House): number {
+  const R = 6371;
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const dLat = rad(UCR_CAMPUS.lat - h.lat);
+  const dLng = rad(UCR_CAMPUS.lng - h.lng);
+  const a =
+    Math.sin(dLat / 2) ** 2 + Math.cos(rad(h.lat)) * Math.cos(rad(UCR_CAMPUS.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
