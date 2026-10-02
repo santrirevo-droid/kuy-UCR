@@ -6,6 +6,7 @@ import {
   mapsEmbedUrl,
   directionsToCampusUrl,
   distanceToCampusKm,
+  telUrl,
   UCR_CAMPUS,
 } from "@/lib/housing";
 import Icon from "@/components/Icon";
@@ -158,10 +159,23 @@ export default function HousingPage() {
                     </p>
                     <ol className="mt-2 divide-y divide-line border-y border-line">
                       {h.residents.map((r, j) => (
-                        <li key={r.name} className="flex items-baseline gap-3 py-2 text-sm">
-                          <span className="tnum w-5 text-right font-display text-ink-subtle">{j + 1}</span>
-                          <span className="font-medium text-ink">{r.name}</span>
-                          {r.nickname !== r.name && <span className="text-ink-subtle">({r.nickname})</span>}
+                        <li key={r.name} className="flex min-h-[2.75rem] items-center gap-3 py-1.5 text-sm">
+                          <span className="tnum w-5 shrink-0 text-right font-display text-ink-subtle">{j + 1}</span>
+                          <span className="min-w-0 flex-1">
+                            <span className="font-medium text-ink">{r.name}</span>
+                            {r.nickname !== r.name && <span className="ml-1.5 text-ink-subtle">({r.nickname})</span>}
+                            {r.phone && <span className="tnum block text-xs text-ink-muted">{r.phone}</span>}
+                          </span>
+                          {r.phone && (
+                            <a
+                              href={telUrl(r.phone)}
+                              aria-label={`Telepon ${r.nickname} ${r.phone}`}
+                              title={`Telepon ${r.phone}`}
+                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-success/30 bg-success-soft text-success transition hover:border-success hover:bg-success hover:text-white"
+                            >
+                              <Icon name="phone" className="h-4 w-4" />
+                            </a>
+                          )}
                         </li>
                       ))}
                     </ol>

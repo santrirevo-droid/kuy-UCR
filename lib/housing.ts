@@ -2,6 +2,14 @@
 // daftar personalia di content/struktur-kepengurusan.md; koordinat dari
 // OpenStreetMap (titik bangunan/nomor rumah), dipakai untuk link Google Maps.
 // Ubah file ini (+ redeploy) kalau ada perpindahan anggota atau alamat.
+// Penghuni yang punya nomor telepon (kontak rumah) ditaruh paling atas.
+
+export type Resident = {
+  name: string;
+  nickname: string;
+  /** Nomor HP AS, format tampilan "(951) 377-8665". */
+  phone?: string;
+};
 
 export type House = {
   id: string;
@@ -11,7 +19,7 @@ export type House = {
   city: string;
   lat: number;
   lng: number;
-  residents: { name: string; nickname: string }[];
+  residents: Resident[];
   note?: string;
 };
 
@@ -27,12 +35,12 @@ export const houses: House[] = [
     lat: 33.9744118,
     lng: -117.3161787,
     residents: [
+      { name: "Risma Hikmawati", nickname: "Risma", phone: "(951) 222-9247" },
       { name: "Umiatu Rohmah", nickname: "Umiatu" },
       { name: "Putri Salsabila Azkya", nickname: "Putri" },
       { name: "Ibnatul Mardiah", nickname: "Ibna" },
       { name: "Enok Ghosiyah", nickname: "Enok" },
       { name: "Siti Nurkholilah", nickname: "Kholilah" },
-      { name: "Risma Hikmawati", nickname: "Risma" },
     ],
   },
   {
@@ -43,10 +51,10 @@ export const houses: House[] = [
     lat: 33.9789812,
     lng: -117.3654355,
     residents: [
-      { name: "Muhammad Taufik Hudaya", nickname: "Taufik" },
+      { name: "Muhammad Taufik Hudaya", nickname: "Taufik", phone: "(951) 906-0483" },
+      { name: "Al Fahrizal", nickname: "Fahrizal", phone: "(951) 377-8665" },
       { name: "Arif Al Anang", nickname: "Arif" },
       { name: "Zaeni Anwar", nickname: "Zaeni" },
-      { name: "Al Fahrizal", nickname: "Fahrizal" },
       { name: "Moh. Fadllurrahman", nickname: "Fadlurrahman" },
     ],
   },
@@ -58,9 +66,9 @@ export const houses: House[] = [
     lat: 33.9631064,
     lng: -117.3828218,
     residents: [
+      { name: "Kiki Adnan Muzaki", nickname: "Kiki", phone: "(951) 906-0496" },
       { name: "Intihaul Fudola", nickname: "Fudola" },
       { name: "Tharekh Era Elraisy", nickname: "Tharekh" },
-      { name: "Kiki Adnan Muzaki", nickname: "Kiki" },
       { name: "Nurul", nickname: "Nurul" },
       { name: "Makmunzir", nickname: "Munzir" },
     ],
@@ -74,12 +82,12 @@ export const houses: House[] = [
     lng: -117.3456902,
     note: "Kompleks apartemen di kawasan Canyon Crest.",
     residents: [
+      { name: "Dannu Akbar", nickname: "Dannu", phone: "(951) 906-0468" },
+      { name: "Ahmad Sayyid Al Adam", nickname: "Sayyid", phone: "(951) 906-0492" },
+      { name: "Mahmud Salim", nickname: "Mahmud", phone: "(951) 384-5055" },
       { name: "Muhammad Syamsur Rijal", nickname: "Rijal" },
-      { name: "Dannu Akbar", nickname: "Dannu" },
       { name: "Saepul", nickname: "Saepul" },
-      { name: "Ahmad Sayyid Al Adam", nickname: "Sayyid" },
       { name: "Azhar Ahmad Falahan", nickname: "Azhar" },
-      { name: "Mahmud Salim", nickname: "Mahmud" },
       { name: "M. Syukrillah", nickname: "Syukri" },
     ],
   },
@@ -91,14 +99,19 @@ export const houses: House[] = [
     lat: 33.9863136,
     lng: -117.3229057,
     residents: [
-      { name: "Muhammad Hidayat", nickname: "Dayat" },
-      { name: "Davik Ihsan Purnama", nickname: "Davik" },
+      { name: "Muhammad Hidayat Rasiin", nickname: "Dayat", phone: "(951) 906-0973" },
+      { name: "Davik Ihsan Purnama", nickname: "Davik", phone: "(951) 410-5539" },
     ],
   },
 ];
 
 export function fullAddress(h: House): string {
   return `${h.street}, ${h.city}`;
+}
+
+/** Link tel: — nomor AS diawali kode negara +1. */
+export function telUrl(phone: string): string {
+  return `tel:+1${phone.replace(/\D/g, "")}`;
 }
 
 /** Link Google Maps yang membuka titik koordinat rumah. */
