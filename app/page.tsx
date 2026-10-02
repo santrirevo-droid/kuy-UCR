@@ -71,6 +71,22 @@ export default async function Home() {
               </div>
             ))}
           </dl>
+
+          <Link
+            href="/housing"
+            className="group mt-4 flex items-center justify-between gap-4 rounded-lg border border-line bg-surface px-4 py-3.5 transition hover:border-brand/40 hover:bg-brand-soft"
+          >
+            <span className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-brand">
+                <Icon name="home" className="h-[1.05rem] w-[1.05rem]" />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-ink">Laporan Housing</span>
+                <span className="block text-xs text-ink-muted">Alamat, titik peta, dan penghuni tiap rumah di Riverside</span>
+              </span>
+            </span>
+            <Icon name="arrow-right" className="h-4 w-4 text-ink-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-brand" />
+          </Link>
         </section>
 
         {/* Indeks tahapan */}
