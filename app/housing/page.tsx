@@ -9,6 +9,7 @@ import {
   telUrl,
   UCR_CAMPUS,
 } from "@/lib/housing";
+import HousingMap from "@/components/HousingMap";
 import Icon from "@/components/Icon";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -83,6 +84,32 @@ export default function HousingPage() {
             ))}
           </dl>
         </header>
+
+        {/* Peta gabungan */}
+        <section className="pt-12">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+            <h2 className="font-display text-display-sm font-semibold text-ink">Peta semua housing</h2>
+            <div className="flex items-center gap-4 text-sm font-semibold">
+              <Link href="/housing/peta" className="inline-flex items-center gap-1 text-brand hover:underline">
+                Layar penuh
+                <Icon name="arrow-up-right" className="h-3.5 w-3.5" />
+              </Link>
+              <a href="/housing/kml" className="text-ink-muted hover:text-brand">
+                Unduh KML
+              </a>
+            </div>
+          </div>
+          <div className="mt-6">
+            <HousingMap houses={houses} campus={UCR_CAMPUS} />
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-ink-subtle">
+            Ingin versi Google Maps? Unduh KML di atas, lalu buka{" "}
+            <a href="https://www.google.com/maps/d/" target="_blank" rel="noreferrer" className="underline hover:text-brand">
+              Google My Maps
+            </a>{" "}
+            → Buat peta baru → Impor → pilih file KML-nya → Bagikan.
+          </p>
+        </section>
 
         {/* Rekap */}
         <section className="py-12">

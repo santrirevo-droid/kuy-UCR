@@ -19,6 +19,8 @@ export type House = {
   city: string;
   lat: number;
   lng: number;
+  /** Warna pin di peta gabungan. */
+  color: string;
   residents: Resident[];
   note?: string;
 };
@@ -29,6 +31,7 @@ export const UCR_CAMPUS = { name: "UCR Bell Tower", lat: 33.97353, lng: -117.328
 export const houses: House[] = [
   {
     id: "barret",
+    color: "#2563eb",
     name: "Barret Road",
     street: "212 Barret Road",
     city: "Riverside, CA 92507",
@@ -45,6 +48,7 @@ export const houses: House[] = [
   },
   {
     id: "mission-inn",
+    color: "#d97706",
     name: "Mission Inn Avenue",
     street: "3050 Mission Inn Avenue",
     city: "Riverside, CA 92507",
@@ -60,6 +64,7 @@ export const houses: House[] = [
   },
   {
     id: "olivewood",
+    color: "#059669",
     name: "Olivewood Avenue",
     street: "5470 Olivewood Avenue",
     city: "Riverside, CA 92506",
@@ -75,6 +80,7 @@ export const houses: House[] = [
   },
   {
     id: "canyon-crest",
+    color: "#7c3aed",
     name: "Canyon Crest",
     street: "1550 Central Avenue",
     city: "Riverside, CA 92507",
@@ -93,6 +99,7 @@ export const houses: House[] = [
   },
   {
     id: "flanders",
+    color: "#e11d48",
     name: "Flanders Road",
     street: "2935 Flanders Road",
     city: "Riverside, CA 92507",
