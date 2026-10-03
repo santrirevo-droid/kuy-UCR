@@ -7,7 +7,7 @@
 // selama masih online. Cache cuma dipakai sebagai fallback kalau jaringan
 // benar-benar mati.
 
-const CACHE_VERSION = "kuyucr-v1";
+const CACHE_VERSION = "kuyucr-v2";
 const OFFLINE_URL = "/offline";
 const PRECACHE_URLS = [OFFLINE_URL, "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
 

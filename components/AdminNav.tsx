@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import Icon, { type IconName } from "@/components/Icon";
+import Logo from "@/components/Logo";
 
 const TABS: { href: string; label: string; icon: IconName }[] = [
   { href: "/admin", label: "Progres Peserta", icon: "chart-bar" },
@@ -20,7 +21,8 @@ export default function AdminNav() {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3.5">
-        <span className="flex items-baseline gap-2.5">
+        <span className="flex items-center gap-2.5">
+          <Logo size={30} />
           <span className="font-display text-base font-semibold tracking-tight text-ink">Kuy, UCR!</span>
           <span className="h-3.5 w-px bg-line-strong" />
           <span className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-gold">Panel Admin</span>

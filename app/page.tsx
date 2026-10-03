@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { stages, stageNumber } from "@/lib/stages";
 import Icon from "@/components/Icon";
+import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import UserBadge from "@/components/UserBadge";
 
@@ -17,7 +18,8 @@ export default async function Home() {
       {/* Bilah identitas — tipis, menempel di atas, garis rambut sebagai pemisah. */}
       <header className="border-b border-line">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-6 py-4">
-          <span className="flex items-baseline gap-2.5">
+          <span className="flex items-center gap-2.5">
+            <Logo size={34} />
             <span className="font-display text-lg font-semibold tracking-tight text-ink">Kuy, UCR!</span>
             <span className="hidden h-3.5 w-px bg-line-strong sm:block" />
             <span className="hidden text-[0.68rem] font-medium uppercase tracking-eyebrow text-ink-subtle sm:block">

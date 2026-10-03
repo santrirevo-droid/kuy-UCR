@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/session";
 import Icon from "@/components/Icon";
+import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import ChangePasswordForm from "@/components/ChangePasswordForm";
 
@@ -16,13 +17,17 @@ export default async function AkunPage() {
       <header className="border-b border-line">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
           {user.mustChangePassword ? (
-            <span className="font-display text-sm font-semibold tracking-tight text-ink">Kuy, UCR!</span>
+            <span className="inline-flex items-center gap-2">
+              <Logo size={28} />
+              <span className="font-display text-sm font-semibold tracking-tight text-ink">Kuy, UCR!</span>
+            </span>
           ) : (
             <Link
               href="/"
               className="group inline-flex items-center gap-2 text-sm font-semibold text-ink-muted transition hover:text-ink"
             >
               <Icon name="arrow-left" className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+              <Logo size={28} />
               <span className="font-display tracking-tight">Kuy, UCR!</span>
             </Link>
           )}

@@ -10,6 +10,7 @@ import {
   UCR_CAMPUS,
 } from "@/lib/housing";
 import Icon from "@/components/Icon";
+import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import UserBadge from "@/components/UserBadge";
 
@@ -38,6 +39,7 @@ export default function HousingPage() {
             className="group inline-flex items-center gap-2 text-sm font-semibold text-ink-muted transition hover:text-ink"
           >
             <Icon name="arrow-left" className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            <Logo size={28} />
             <span className="font-display tracking-tight">Kuy, UCR!</span>
           </Link>
           <div className="flex items-center gap-2">
