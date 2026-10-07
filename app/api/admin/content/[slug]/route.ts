@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { isAdminRequest, PAT_COOKIE } from "@/lib/auth";
+import { PAT_COOKIE } from "@/lib/auth";
+import { isAdminRequest } from "@/lib/admin-session";
 import { GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH } from "@/lib/content";
 import { getStage } from "@/lib/stages";
 

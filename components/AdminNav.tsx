@@ -11,6 +11,7 @@ const TABS: { href: string; label: string; icon: IconName }[] = [
   { href: "/admin", label: "Progres Peserta", icon: "chart-bar" },
   { href: "/admin/konten", label: "Kelola Konten", icon: "file-text" },
   { href: "/admin/users", label: "Kelola User", icon: "user-cog" },
+  { href: "/tagihan", label: "Tagihan", icon: "wallet" },
 ];
 
 // Chrome panel admin: baris identitas di atas, lalu tab dengan penanda garis

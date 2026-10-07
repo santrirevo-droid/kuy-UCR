@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest, PAT_COOKIE, SESSION_MAX_AGE } from "@/lib/auth";
+import { PAT_COOKIE, SESSION_MAX_AGE } from "@/lib/auth";
+import { isAdminRequest } from "@/lib/admin-session";
 import { GITHUB_OWNER, GITHUB_REPO } from "@/lib/content";
 
 // Dipanggil khusus saat admin masuk ke "Kelola Konten" dan belum punya token

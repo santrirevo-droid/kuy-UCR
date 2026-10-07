@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/auth";
+import { isAdminRequest } from "@/lib/admin-session";
 import { createUser, getAllUsers, generateTempPassword } from "@/lib/users";
 
 export async function GET(req: Request) {

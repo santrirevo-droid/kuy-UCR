@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { randomBytes } from "node:crypto";
 import { verifyPassword } from "@/lib/users";
 import { createUserSession, SESSION_COOKIE, SESSION_TTL_SECONDS } from "@/lib/session";
 import { ADMIN_PASSWORD, ADMIN_COOKIE, SESSION_MAX_AGE } from "@/lib/auth";
+import { createAdminToken } from "@/lib/admin-session";
 
 export async function POST(req: Request) {
   let body: { username?: string; password?: string };
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Username atau password salah" }, { status: 401 });
     }
     const res = NextResponse.json({ ok: true, admin: true });
-    res.cookies.set(ADMIN_COOKIE, randomBytes(16).toString("hex"), {
+    res.cookies.set(ADMIN_COOKIE, createAdminToken(), {
       httpOnly: true,
       secure: true,
       sameSite: "strict",

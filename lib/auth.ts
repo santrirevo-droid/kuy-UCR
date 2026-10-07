@@ -15,7 +15,5 @@ export const PAT_COOKIE = "kuyucr_pat";
 
 export const SESSION_MAX_AGE = 60 * 60 * 6; // 6 jam
 
-export function isAdminRequest(req: Request): boolean {
-  const cookieHeader = req.headers.get("cookie") || "";
-  return cookieHeader.split(";").some((c) => c.trim().startsWith(`${ADMIN_COOKIE}=`));
-}
+// Verifikasi sesi admin (cookie bertanda tangan) ada di lib/admin-session.ts —
+// dipisah karena butuh node:crypto, sedangkan file ini juga diimpor middleware.

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/auth";
+import { isAdminRequest } from "@/lib/admin-session";
 import { deleteUser, normalizeUsername, updatePassword, generateTempPassword } from "@/lib/users";
 import { getRedis } from "@/lib/kv";
 import { stages } from "@/lib/stages";
