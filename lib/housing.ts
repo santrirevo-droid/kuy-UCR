@@ -38,12 +38,12 @@ export const houses: House[] = [
     lat: 33.9744118,
     lng: -117.3161787,
     residents: [
-      { name: "Risma Hikmawati", nickname: "Risma", phone: "(951) 222-9247" },
       { name: "Umiatu Rohmah", nickname: "Umiatu" },
       { name: "Putri Salsabila Azkya", nickname: "Putri" },
       { name: "Ibnatul Mardiah", nickname: "Ibna" },
       { name: "Enok Ghosiyah", nickname: "Enok" },
       { name: "Siti Nurkholilah", nickname: "Kholilah" },
+      { name: "Risma Hikmawati", nickname: "Risma" },
     ],
   },
   {
@@ -72,9 +72,9 @@ export const houses: House[] = [
     lng: -117.3828218,
     residents: [
       { name: "Kiki Adnan Muzaki", nickname: "Kiki", phone: "(951) 906-0496" },
+      { name: "Nurul", nickname: "Nurul", phone: "(951) 222-9247" },
       { name: "Intihaul Fudola", nickname: "Fudola" },
       { name: "Tharekh Era Elraisy", nickname: "Tharekh" },
-      { name: "Nurul", nickname: "Nurul" },
       { name: "Makmunzir", nickname: "Munzir" },
     ],
   },
