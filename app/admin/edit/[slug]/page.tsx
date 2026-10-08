@@ -105,8 +105,8 @@ export default function EditStagePage() {
 
   if (!stage) {
     return (
-      <div className="mx-auto max-w-2xl px-6 py-16">
-        <h1 className="font-display text-display-sm font-semibold text-ink">Tahap tidak ditemukan</h1>
+      <div className="mx-auto max-w-2xl px-4 sm:px-6 py-16">
+        <h1 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Tahap tidak ditemukan</h1>
         <Link href="/admin/konten" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand">
           <Icon name="arrow-left" className="h-4 w-4" />
           Kembali ke daftar tahap
@@ -118,7 +118,7 @@ export default function EditStagePage() {
   return (
     <div className="min-h-screen bg-canvas">
       <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-3.5">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3.5">
           <div className="min-w-0">
             <Link
               href="/admin/konten"
@@ -147,7 +147,7 @@ export default function EditStagePage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-8">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
         {loading ? (
           <div className="flex h-[50vh] items-center justify-center text-sm text-ink-subtle">Memuat…</div>
         ) : needsGithub ? (
@@ -235,7 +235,7 @@ export default function EditStagePage() {
                   className={`${input} h-[70vh] resize-none font-mono text-[0.82rem] leading-relaxed`}
                 />
               ) : (
-                <div className={`${card} h-[70vh] overflow-y-auto px-6 py-6 sm:px-10`}>
+                <div className={`${card} h-[70vh] overflow-y-auto px-4 sm:px-6 py-6 sm:px-10`}>
                   <MarkdownRenderer source={content} />
                 </div>
               )}

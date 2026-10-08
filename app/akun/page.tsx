@@ -15,7 +15,7 @@ export default async function AkunPage() {
   return (
     <div className="min-h-screen bg-canvas">
       <header className="border-b border-line">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 sm:px-6 py-4">
           {user.mustChangePassword ? (
             <span className="inline-flex items-center gap-2">
               <Logo size={28} />
@@ -35,10 +35,10 @@ export default async function AkunPage() {
         </div>
       </header>
 
-      <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-6 py-14">
+      <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-4 sm:px-6 py-14">
         <div className="animate-rise">
           <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-gold">Pengaturan akun</p>
-          <h1 className="mt-3 font-display text-display-sm font-semibold text-ink">Akun saya</h1>
+          <h1 className="mt-3 font-display text-xl font-semibold text-ink sm:text-display-sm">Akun saya</h1>
           <p className="mt-3 text-sm leading-relaxed text-ink-muted">
             Masuk sebagai <strong className="font-semibold text-ink">{user.name}</strong> (@{user.username}). Ganti
             password akunmu di bawah ini.

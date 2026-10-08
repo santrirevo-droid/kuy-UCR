@@ -46,9 +46,9 @@ export default async function StagePage({ params }: { params: { slug: string } }
         userBadge={<UserBadge />}
       />
 
-      <main className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-16">
         {/* Kepala artikel */}
-        <header className="animate-rise border-b border-line pb-8">
+        <header className="animate-rise border-b border-line pb-6 sm:pb-8">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-surface text-brand">
               <Icon name={stage.icon} className="h-5 w-5" />
@@ -61,8 +61,8 @@ export default async function StagePage({ params }: { params: { slug: string } }
             </span>
           </div>
 
-          <h1 className="mt-6 font-display text-display-sm font-semibold text-ink sm:text-display-md">{stage.title}</h1>
-          <p className="mt-3 text-lg leading-relaxed text-ink-muted">{stage.subtitle}</p>
+          <h1 className="mt-4 font-display sm:mt-6 text-display-xs font-semibold text-ink sm:text-display-md">{stage.title}</h1>
+          <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-muted sm:text-lg">{stage.subtitle}</p>
 
           {totalItems > 0 &&
             (user ? (
@@ -98,7 +98,7 @@ export default async function StagePage({ params }: { params: { slug: string } }
             ))}
         </header>
 
-        <div className="mt-10">
+        <div className="mt-7 sm:mt-10">
           <MarkdownRenderer
             source={content}
             tracker={user ? { stageSlug: stage.slug, initialDone: doneItems } : undefined}

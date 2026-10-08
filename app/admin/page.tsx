@@ -71,11 +71,11 @@ export default async function AdminProgressPage() {
     <div className="min-h-screen bg-canvas">
       <AdminNav />
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-4 sm:px-6 py-10">
         <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
           <div>
             <p className={eyebrow}>Rekapitulasi</p>
-            <h1 className="mt-2.5 font-display text-display-sm font-semibold text-ink">Progres peserta</h1>
+            <h1 className="mt-2.5 font-display text-xl font-semibold text-ink sm:text-display-sm">Progres peserta</h1>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">
               Jumlah item checklist yang sudah dicentang tiap peserta di setiap tahap.
             </p>
@@ -105,7 +105,7 @@ export default async function AdminProgressPage() {
         )}
 
         {!dbError && users.length === 0 && (
-          <div className="mt-8 rounded-lg border border-dashed border-line-strong px-6 py-10 text-center">
+          <div className="mt-8 rounded-lg border border-dashed border-line-strong px-4 sm:px-6 py-10 text-center">
             <p className="text-sm text-ink-muted">
               Belum ada akun peserta. Buat akun pertama di{" "}
               <Link href="/admin/users" className="font-semibold text-brand underline underline-offset-2">

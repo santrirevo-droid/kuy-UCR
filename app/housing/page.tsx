@@ -34,7 +34,7 @@ export default function HousingPage() {
   return (
     <div className="min-h-screen bg-canvas">
       <header className="sticky top-0 z-30 border-b border-line bg-canvas/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-2 px-6 py-3">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-2 px-4 sm:px-6 py-3">
           <Link
             href="/"
             className="group inline-flex items-center gap-2 text-sm font-semibold text-ink-muted transition hover:text-ink"
@@ -52,9 +52,9 @@ export default function HousingPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-6 py-12 sm:py-16">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-16">
         {/* Kepala laporan */}
-        <header className="animate-rise border-b border-line pb-10">
+        <header className="animate-rise border-b border-line pb-7 sm:pb-10">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-surface text-brand">
               <Icon name="home" className="h-5 w-5" />
@@ -67,15 +67,15 @@ export default function HousingPage() {
             </span>
           </div>
 
-          <h1 className="mt-6 font-display text-display-sm font-semibold text-ink sm:text-display-md">
+          <h1 className="mt-4 font-display sm:mt-6 text-display-xs font-semibold text-ink sm:text-display-md">
             Laporan Housing Rombongan
           </h1>
-          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-ink-muted">
+          <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-ink-muted sm:text-lg">
             Penempatan tempat tinggal peserta Short Course PKUMI–LPDP selama program di Riverside — alamat lengkap,
             titik Google Maps, dan daftar penghuni tiap rumah.
           </p>
 
-          <dl className="mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
+          <dl className="mt-6 grid grid-cols-2 sm:mt-9 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
             {facts.map((f) => (
               <div key={f.label} className="bg-surface px-4 py-3.5">
                 <dt className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">{f.label}</dt>
@@ -86,9 +86,9 @@ export default function HousingPage() {
         </header>
 
         {/* Peta gabungan */}
-        <section className="pt-12">
+        <section className="pt-8 sm:pt-12">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
-            <h2 className="font-display text-display-sm font-semibold text-ink">Peta semua housing</h2>
+            <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Peta semua housing</h2>
             <div className="flex items-center gap-4 text-sm font-semibold">
               <Link href="/housing/peta" className="inline-flex items-center gap-1 text-brand hover:underline">
                 Layar penuh
@@ -99,7 +99,7 @@ export default function HousingPage() {
               </a>
             </div>
           </div>
-          <div className="mt-6">
+          <div className="mt-5 sm:mt-6">
             <HousingMap houses={houses} campus={UCR_CAMPUS} />
           </div>
           <p className="mt-3 text-xs leading-relaxed text-ink-subtle">
@@ -112,8 +112,8 @@ export default function HousingPage() {
         </section>
 
         {/* Rekap */}
-        <section className="py-12">
-          <h2 className="font-display text-display-sm font-semibold text-ink">Rekap penempatan</h2>
+        <section className="py-8 sm:py-12">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Rekap penempatan</h2>
           <div className="mt-6 overflow-x-auto rounded-lg border border-line">
             <table className="w-full min-w-[34rem] text-left text-sm">
               <thead className="bg-surface-2">
@@ -157,8 +157,8 @@ export default function HousingPage() {
         </section>
 
         {/* Detail per rumah */}
-        <section className="space-y-8 border-t border-line pt-12">
-          <h2 className="font-display text-display-sm font-semibold text-ink">Detail tiap rumah</h2>
+        <section className="space-y-6 border-t border-line pt-8 sm:space-y-8 sm:pt-12">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Detail tiap rumah</h2>
 
           {houses.map((h, i) => (
             <article key={h.id} id={h.id} className="scroll-mt-20 overflow-hidden rounded-lg border border-line bg-surface">
@@ -244,7 +244,7 @@ export default function HousingPage() {
           ))}
         </section>
 
-        <p className="mt-12 border-t border-line pt-6 text-xs leading-relaxed text-ink-subtle">
+        <p className="mt-10 border-t border-line pt-6 sm:mt-12 text-xs leading-relaxed text-ink-subtle">
           Ada perpindahan penghuni atau salah alamat? Kabari Bidang Operasional supaya laporan ini diperbarui. Titik
           peta diambil dari OpenStreetMap berdasarkan nomor rumah — cek ulang di lokasi bila ada selisih.
         </p>

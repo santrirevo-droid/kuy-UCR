@@ -48,7 +48,7 @@ export default function MasukPage() {
   return (
     <div className="min-h-screen bg-canvas">
       <header className="border-b border-line">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 sm:px-6 py-4">
           <Link
             href="/"
             className="group inline-flex items-center gap-2 text-sm font-semibold text-ink-muted transition hover:text-ink"
@@ -61,10 +61,10 @@ export default function MasukPage() {
         </div>
       </header>
 
-      <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-6 py-14">
+      <main className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center px-4 sm:px-6 py-14">
         <div className="animate-rise">
           <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-gold">Akses peserta</p>
-          <h1 className="mt-3 font-display text-display-sm font-semibold text-ink">Masuk ke akunmu</h1>
+          <h1 className="mt-3 font-display text-xl font-semibold text-ink sm:text-display-sm">Masuk ke akunmu</h1>
           <p className="mt-3 text-sm leading-relaxed text-ink-muted">
             Masuk untuk mencentang dan menyimpan progres persiapanmu sendiri. Belum punya akun? Minta dibuatkan ke
             admin program.

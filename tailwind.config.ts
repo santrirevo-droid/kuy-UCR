@@ -38,6 +38,8 @@ const config: Config = {
       },
       fontSize: {
         // Skala display untuk judul serif — tracking rapat, leading pendek.
+        // display-xs khusus judul halaman di layar HP.
+        "display-xs": ["1.5rem", { lineHeight: "1.22", letterSpacing: "-0.012em" }],
         "display-sm": ["1.75rem", { lineHeight: "1.2", letterSpacing: "-0.015em" }],
         "display-md": ["2.25rem", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
         "display-lg": ["3rem", { lineHeight: "1.08", letterSpacing: "-0.025em" }],

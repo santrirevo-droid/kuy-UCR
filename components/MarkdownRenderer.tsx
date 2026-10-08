@@ -145,15 +145,15 @@ export default function MarkdownRenderer({
 
   return (
     <div
-      className="prose max-w-none
+      className="prose max-w-none text-[0.9375rem] sm:text-base
         prose-headings:scroll-mt-28 prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight
-        prose-h2:mb-5 prose-h2:mt-14 prose-h2:border-b prose-h2:border-line prose-h2:pb-3 prose-h2:text-2xl
-        prose-h3:mb-3 prose-h3:mt-10 prose-h3:text-lg
-        prose-h4:mt-8 prose-h4:text-base
-        prose-p:leading-[1.75]
+        prose-h2:mb-4 prose-h2:mt-10 prose-h2:border-b prose-h2:border-line prose-h2:pb-2.5 prose-h2:text-xl sm:prose-h2:mb-5 sm:prose-h2:mt-14 sm:prose-h2:pb-3 sm:prose-h2:text-2xl
+        prose-h3:mb-2.5 prose-h3:mt-8 prose-h3:text-[1.05rem] sm:prose-h3:mb-3 sm:prose-h3:mt-10 sm:prose-h3:text-lg
+        prose-h4:mt-6 prose-h4:text-[0.95rem] sm:prose-h4:mt-8 sm:prose-h4:text-base
+        prose-p:leading-[1.7] sm:prose-p:leading-[1.75]
         prose-a:font-medium prose-a:underline prose-a:decoration-brand/30 prose-a:underline-offset-[3px] hover:prose-a:decoration-brand
-        prose-li:leading-[1.7] prose-li:marker:text-ink-subtle
-        prose-hr:my-12 prose-hr:border-line
+        prose-li:leading-[1.65] sm:prose-li:leading-[1.7] prose-li:marker:text-ink-subtle
+        prose-hr:my-8 sm:prose-hr:my-12 prose-hr:border-line
         prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:border-line prose-pre:text-[0.82rem] prose-pre:leading-relaxed
         prose-code:rounded prose-code:border prose-code:border-line prose-code:bg-surface-2 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.85em] prose-code:font-medium prose-code:before:content-none prose-code:after:content-none
         prose-img:rounded-lg prose-img:border prose-img:border-line
@@ -165,29 +165,29 @@ export default function MarkdownRenderer({
           // Tabel tanpa judul kolom (ditulis "| | |" di markdown) tidak perlu
           // strip header kosong — thead-nya disembunyikan lewat :has().
           table: (props: TableHTMLAttributes<HTMLTableElement>) => (
-            <div className="not-prose my-7 overflow-x-auto rounded-lg border border-line bg-surface [&_thead:has(th:empty)]:hidden">
+            <div className="not-prose my-5 overflow-x-auto sm:my-7 rounded-lg border border-line bg-surface [&_thead:has(th:empty)]:hidden">
               <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
             </div>
           ),
           thead: (props: HTMLAttributes<HTMLTableSectionElement>) => <thead className="bg-surface-2" {...props} />,
           th: (props: HTMLAttributes<HTMLTableCellElement>) => (
             <th
-              className="border-b border-line px-4 py-3 text-left text-[0.68rem] font-semibold uppercase tracking-eyebrow text-ink-muted"
+              className="border-b border-line px-3 py-2.5 text-left sm:px-4 sm:py-3 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-ink-muted"
               {...props}
             />
           ),
           td: (props: HTMLAttributes<HTMLTableCellElement>) => (
-            <td className="border-b border-line px-4 py-3 align-top leading-relaxed text-ink-muted" {...props} />
+            <td className="border-b border-line px-3 py-2.5 align-top sm:px-4 sm:py-3 leading-relaxed text-ink-muted" {...props} />
           ),
           blockquote: ({ children }: HTMLAttributes<HTMLQuoteElement>) => {
             const callout = matchCallout(plainText(children));
             return (
-              <aside className={`not-prose my-7 rounded-lg border px-5 py-4 ${callout.tone}`}>
+              <aside className={`not-prose my-5 rounded-lg border px-4 py-3.5 sm:my-7 sm:px-5 sm:py-4 ${callout.tone}`}>
                 <div className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-[rgb(var(--callout))]">
                   <Icon name={callout.icon} className="h-3.5 w-3.5" />
                   {callout.label}
                 </div>
-                <div className="mt-2 space-y-2 text-[0.95rem] leading-relaxed text-ink [&_a]:font-medium [&_a]:text-brand [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded [&_code]:bg-surface/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
+                <div className="mt-2 space-y-2 text-[0.9rem] leading-relaxed sm:text-[0.95rem] text-ink [&_a]:font-medium [&_a]:text-brand [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded [&_code]:bg-surface/70 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5">
                   {stripPrefix(children, callout.prefix)}
                 </div>
               </aside>

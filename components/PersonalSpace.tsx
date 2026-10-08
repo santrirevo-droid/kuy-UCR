@@ -203,7 +203,7 @@ export default function PersonalSpace({
         </form>
         {error && <p className="mt-2 text-xs font-medium text-danger">{error}</p>}
 
-        <div className="mt-6">
+        <div className="mt-5 sm:mt-6">
           <div className="flex items-center justify-between gap-3">
             <label htmlFor={`notes-${stageSlug}`} className={label}>
               Catatan pribadi

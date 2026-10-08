@@ -127,9 +127,9 @@ export default function BillingBoard({
       )}
 
       {sections.map((s) => (
-        <section key={s.id} className="mt-10">
+        <section key={s.id} className="mt-8 sm:mt-10">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h2 className="font-display text-display-sm font-semibold text-ink">{s.title}</h2>
+            <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">{s.title}</h2>
             <span className="text-sm text-ink-muted">{s.note}</span>
           </div>
           <div className="mt-4 overflow-x-auto rounded-lg border border-line">

@@ -119,10 +119,10 @@ export default function AdminUsersPage() {
     <div className="min-h-screen bg-canvas">
       <AdminNav />
 
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 py-10">
         <div className="border-b border-line pb-6">
           <p className={eyebrow}>Manajemen akun</p>
-          <h1 className="mt-2.5 font-display text-display-sm font-semibold text-ink">Kelola user</h1>
+          <h1 className="mt-2.5 font-display text-xl font-semibold text-ink sm:text-display-sm">Kelola user</h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">
             Buatkan akun untuk tiap peserta rombongan. Akun ini dipakai untuk masuk dan mencentang progres
             persiapannya sendiri di setiap tahap.
