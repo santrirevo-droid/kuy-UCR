@@ -93,11 +93,9 @@ export const houses: House[] = [
     residents: [
       { name: "Dannu Akbar", nickname: "Dannu", phone: "(951) 906-0468" },
       { name: "Ahmad Sayyid Al Adam", nickname: "Sayyid", phone: "(951) 906-0492" },
-      { name: "Mahmud Salim", nickname: "Mahmud", phone: "(951) 384-5055" },
       { name: "Muhammad Syamsur Rijal", nickname: "Rijal" },
       { name: "Saepul", nickname: "Saepul" },
       { name: "Azhar Ahmad Falahan", nickname: "Azhar" },
-      { name: "M. Syukrillah", nickname: "Syukri" },
     ],
   },
   {
@@ -111,6 +109,20 @@ export const houses: House[] = [
     residents: [
       { name: "Muhammad Hidayat Rasiin", nickname: "Dayat", phone: "(951) 906-0973" },
       { name: "Davik Ihsan Purnama", nickname: "Davik", phone: "(951) 410-5539" },
+    ],
+  },
+  {
+    id: "sunshine",
+    color: "#0891b2",
+    name: "Sunshine Lane",
+    street: "8380 Sunshine Lane",
+    city: "Riverside, CA 92508",
+    lat: 33.8975182,
+    lng: -117.3273722,
+    note: "Kawasan Orangecrest, selatan kampus.",
+    residents: [
+      { name: "Mahmud Salim", nickname: "Mahmud", phone: "(951) 384-5055" },
+      { name: "M. Syukrillah", nickname: "Syukri" },
     ],
   },
 ];
