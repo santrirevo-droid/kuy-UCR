@@ -49,8 +49,8 @@ export const houses: House[] = [
   {
     id: "mission-inn",
     color: "#d97706",
-    name: "Mission Inn Avenue",
-    street: "3050 Mission Inn Avenue",
+    name: "Mission Inn Apt #218",
+    street: "3050 Mission Inn Avenue, Apt #218",
     city: "Riverside, CA 92507",
     lat: 33.9789812,
     lng: -117.3654355,
@@ -79,14 +79,17 @@ export const houses: House[] = [
     ],
   },
   {
+    // Dulu di Canyon Crest (1550 Central Ave), pindah ke gedung yang sama
+    // dengan Apt #218. id lama dipertahankan karena dipakai sebagai kunci
+    // status pembayaran WiFi di halaman tagihan.
     id: "canyon-crest",
     color: "#7c3aed",
-    name: "Canyon Crest",
-    street: "1550 Central Avenue",
+    name: "Mission Inn Apt #256",
+    street: "3050 Mission Inn Avenue, Apt #256",
     city: "Riverside, CA 92507",
-    lat: 33.955212,
-    lng: -117.3456902,
-    note: "Kompleks apartemen di kawasan Canyon Crest.",
+    lat: 33.9789812,
+    lng: -117.3654355,
+    note: "Satu gedung dengan Apt #218.",
     residents: [
       { name: "Dannu Akbar", nickname: "Dannu", phone: "(951) 906-0468" },
       { name: "Ahmad Sayyid Al Adam", nickname: "Sayyid", phone: "(951) 906-0492" },

@@ -120,21 +120,28 @@ export default function HousingMap({
 
         const bounds: [number, number][] = [];
 
+        // Unit-unit di gedung yang sama (koordinat identik) digeser berdampingan
+        // supaya pinnya tidak saling menutupi.
+        const coord = (h: House) => `${h.lat},${h.lng}`;
+        const sameSpot = (h: House) => houses.filter((o) => coord(o) === coord(h));
+
         houses.forEach((h, i) => {
+          const group = sameSpot(h);
+          const shift = (group.indexOf(h) - (group.length - 1) / 2) * 30;
           const marker = L.marker([h.lat, h.lng], {
             icon: L.divIcon({
               className: "",
               html: pinHtml(h.color, String(i + 1)),
               iconSize: [34, 44],
-              iconAnchor: [17, 42],
-              popupAnchor: [0, -38],
+              iconAnchor: [17 - shift, 42],
+              popupAnchor: [shift, -38],
             }),
             title: h.name,
             riseOnHover: true,
           })
             .addTo(map)
             .bindPopup(popupHtml(h, i, campus), { maxWidth: 300, minWidth: 240 })
-            .bindTooltip(`${i + 1}. ${h.name}`, { direction: "top", offset: [0, -40] });
+            .bindTooltip(`${i + 1}. ${h.name}`, { direction: "top", offset: [shift, -40] });
           marker.on("popupopen", () => setActive(h.id));
           marker.on("popupclose", () => setActive((cur) => (cur === h.id ? null : cur)));
           markersRef.current[h.id] = marker;
