@@ -8,13 +8,15 @@ import {
   MONTHS,
   MONTHLY_USD,
   TOTAL_USD,
+  CHASE_PROMO_BONUS,
   cardRateOf,
   computeCosts,
   type Assumptions,
   type BankCost,
 } from "@/lib/dana-lpdp";
 
-const usd = (n: number) => `$${n.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const usd = (n: number) =>
+  `${n < 0 ? "−" : ""}$${Math.abs(n).toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const idr = (n: number) => `Rp${Math.round(n).toLocaleString("id-ID")}`;
 const money = (n: number, c: BankCost["currency"]) => (c === "IDR" ? idr(n) : usd(n));
 const fmtTime = (iso: string) =>
@@ -200,7 +202,9 @@ export default function FeeCalculator() {
             <div className="flex-1 px-4 py-3">
               {c.oneTime.length > 0 && (
                 <>
-                  <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">Biaya sekali</p>
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+                    Sekali selama program
+                  </p>
                   <ul className="mb-4 mt-2 space-y-2">
                     {c.oneTime.map((l) => (
                       <li key={l.label} className="flex items-baseline justify-between gap-3 text-sm">
@@ -208,11 +212,24 @@ export default function FeeCalculator() {
                           <span className="block text-ink">{l.label}</span>
                           <span className="tnum block text-xs text-ink-subtle">{l.detail}</span>
                         </span>
-                        <span className="tnum shrink-0 text-ink">{money(l.amount, c.currency)}</span>
+                        <span className={`tnum shrink-0 ${l.amount < 0 ? "text-success" : "text-ink"}`}>
+                          {money(l.amount, c.currency)}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </>
+              )}
+              {c.id === "chase" && (
+                <label className="-mt-2 mb-4 flex cursor-pointer items-center gap-2 text-xs text-ink-muted">
+                  <input
+                    type="checkbox"
+                    className="h-3.5 w-3.5 accent-[rgb(var(--c-brand))]"
+                    checked={a.chasePromo}
+                    onChange={(e) => setA((p) => ({ ...p, chasePromo: e.target.checked }))}
+                  />
+                  Hitung bonus promo ${CHASE_PROMO_BONUS}
+                </label>
               )}
               <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">Biaya per bulan</p>
               <ul className="mt-2 space-y-2">

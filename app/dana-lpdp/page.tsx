@@ -7,6 +7,8 @@ import UserBadge from "@/components/UserBadge";
 import {
   CHASE_INCOMING_WIRE_FEE,
   CHASE_MONTHLY_FEE,
+  CHASE_PROMO_BONUS,
+  CHASE_PROMO_URL,
   DEFAULT_ASSUMPTIONS,
   MANDIRI_IDR_ATM_FEE,
   MONTHLY_USD as MONTHLY,
@@ -91,6 +93,7 @@ const banks: Bank[] = [
       "Bisa Zelle: patungan sewa, tagihan HP & WiFi, dan bayar sesama peserta jadi instan",
       "Tarik tunai di semua ATM Chase gratis, berapa kali pun",
       "Kartu debit lokal: tanpa biaya transaksi luar negeri",
+      `Promo nasabah baru: bonus $${CHASE_PROMO_BONUS} setelah 10 transaksi dalam 60 hari (lihat bagian Promo di bawah)`,
       "Bisa dibuka tanpa SSN, cukup paspor + DS-2019/I-20 + alamat AS",
       "Cabang dan ATM Chase banyak di Riverside",
     ],
@@ -139,6 +142,25 @@ const payouts = [
   },
 ];
 
+const promoSteps = [
+  {
+    title: "Tulis email di halaman promo",
+    body: "Buka tautan promo, isi alamat email, lalu kirim. Kode promo dikirim ke email tersebut.",
+  },
+  {
+    title: "Tunjukkan email kode promo di cabang",
+    body: "Datang ke cabang Chase dan tunjukkan email kode promonya ke banker saat membuka Chase Secure Banking. Bawa dua identitas (paspor + DS-2019/I-20) dan siapkan waktu sekitar 1 jam, atau buat janji dulu.",
+  },
+  {
+    title: "Selesaikan 10 transaksi dalam 60 hari",
+    body: "Yang dihitung: belanja pakai kartu debit, Zelle, ACH masuk, Chase QuickDeposit, dan bayar tagihan online. Patungan sewa, HP, dan WiFi lewat Zelle juga termasuk.",
+  },
+  {
+    title: `Bonus $${CHASE_PROMO_BONUS} masuk dalam 15 hari`,
+    body: "Bonus dikirim ke rekening paling lambat 15 hari setelah 10 transaksi tercatat. Bonus dilaporkan sebagai bunga (formulir pajak 1042-S untuk non-resident).",
+  },
+];
+
 const steps = [
   {
     title: "Sebelum berangkat",
@@ -146,7 +168,7 @@ const steps = [
   },
   {
     title: "Minggu pertama di Riverside",
-    body: "Buka rekening Chase di cabang terdekat. Bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS.",
+    body: `Daftarkan email di halaman promo Chase untuk dapat kode promo $${CHASE_PROMO_BONUS}, lalu buka rekening Chase Secure Banking di cabang terdekat. Tunjukkan email kode promo ke banker, bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS.`,
   },
   {
     title: "Saat dana LPDP cair (bulan pertama)",
@@ -284,6 +306,54 @@ export default function LpdpFundsPage() {
           </div>
         </section>
 
+        {/* Promo Chase */}
+        <section id="promo-chase" className="scroll-mt-20 pt-10 sm:pt-14">
+          <div className="overflow-hidden rounded-lg border border-gold/40 bg-surface">
+            <div className="flex flex-col gap-4 border-b border-line bg-gold-soft px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div>
+                <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-gold">
+                  Promo Chase · berlaku s.d. 27 Jan 2027
+                </p>
+                <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-display-sm">
+                  Bonus ${CHASE_PROMO_BONUS} buka rekening Chase
+                </h2>
+                <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-ink-muted">
+                  Untuk nasabah baru Chase Secure Banking. Cukup tulis email di halaman promo, lalu tunjukkan email
+                  kode promonya ke banker di kantor cabang.
+                </p>
+              </div>
+              <a
+                href={CHASE_PROMO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-brand px-4 py-2.5 text-sm font-semibold text-brand-on shadow-subtle transition hover:bg-brand-hover"
+              >
+                Ambil kode promo
+                <Icon name="arrow-up-right" className="h-4 w-4" />
+              </a>
+            </div>
+            <ol className="divide-y divide-line">
+              {promoSteps.map((p, i) => (
+                <li key={p.title} className="grid grid-cols-[auto_1fr] gap-x-4 px-4 py-3.5 sm:px-5">
+                  <span className="tnum font-display text-sm font-semibold text-gold">{String(i + 1).padStart(2, "0")}</span>
+                  <span>
+                    <span className="block text-sm font-semibold text-ink">{p.title}</span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-ink-muted">{p.body}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <p className="flex gap-2 border-t border-line bg-warn-soft px-4 py-3 text-xs leading-relaxed text-ink sm:px-5">
+              <Icon name="alert" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />
+              <span>
+                Bonus hanya dibayar kalau rekening masih terbuka saat pencairan. Program selesai 25 Des, jadi kejar 10
+                transaksi secepatnya dan jangan tutup rekening sebelum bonus masuk. Promo tidak berlaku bagi yang
+                sudah punya rekening checking Chase.
+              </span>
+            </p>
+          </div>
+        </section>
+
         {/* Kartu per bank */}
         <section className="pt-10 sm:pt-14">
           <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Kelebihan &amp; kekurangan</h2>
@@ -413,6 +483,10 @@ export default function LpdpFundsPage() {
               <li>
                 Biaya transfer SWIFT dari Mandiri, biaya bank perantara, dan biaya terima wire internasional di Chase.
                 Angkanya berubah-ubah, jadi cek tarif resmi sebelum transfer pertama.
+              </li>
+              <li>
+                Apakah transfer LPDP dihitung sebagai &quot;qualifying deposit&quot; $250 yang membebaskan biaya bulanan
+                Chase $4,95. Kalau ya, biaya bulanan Chase bisa jadi $0.
               </li>
               <li>
                 Biaya bulanan dan biaya terima transfer di Chase untuk jenis rekening yang dibuka, serta apakah ada

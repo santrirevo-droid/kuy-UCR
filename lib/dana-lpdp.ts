@@ -15,6 +15,8 @@ export type Assumptions = {
   markupPct: number;
   /** Berapa kali tarik tunai di ATM AS setiap bulan. */
   withdrawalsPerMonth: number;
+  /** Ikut promo buka rekening Chase Secure Banking ($175). */
+  chasePromo: boolean;
 };
 
 export const DEFAULT_ASSUMPTIONS: Assumptions = {
@@ -23,6 +25,7 @@ export const DEFAULT_ASSUMPTIONS: Assumptions = {
   // Rp324 di atas kurs Rp17.800, sesuai catatan peserta (rentang 1,5–2%).
   markupPct: 1.82,
   withdrawalsPerMonth: 1,
+  chasePromo: true,
 };
 
 /** Biaya ATM pemilik mesin di AS, mis. SchoolsFirst FCU. */
@@ -35,6 +38,9 @@ export const MULTI_ATM_FEE = 2;
 /** Chase Secure Banking: biaya terima transfer internasional dan biaya bulanan. */
 export const CHASE_INCOMING_WIRE_FEE = 15;
 export const CHASE_MONTHLY_FEE = 4.95;
+/** Promo nasabah baru Chase Secure Banking, berlaku s.d. 27 Jan 2027. */
+export const CHASE_PROMO_BONUS = 175;
+export const CHASE_PROMO_URL = "https://account.chase.com/consumer/banking/secure-banking-offer";
 
 export type FeeLine = { label: string; detail: string; amount: number };
 
@@ -99,6 +105,15 @@ export function computeCosts(a: Assumptions): BankCost[] {
       detail: `1 × $${CHASE_INCOMING_WIRE_FEE}, saat $${TOTAL_USD.toLocaleString("id-ID")} masuk`,
       amount: CHASE_INCOMING_WIRE_FEE,
     },
+    ...(a.chasePromo
+      ? [
+          {
+            label: "Bonus promo buka rekening",
+            detail: "Setelah 10 transaksi dalam 60 hari",
+            amount: -CHASE_PROMO_BONUS,
+          },
+        ]
+      : []),
   ];
   const chaseMonthly: FeeLine[] = [
     { label: "Biaya bulanan", detail: `1 × $${CHASE_MONTHLY_FEE.toLocaleString("id-ID")}`, amount: CHASE_MONTHLY_FEE },
