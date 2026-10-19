@@ -11,8 +11,8 @@ export type Assumptions = {
   idrReceived: number;
   /** Kurs normal (tengah) Rp per $1. */
   rate: number;
-  /** Tambahan kurs dari jaringan kartu + bank, Rp per $1. */
-  markup: number;
+  /** Admin kurs dari jaringan kartu + bank, persen di atas kurs normal. */
+  markupPct: number;
   /** Berapa kali tarik tunai di ATM AS setiap bulan. */
   withdrawalsPerMonth: number;
 };
@@ -20,7 +20,8 @@ export type Assumptions = {
 export const DEFAULT_ASSUMPTIONS: Assumptions = {
   idrReceived: 107_840_000,
   rate: 17_800,
-  markup: 324,
+  // Rp324 di atas kurs Rp17.800, sesuai catatan peserta (rentang 1,5–2%).
+  markupPct: 1.82,
   withdrawalsPerMonth: 1,
 };
 
@@ -55,14 +56,15 @@ export type BankCost = {
 
 export function computeCosts(a: Assumptions): BankCost[] {
   const n = Math.max(0, Math.round(a.withdrawalsPerMonth));
-  const cardRate = a.rate + a.markup;
+  const markup = (a.rate * a.markupPct) / 100;
+  const cardRate = a.rate + markup;
 
   // Mandiri Rupiah: tiap dolar yang ditarik dibeli dengan kurs + markup.
   const idrMonthly: FeeLine[] = [
     {
       label: "Selisih kurs",
-      detail: `$${MONTHLY_USD.toLocaleString("id-ID")} × Rp${a.markup.toLocaleString("id-ID")}`,
-      amount: MONTHLY_USD * a.markup,
+      detail: `$${MONTHLY_USD.toLocaleString("id-ID")} × ${rp(markup)} (${a.markupPct.toLocaleString("id-ID")}%)`,
+      amount: MONTHLY_USD * markup,
     },
     {
       label: "Admin Mandiri tarik tunai",
@@ -71,7 +73,7 @@ export function computeCosts(a: Assumptions): BankCost[] {
     },
     {
       label: "Admin ATM AS",
-      detail: `${n} × $${US_ATM_FEE}, dikonversi Rp${cardRate.toLocaleString("id-ID")}`,
+      detail: `${n} × $${US_ATM_FEE} × ${rp(cardRate)} (kurs + admin kurs)`,
       amount: n * US_ATM_FEE * cardRate,
     },
   ];
@@ -139,6 +141,15 @@ export function computeCosts(a: Assumptions): BankCost[] {
       spendableUsd: TOTAL_USD - chaseTotal,
     },
   ];
+}
+
+/** Kurs kartu: kurs normal + admin kurs, Rp per $1. */
+export function cardRateOf(a: Pick<Assumptions, "rate" | "markupPct">) {
+  return a.rate * (1 + a.markupPct / 100);
+}
+
+function rp(n: number) {
+  return `Rp${Math.round(n).toLocaleString("id-ID")}`;
 }
 
 function sum(lines: FeeLine[]) {

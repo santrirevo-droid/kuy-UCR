@@ -23,7 +23,9 @@ export const metadata = {
 };
 
 const rp = (n: number) => `Rp${n.toLocaleString("id-ID")}`;
-const { idrReceived, rate, markup } = DEFAULT_ASSUMPTIONS;
+const { rate, markupPct } = DEFAULT_ASSUMPTIONS;
+const markup = Math.round((rate * markupPct) / 100);
+const pct = markupPct.toLocaleString("id-ID");
 
 const facts = [
   { label: "Dana diterima", value: `$${(MONTHLY * MONTHS).toLocaleString("id-ID")}` },
@@ -51,11 +53,11 @@ const banks: Bank[] = [
       "Sudah dimiliki hampir semua peserta, tidak perlu buka rekening baru",
       "Mudah dipantau lewat Livin' dan bisa dipakai membayar keperluan di Indonesia",
       "Kartu debit berlogo Visa/Mastercard tetap bisa dipakai belanja dan tarik tunai di AS",
-      `Dana diterima dalam Rupiah (${rp(idrReceived)} untuk 3 bulan), langsung bisa dipakai untuk keperluan di Indonesia`,
+      "Dana diterima dalam Rupiah ($6.000 × kurs dolar saat pencairan), langsung bisa dipakai untuk keperluan di Indonesia",
     ],
     cons: [
       "Kena konversi dua kali: USD → IDR saat dana masuk, lalu IDR → USD saat dipakai di AS",
-      `Admin kurs +1,5–2% di setiap transaksi di AS, mis. kurs normal ${rp(rate)} jadi ${rp(rate + markup)} per $1`,
+      `Admin kurs +1,5–2% di setiap transaksi di AS, mis. kurs normal ${rp(rate)} jadi ${rp(rate + markup)} per $1 (+${pct}%)`,
       `Tarik tunai di ATM AS kena admin Mandiri ${rp(MANDIRI_IDR_ATM_FEE)} + admin ATM AS $${US_ATM_FEE} (ikut kena admin kurs): sekitar ${rp(MANDIRI_IDR_ATM_FEE + US_ATM_FEE * (rate + markup))} per tarikan, belum termasuk admin kurs atas uang yang ditarik`,
       "Tidak bisa dipakai Zelle untuk patungan sewa, HP, atau WiFi",
     ],
@@ -108,7 +110,7 @@ const rows: Row[] = [
   { label: "Konversi kurs", values: ["2 kali", "Tidak ada", "Saat dana dipindah"] },
   { label: "Belanja di AS", values: ["Bisa, kena kurs", "Bisa, tanpa konversi", "Bisa, tanpa biaya"] },
   { label: "Zelle / patungan", values: ["Tidak", "Tidak", "Ya"] },
-  { label: "Admin kurs", values: ["+1,5–2% (≈Rp324/$)", "Gratis", "Gratis"] },
+  { label: "Admin kurs", values: [`+${pct}% (rentang 1,5–2%)`, "Gratis", "Gratis"] },
   { label: "Biaya bulanan", values: ["Admin tabungan biasa", `$${MULTI_MONTHLY_FEE}`, `$${CHASE_MONTHLY_FEE.toLocaleString("id-ID", { minimumFractionDigits: 2 })}`] },
   { label: "Biaya dana masuk", values: ["—", "—", `$${CHASE_INCOMING_WIRE_FEE} sekali`] },
   {
@@ -350,15 +352,17 @@ export default function LpdpFundsPage() {
               <li>
                 Dana LPDP ${(MONTHLY * MONTHS).toLocaleString("id-ID")} cair <strong>sekali</strong> di bulan pertama
                 untuk {MONTHS} bulan, lalu dipakai merata ${MONTHLY.toLocaleString("id-ID")} per bulan. Untuk Mandiri
-                Rupiah, dana yang masuk dianggap {rp(idrReceived)} (≈ {rp(Math.round(idrReceived / MONTHS))} per
-                bulan).
+                Rupiah, dana yang masuk dianggap ${(MONTHLY * MONTHS).toLocaleString("id-ID")} × kurs normal, karena
+                LPDP mengonversinya dengan kurs dolar saat pencairan.
               </li>
               <li>
                 Seluruh dana bulanan ditarik tunai atau dibelanjakan di AS. Jumlah tarikan dibagi rata, jadi
                 tarik 2× berarti $1.000 sekali tarik.
               </li>
               <li>
-                Mandiri Rupiah: setiap dolar dibeli dengan kurs normal + admin kurs ({rp(rate)} + {rp(markup)}).
+                Mandiri Rupiah: setiap dolar dibeli dengan kurs normal + admin kurs {pct}% (mis. {rp(rate)} +{" "}
+                {rp(markup)}). Kurs normal diambil otomatis dari kuotasi pasar USD/IDR (setara yang tampil di
+                Google) dan diperbarui tiap 10 menit; bisa diganti manual.
                 Admin ATM AS $3 juga ditagih dalam Dollar, jadi ikut kena admin kurs.
               </li>
               <li>

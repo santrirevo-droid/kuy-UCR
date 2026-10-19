@@ -1,48 +1,124 @@
 "use client";
 
-import { useMemo, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 import Icon from "@/components/Icon";
 import { input, label } from "@/lib/ui";
-import { DEFAULT_ASSUMPTIONS, MONTHS, MONTHLY_USD, computeCosts, type Assumptions, type BankCost } from "@/lib/dana-lpdp";
+import {
+  DEFAULT_ASSUMPTIONS,
+  MONTHS,
+  MONTHLY_USD,
+  TOTAL_USD,
+  cardRateOf,
+  computeCosts,
+  type Assumptions,
+  type BankCost,
+} from "@/lib/dana-lpdp";
 
 const usd = (n: number) => `$${n.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const idr = (n: number) => `Rp${Math.round(n).toLocaleString("id-ID")}`;
 const money = (n: number, c: BankCost["currency"]) => (c === "IDR" ? idr(n) : usd(n));
+const fmtTime = (iso: string) =>
+  new Date(iso).toLocaleString("id-ID", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+
+type LiveRate = { rate: number; source: string; updatedAt: string };
 
 // Kalkulator biaya admin: tiga rekening dihitung dari asumsi yang sama,
-// pengunjung bisa mengubah kurs, markup, dan frekuensi tarik tunai.
+// pengunjung bisa mengubah kurs, admin kurs, dan frekuensi tarik tunai.
+// Kurs normal default-nya otomatis dari /api/kurs.
 export default function FeeCalculator() {
   const [a, setA] = useState<Assumptions>(DEFAULT_ASSUMPTIONS);
-  const costs = useMemo(() => computeCosts(a), [a]);
+  const [auto, setAuto] = useState(true);
+  const [live, setLive] = useState<LiveRate | null>(null);
+  const [liveError, setLiveError] = useState(false);
+  // Dana Rupiah mengikuti $6.000 × kurs normal sampai pengunjung mengisinya sendiri.
+  const [idrFollowsRate, setIdrFollowsRate] = useState(true);
+  const [markupText, setMarkupText] = useState(DEFAULT_ASSUMPTIONS.markupPct.toLocaleString("id-ID"));
+
+  useEffect(() => {
+    fetch("/api/kurs")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d: LiveRate) => setLive(d))
+      .catch(() => setLiveError(true));
+  }, []);
+
+  const effective = useMemo<Assumptions>(() => {
+    const rate = auto && live ? live.rate : a.rate;
+    return { ...a, rate, idrReceived: idrFollowsRate ? Math.round(TOTAL_USD * rate) : a.idrReceived };
+  }, [a, auto, live, idrFollowsRate]);
+  const costs = useMemo(() => computeCosts(effective), [effective]);
   const best = costs.reduce((b, c) => (c.spendableUsd > b.spendableUsd ? c : b));
-  const markupPct = ((a.markup / a.rate) * 100).toFixed(2).replace(".", ",");
+  const cardRate = cardRateOf(effective);
 
   const set = (key: keyof Assumptions) => (e: ChangeEvent<HTMLInputElement>) => {
     const v = Number(e.target.value.replace(/\D/g, ""));
     setA((p) => ({ ...p, [key]: Math.max(key === "rate" ? 1 : 0, Number.isFinite(v) ? v : 0) }));
   };
 
+  function setMarkup(e: ChangeEvent<HTMLInputElement>) {
+    const text = e.target.value.replace(/[^\d,.]/g, "");
+    setMarkupText(text);
+    const v = Number(text.replace(",", "."));
+    if (Number.isFinite(v)) setA((p) => ({ ...p, markupPct: Math.min(Math.max(v, 0), 20) }));
+  }
+
+  function toggleAuto() {
+    // Saat pindah ke manual, mulai dari kurs live terakhir supaya tidak lompat.
+    if (auto && live) setA((p) => ({ ...p, rate: Math.round(live.rate) }));
+    setAuto(!auto);
+  }
+
   return (
     <div>
       <div className="grid gap-4 rounded-lg border border-line bg-surface p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-4">
         <div>
-          <label htmlFor="rate" className={label}>
-            Kurs normal (Rp/$)
-          </label>
-          <input id="rate" inputMode="numeric" className={`${input} tnum mt-1.5`} value={a.rate} onChange={set("rate")} />
+          <div className="flex items-center justify-between gap-2">
+            <label htmlFor="rate" className={label}>
+              Kurs normal (Rp/$)
+            </label>
+            <button
+              type="button"
+              onClick={toggleAuto}
+              aria-pressed={auto}
+              className={`rounded px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase tracking-eyebrow transition ${
+                auto ? "bg-success-soft text-success" : "bg-surface-2 text-ink-muted hover:text-ink"
+              }`}
+            >
+              {auto ? "Otomatis" : "Manual"}
+            </button>
+          </div>
+          <input
+            id="rate"
+            inputMode="numeric"
+            className={`${input} tnum mt-1.5 read-only:bg-surface-2`}
+            value={auto ? (live ? Math.round(live.rate) : "") : a.rate}
+            placeholder={auto ? "Memuat kurs…" : undefined}
+            readOnly={auto}
+            onChange={set("rate")}
+          />
+          <p className="mt-1 text-xs text-ink-subtle">
+            {!auto
+              ? "Diisi manual. Klik Manual untuk kembali ke kurs otomatis."
+              : live
+                ? `${live.source} · ${fmtTime(live.updatedAt)}`
+                : liveError
+                  ? `Kurs otomatis gagal dimuat, memakai ${idr(a.rate)}`
+                  : "Mengambil kurs terbaru…"}
+          </p>
         </div>
         <div>
           <label htmlFor="markup" className={label}>
-            Admin kurs (Rp/$)
+            Admin kurs (%)
           </label>
           <input
             id="markup"
-            inputMode="numeric"
+            inputMode="decimal"
             className={`${input} tnum mt-1.5`}
-            value={a.markup}
-            onChange={set("markup")}
+            value={markupText}
+            onChange={setMarkup}
           />
-          <p className="tnum mt-1 text-xs text-ink-subtle">≈ {markupPct}% di atas kurs normal</p>
+          <p className="tnum mt-1 text-xs text-ink-subtle">
+            ≈ {idr(cardRate - effective.rate)} per $1, jadi {idr(cardRate)}
+          </p>
         </div>
         <div>
           <label htmlFor="idr" className={label}>
@@ -52,10 +128,25 @@ export default function FeeCalculator() {
             id="idr"
             inputMode="numeric"
             className={`${input} tnum mt-1.5`}
-            value={a.idrReceived}
-            onChange={set("idrReceived")}
+            value={effective.idrReceived}
+            onChange={(e) => {
+              setIdrFollowsRate(false);
+              set("idrReceived")(e);
+            }}
           />
-          <p className="mt-1 text-xs text-ink-subtle">Hanya untuk Mandiri Rupiah</p>
+          <p className="mt-1 text-xs text-ink-subtle">
+            {idrFollowsRate ? (
+              `$${TOTAL_USD.toLocaleString("id-ID")} × kurs normal`
+            ) : (
+              <button
+                type="button"
+                className="underline hover:text-brand"
+                onClick={() => setIdrFollowsRate(true)}
+              >
+                Kembali ke ${TOTAL_USD.toLocaleString("id-ID")} × kurs
+              </button>
+            )}
+          </p>
         </div>
         <div>
           <span className={label}>Tarik tunai / bulan</span>
