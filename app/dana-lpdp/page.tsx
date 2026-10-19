@@ -74,13 +74,12 @@ const banks: Bank[] = [
       "Satu tabungan untuk beberapa mata uang: saldo USD tetap dalam Dollar, tidak dikonversi ke Rupiah",
       "Bebas admin kurs: belanja dan tarik tunai di AS langsung memotong saldo USD",
       "Cukup satu kartu debit Mandiri untuk semua tabungan: tinggal hubungkan ke saldo USD di Livin', lalu belanja di AS langsung memotong saldo USD tanpa konversi",
-      "Transfer valas ke luar negeri bisa dari Livin', termasuk kirim ke rekening Chase sendiri",
       "Sisa dana di akhir program tetap aman di Indonesia, tidak perlu dipindahkan saat pulang",
     ],
     cons: [
       `Biaya bulanan saldo USD $${MULTI_MONTHLY_FEE}`,
       `Tarik tunai di ATM AS kena admin Mandiri $${MULTI_ATM_FEE} + admin ATM AS $${US_ATM_FEE} per tarikan`,
-      "Transfer USD ke rekening AS (SWIFT) bisa kena biaya bank perantara dan biaya terima di Chase",
+      `Jangan kirim USD langsung dari Mandiri ke rekening AS (SWIFT): kena biaya kirim, biaya bank perantara, dan potongan bank penerima $${CHASE_INCOMING_WIRE_FEE}. Pakai Wise atau Flip`,
       "Tetap tidak bisa Zelle; untuk patungan tetap perlu rekening AS atau uang tunai",
     ],
   },
@@ -252,11 +251,11 @@ const steps = [
   },
   {
     title: "Saat dana LPDP cair (bulan pertama)",
-    body: `Dana $${(MONTHLY * MONTHS).toLocaleString("id-ID")} masuk sekaligus untuk 3 bulan. Bagi sendiri jadi jatah $${MONTHLY.toLocaleString("id-ID")} per bulan supaya tidak habis di awal. Kalau dana diterima di Mandiri, pindahkan ke Chase sesedikit mungkin: setiap transfer masuk ke Chase kena potongan $${CHASE_INCOMING_WIRE_FEE}.`,
+    body: `Dana $${(MONTHLY * MONTHS).toLocaleString("id-ID")} masuk sekaligus untuk 3 bulan. Bagi sendiri jadi jatah $${MONTHLY.toLocaleString("id-ID")} per bulan supaya tidak habis di awal. Kalau dana diterima di Mandiri dan perlu dipindah ke Chase, pakai Wise atau Flip, jangan transfer langsung dari bank.`,
   },
   {
     title: "Sebelum pulang (Desember)",
-    body: "Habiskan atau kirim balik sisa saldo Chase ke Mandiri, lalu tutup rekeningnya di cabang supaya tidak ada biaya bulanan setelah kamu pulang.",
+    body: "Habiskan atau kirim balik sisa saldo Chase ke Mandiri lewat Remitly atau Panda Remit (bukan wire dari Chase), lalu tutup rekeningnya di cabang supaya tidak ada biaya bulanan setelah kamu pulang.",
   },
 ];
 
@@ -364,7 +363,8 @@ export default function LpdpFundsPage() {
               <strong>Mandiri Multicurrency</strong> paling hemat kalau tarik tunai cukup sekali sebulan dan sisanya
               belanja pakai kartu. <strong>Chase</strong> lebih hemat kalau sering tarik tunai (2× sebulan atau lebih)
               atau butuh Zelle untuk patungan sewa, HP, dan WiFi. Kalau dana masuk ke Mandiri tapi tetap butuh Chase,
-              pindahkan sesekali dalam jumlah besar, karena setiap transfer masuk ke Chase dipotong $15.
+              pindahkan lewat Wise atau Flip, <strong>jangan</strong> transfer langsung dari bank (lihat bagian
+              Transfer antar mata uang).
             </p>
           </div>
         </section>
@@ -441,6 +441,30 @@ export default function LpdpFundsPage() {
             Kalau dana diterima dalam Rupiah tapi perlu Dollar di rekening Chase, atau sebaliknya ingin mengirim sisa
             Dollar pulang ke Indonesia.
           </p>
+
+          <div className="mt-5 rounded-lg border border-danger/40 bg-danger-soft px-4 py-4 sm:px-5">
+            <p className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-danger">
+              <Icon name="alert" className="h-4 w-4" />
+              Jangan transfer langsung antarbank
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink">
+              <strong>Jangan sekali-kali</strong> mengirim langsung dari bank lokal Indonesia (Mandiri Rupiah maupun
+              Mandiri Multicurrency/Dollar) ke bank lokal AS seperti Chase, dan sebaliknya. Transfer antarbank lewat
+              SWIFT kena banyak biaya:
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-ink">
+              <li>biaya kirim dari bank pengirim,</li>
+              <li>biaya bank perantara (koresponden) yang memotong di tengah jalan,</li>
+              <li>
+                <strong>potongan bank penerima ${CHASE_INCOMING_WIRE_FEE}</strong> setiap kali dana masuk ke Chase,
+              </li>
+              <li>dan untuk Rupiah, kurs bank yang lebih jelek.</li>
+            </ul>
+            <p className="mt-2 text-sm leading-relaxed text-ink">
+              Selalu pakai aplikasi transfer di bawah ini. Pengecualian satu-satunya adalah pencairan dari LPDP sendiri,
+              yang memang dihitung sekali potong ${CHASE_INCOMING_WIRE_FEE} di kalkulator.
+            </p>
+          </div>
 
           <h3 className="mt-6 flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-gold sm:mt-8">
             Rupiah → Dollar
@@ -608,10 +632,6 @@ export default function LpdpFundsPage() {
             </p>
             <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
               <li>Kurs dolar yang dipakai LPDP kalau memilih pencairan Rupiah, dan batas waktu menyerahkan data rekening.</li>
-              <li>
-                Biaya transfer SWIFT dari Mandiri, biaya bank perantara, dan biaya terima wire internasional di Chase.
-                Angkanya berubah-ubah, jadi cek tarif resmi sebelum transfer pertama.
-              </li>
               <li>
                 Apakah transfer LPDP dihitung sebagai &quot;qualifying deposit&quot; $250 yang membebaskan biaya bulanan
                 Chase $4,95. Kalau ya, biaya bulanan Chase bisa jadi $0.
