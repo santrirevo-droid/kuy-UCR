@@ -41,6 +41,8 @@ export type BankCost = {
   id: "idr" | "multi" | "chase";
   name: string;
   currency: "IDR" | "USD";
+  /** Biaya sekali bayar selama program (mis. potongan dana masuk). */
+  oneTime: FeeLine[];
   /** Rincian biaya per bulan, dalam mata uang rekening. */
   monthly: FeeLine[];
   monthlyTotal: number;
@@ -87,22 +89,27 @@ export function computeCosts(a: Assumptions): BankCost[] {
   ];
   const multiTotal = sum(multiMonthly) * MONTHS;
 
-  const chaseMonthly: FeeLine[] = [
+  // Dana LPDP $6.000 masuk sekali di bulan pertama, jadi potongan terima
+  // transfer hanya terjadi satu kali.
+  const chaseOneTime: FeeLine[] = [
     {
       label: "Potongan terima transfer",
-      detail: `1 × $${CHASE_INCOMING_WIRE_FEE}`,
+      detail: `1 × $${CHASE_INCOMING_WIRE_FEE}, saat $${TOTAL_USD.toLocaleString("id-ID")} masuk`,
       amount: CHASE_INCOMING_WIRE_FEE,
     },
-    { label: "Biaya bulanan", detail: `1 × $${CHASE_MONTHLY_FEE}`, amount: CHASE_MONTHLY_FEE },
+  ];
+  const chaseMonthly: FeeLine[] = [
+    { label: "Biaya bulanan", detail: `1 × $${CHASE_MONTHLY_FEE.toLocaleString("id-ID")}`, amount: CHASE_MONTHLY_FEE },
     { label: "Tarik tunai di ATM Chase", detail: `${n} × $0`, amount: 0 },
   ];
-  const chaseTotal = sum(chaseMonthly) * MONTHS;
+  const chaseTotal = sum(chaseOneTime) + sum(chaseMonthly) * MONTHS;
 
   return [
     {
       id: "idr",
       name: "Mandiri Rupiah",
       currency: "IDR",
+      oneTime: [],
       monthly: idrMonthly,
       monthlyTotal: idrMonthlyTotal,
       totalFees: idrTotal,
@@ -113,6 +120,7 @@ export function computeCosts(a: Assumptions): BankCost[] {
       id: "multi",
       name: "Mandiri Multicurrency",
       currency: "USD",
+      oneTime: [],
       monthly: multiMonthly,
       monthlyTotal: sum(multiMonthly),
       totalFees: multiTotal,
@@ -123,6 +131,7 @@ export function computeCosts(a: Assumptions): BankCost[] {
       id: "chase",
       name: "Chase",
       currency: "USD",
+      oneTime: chaseOneTime,
       monthly: chaseMonthly,
       monthlyTotal: sum(chaseMonthly),
       totalFees: chaseTotal,

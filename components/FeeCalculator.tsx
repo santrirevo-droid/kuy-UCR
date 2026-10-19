@@ -107,6 +107,22 @@ export default function FeeCalculator() {
             </header>
 
             <div className="flex-1 px-4 py-3">
+              {c.oneTime.length > 0 && (
+                <>
+                  <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">Biaya sekali</p>
+                  <ul className="mb-4 mt-2 space-y-2">
+                    {c.oneTime.map((l) => (
+                      <li key={l.label} className="flex items-baseline justify-between gap-3 text-sm">
+                        <span className="min-w-0">
+                          <span className="block text-ink">{l.label}</span>
+                          <span className="tnum block text-xs text-ink-subtle">{l.detail}</span>
+                        </span>
+                        <span className="tnum shrink-0 text-ink">{money(l.amount, c.currency)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
               <p className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">Biaya per bulan</p>
               <ul className="mt-2 space-y-2">
                 {c.monthly.map((l) => (

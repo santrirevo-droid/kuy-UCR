@@ -19,16 +19,16 @@ import {
 export const metadata = {
   title: "Dana LPDP & Rekening",
   description:
-    "Penerimaan living allowance LPDP $2.000/bulan selama 3 bulan, dan perbandingan Mandiri Rupiah, Mandiri Multicurrency, dan Chase.",
+    "Penerimaan living allowance LPDP $6.000 (untuk 3 bulan, cair sekali di bulan pertama), dan perbandingan Mandiri Rupiah, Mandiri Multicurrency, dan Chase.",
 };
 
 const rp = (n: number) => `Rp${n.toLocaleString("id-ID")}`;
 const { idrReceived, rate, markup } = DEFAULT_ASSUMPTIONS;
 
 const facts = [
-  { label: "Dana bulanan", value: `$${MONTHLY.toLocaleString("id-ID")}` },
-  { label: "Durasi", value: `${MONTHS} bulan` },
-  { label: "Total diterima", value: `$${(MONTHLY * MONTHS).toLocaleString("id-ID")}` },
+  { label: "Dana diterima", value: `$${(MONTHLY * MONTHS).toLocaleString("id-ID")}` },
+  { label: "Pencairan", value: "Sekali, bulan pertama" },
+  { label: "Jatah bulanan", value: `$${MONTHLY.toLocaleString("id-ID")} × ${MONTHS} bulan` },
   { label: "Periode", value: "Okt – Des 2026" },
 ];
 
@@ -93,8 +93,8 @@ const banks: Bank[] = [
       "Cabang dan ATM Chase banyak di Riverside",
     ],
     cons: [
-      `Setiap dana masuk (transfer internasional) dipotong $${CHASE_INCOMING_WIRE_FEE}`,
-      `Biaya bulanan $${CHASE_MONTHLY_FEE.toFixed(2)}`,
+      `Dana masuk (transfer internasional) dipotong $${CHASE_INCOMING_WIRE_FEE} setiap kali transfer; karena LPDP cair sekali, cukup sekali potong`,
+      `Biaya bulanan $${CHASE_MONTHLY_FEE.toLocaleString("id-ID", { minimumFractionDigits: 2 })}`,
       "Tarik tunai di ATM selain Chase tetap kena biaya",
       "Wajib ditutup sebelum pulang dan sisa saldo dipindahkan, padahal program cuma 3 bulan",
     ],
@@ -109,8 +109,8 @@ const rows: Row[] = [
   { label: "Belanja di AS", values: ["Bisa, kena kurs", "Bisa, tanpa konversi", "Bisa, tanpa biaya"] },
   { label: "Zelle / patungan", values: ["Tidak", "Tidak", "Ya"] },
   { label: "Admin kurs", values: ["+1,5–2% (≈Rp324/$)", "Gratis", "Gratis"] },
-  { label: "Biaya bulanan", values: ["Admin tabungan biasa", `$${MULTI_MONTHLY_FEE}`, `$${CHASE_MONTHLY_FEE.toFixed(2)}`] },
-  { label: "Biaya dana masuk", values: ["—", "—", `$${CHASE_INCOMING_WIRE_FEE} per transfer`] },
+  { label: "Biaya bulanan", values: ["Admin tabungan biasa", `$${MULTI_MONTHLY_FEE}`, `$${CHASE_MONTHLY_FEE.toLocaleString("id-ID", { minimumFractionDigits: 2 })}`] },
+  { label: "Biaya dana masuk", values: ["—", "—", `$${CHASE_INCOMING_WIRE_FEE} sekali`] },
   {
     label: "Tarik tunai di AS",
     values: [`${rp(MANDIRI_IDR_ATM_FEE)} + $${US_ATM_FEE} ATM`, `$${MULTI_ATM_FEE} + $${US_ATM_FEE} ATM`, "Gratis di ATM Chase"],
@@ -129,8 +129,8 @@ const steps = [
     body: "Buka rekening Chase di cabang terdekat. Bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS.",
   },
   {
-    title: "Setiap dana LPDP cair",
-    body: "Biarkan dana utama di Mandiri. Pindahkan ke Chase hanya sejumlah kebutuhan bulan itu (sewa, patungan, belanja), lewat Wise atau transfer valas dari Livin'.",
+    title: "Saat dana LPDP cair (bulan pertama)",
+    body: `Dana $${(MONTHLY * MONTHS).toLocaleString("id-ID")} masuk sekaligus untuk 3 bulan. Bagi sendiri jadi jatah $${MONTHLY.toLocaleString("id-ID")} per bulan supaya tidak habis di awal. Kalau dana diterima di Mandiri, pindahkan ke Chase sesedikit mungkin: setiap transfer masuk ke Chase kena potongan $${CHASE_INCOMING_WIRE_FEE}.`,
   },
   {
     title: "Sebelum pulang (Desember)",
@@ -239,7 +239,7 @@ export default function LpdpFundsPage() {
             <p className="mt-2 text-sm leading-relaxed text-ink sm:text-[0.95rem]">
               Pakai <strong>dua rekening</strong>. <strong>Mandiri Multicurrency</strong> (saldo USD, dihubungkan ke
               kartu debit Mandiri yang sudah ada) untuk menerima dan menyimpan dana LPDP, dan <strong>Chase</strong> untuk kebutuhan harian
-              dan patungan lewat Zelle. Pindahkan ke Chase hanya sebanyak kebutuhan tiap bulan. Jika LPDP hanya bisa
+              dan patungan lewat Zelle. Karena dana $6.000 cair sekaligus, pindahkan ke Chase sesekali saja dalam jumlah besar, sebab setiap transfer masuk ke Chase dipotong $15. Jika LPDP hanya bisa
               mentransfer ke rekening Rupiah, terima di Mandiri Rupiah lalu kirim ke Chase lewat Wise supaya kursnya
               lebih baik daripada belanja di AS langsung dari saldo Rupiah.
             </p>
@@ -312,9 +312,10 @@ export default function LpdpFundsPage() {
             </p>
             <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
               <li>
-                Dana LPDP cair {MONTHS}× (sebulan sekali), masing-masing ${MONTHLY.toLocaleString("id-ID")}. Untuk
-                Mandiri Rupiah, total yang masuk dianggap {rp(idrReceived)} (≈{" "}
-                {rp(Math.round(idrReceived / MONTHS))} per bulan).
+                Dana LPDP ${(MONTHLY * MONTHS).toLocaleString("id-ID")} cair <strong>sekali</strong> di bulan pertama
+                untuk {MONTHS} bulan, lalu dipakai merata ${MONTHLY.toLocaleString("id-ID")} per bulan. Untuk Mandiri
+                Rupiah, dana yang masuk dianggap {rp(idrReceived)} (≈ {rp(Math.round(idrReceived / MONTHS))} per
+                bulan).
               </li>
               <li>
                 Seluruh dana bulanan ditarik tunai atau dibelanjakan di AS. Jumlah tarikan dibagi rata, jadi
@@ -329,8 +330,9 @@ export default function LpdpFundsPage() {
                 membatasi jumlah sekali tarik, jadi $2.000 mungkin perlu ditarik lebih dari sekali.
               </li>
               <li>
-                Chase: dana LPDP dikirim langsung ke Chase setiap bulan, sehingga ada {MONTHS}× potongan terima
-                transfer ${CHASE_INCOMING_WIRE_FEE}. Tarik tunai selalu di ATM Chase.
+                Chase: dana LPDP dikirim langsung ke Chase sekali, jadi potongan terima transfer $
+                {CHASE_INCOMING_WIRE_FEE} hanya terjadi satu kali. Biaya bulanan ${CHASE_MONTHLY_FEE.toLocaleString("id-ID", { minimumFractionDigits: 2 })} tetap
+                ditagih {MONTHS} bulan. Tarik tunai selalu di ATM Chase.
               </li>
               <li>
                 &quot;Bisa dipakai di AS&quot; = dolar yang benar-benar sampai di tangan setelah semua biaya. Untuk
