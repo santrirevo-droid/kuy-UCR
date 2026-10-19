@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ChangeEvent, type ReactNode } from "react";
 import Icon from "@/components/Icon";
 import { input, label } from "@/lib/ui";
 import {
@@ -32,8 +32,9 @@ type LiveRate = { rate: number; source: string; updatedAt: string };
 
 // Kalkulator biaya admin: tiga rekening dihitung dari asumsi yang sama,
 // pengunjung bisa mengubah kurs, admin kurs, dan frekuensi tarik tunai.
-// Kurs normal default-nya otomatis dari /api/kurs.
-export default function FeeCalculator() {
+// Kurs normal default-nya otomatis dari /api/kurs. State disimpan di
+// FeeProvider supaya ringkasan (atas halaman) dan kalkulator (bawah) sinkron.
+function useFeeState() {
   const [a, setA] = useState<Assumptions>(DEFAULT_ASSUMPTIONS);
   const [auto, setAuto] = useState(true);
   const [live, setLive] = useState<LiveRate | null>(null);
@@ -75,10 +76,44 @@ export default function FeeCalculator() {
     setAuto(!auto);
   }
 
+  return {
+    a,
+    setA,
+    auto,
+    live,
+    liveError,
+    idrFollowsRate,
+    setIdrFollowsRate,
+    markupText,
+    effective,
+    costs,
+    best,
+    cardRate,
+    set,
+    setMarkup,
+    toggleAuto,
+  };
+}
+
+const FeeContext = createContext<ReturnType<typeof useFeeState> | null>(null);
+
+export function FeeProvider({ children }: { children: ReactNode }) {
+  const value = useFeeState();
+  return <FeeContext.Provider value={value}>{children}</FeeContext.Provider>;
+}
+
+function useFee() {
+  const value = useContext(FeeContext);
+  if (!value) throw new Error("FeeSummary/FeeCalculator harus berada di dalam FeeProvider");
+  return value;
+}
+
+// Ringkasan berdampingan: satu kolom per rekening, angka ikut asumsi kalkulator.
+export function FeeSummary() {
+  const { a, effective, costs, best, cardRate } = useFee();
   const byId = Object.fromEntries(costs.map((c) => [c.id, c])) as Record<BankCost["id"], BankCost>;
   const n = a.withdrawalsPerMonth;
   const dec = (v: number) => v.toLocaleString("id-ID", { minimumFractionDigits: 2 });
-  // Ringkasan berdampingan: satu kolom per rekening, angka ikut asumsi di bawah.
   const summary: { label: string; values: [string, string, string] }[] = [
     { label: "Admin kurs", values: [`+${effective.markupPct.toLocaleString("id-ID")}%`, "Gratis", "Gratis"] },
     { label: "Biaya bulanan", values: ["—", `$${MULTI_MONTHLY_FEE}`, `$${dec(CHASE_MONTHLY_FEE)}`] },
@@ -103,7 +138,6 @@ export default function FeeCalculator() {
   ];
 
   return (
-    <div>
       <div className="overflow-hidden rounded-lg border border-line bg-surface">
         <table className="w-full table-fixed border-collapse text-left text-[0.8rem] sm:text-sm">
           <caption className="border-b border-line px-3 py-2.5 text-left text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle sm:px-4">
@@ -161,8 +195,31 @@ export default function FeeCalculator() {
           </tbody>
         </table>
       </div>
+  );
+}
 
-      <p className="mb-3 mt-8 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+export default function FeeCalculator() {
+  const {
+    a,
+    setA,
+    auto,
+    live,
+    liveError,
+    idrFollowsRate,
+    setIdrFollowsRate,
+    markupText,
+    effective,
+    costs,
+    best,
+    cardRate,
+    set,
+    setMarkup,
+    toggleAuto,
+  } = useFee();
+
+  return (
+    <div>
+      <p className="mb-3 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
         Ubah asumsi
       </p>
       <div className="grid gap-4 rounded-lg border border-line bg-surface p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-4">

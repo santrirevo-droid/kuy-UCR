@@ -1,5 +1,5 @@
 import Link from "next/link";
-import FeeCalculator from "@/components/FeeCalculator";
+import FeeCalculator, { FeeProvider, FeeSummary } from "@/components/FeeCalculator";
 import Icon from "@/components/Icon";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -318,6 +318,7 @@ export default function LpdpFundsPage() {
       </header>
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-16">
+        <FeeProvider>
         <header className="animate-rise border-b border-line pb-7 sm:pb-10">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-md border border-line bg-surface text-brand">
@@ -350,8 +351,21 @@ export default function LpdpFundsPage() {
           </dl>
         </header>
 
-        {/* Rekomendasi singkat */}
+        {/* Ringkasan biaya admin */}
         <section className="pt-7 sm:pt-10">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Ringkasan biaya admin</h2>
+            <a href="#biaya" className="shrink-0 text-xs font-semibold text-brand hover:underline">
+              Rincian &amp; ubah asumsi ↓
+            </a>
+          </div>
+          <div className="mt-4 sm:mt-6">
+            <FeeSummary />
+          </div>
+        </section>
+
+        {/* Rekomendasi singkat */}
+        <section className="pt-8 sm:pt-10">
           <div className="rounded-lg border border-brand/30 bg-brand-soft px-4 py-4 sm:px-5 sm:py-5">
             <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-brand">
               <Icon name="bulb" className="h-4 w-4" />
@@ -557,8 +571,8 @@ export default function LpdpFundsPage() {
           <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Rincian biaya admin</h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
             Simulasi untuk dana ${MONTHLY.toLocaleString("id-ID")} per bulan yang seluruhnya dipakai di AS selama{" "}
-            {MONTHS} bulan. Ringkasan di atas langsung membandingkan ketiga rekening; ubah asumsi di bawahnya
-            (mis. jumlah tarik tunai per bulan) dan semua angka ikut berubah.
+            {MONTHS} bulan. Ubah asumsi di bawah (mis. jumlah tarik tunai per bulan); ringkasan di atas halaman ikut
+            berubah.
           </p>
 
           <div className="mt-5 sm:mt-7">
@@ -652,6 +666,7 @@ export default function LpdpFundsPage() {
           </Link>{" "}
           untuk estimasi biaya hidup.
         </p>
+        </FeeProvider>
       </main>
     </div>
   );
