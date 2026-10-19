@@ -18,6 +18,15 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
+  // Basis URL absolut untuk og:image — WhatsApp hanya mau gambar dengan URL penuh.
+  metadataBase: new URL("https://kuy-sc-ucr.vercel.app"),
+  // Sengaja tanpa title/description supaya tiap halaman tetap memakai <title>
+  // miliknya sendiri di pratinjau link.
+  openGraph: {
+    type: "website",
+    siteName: "Kuy, UCR!",
+    locale: "id_ID",
+  },
   title: {
     default: "Kuy, UCR! — Panduan Program PKUMI–LPDP di UC Riverside",
     template: "%s · Kuy, UCR!",
