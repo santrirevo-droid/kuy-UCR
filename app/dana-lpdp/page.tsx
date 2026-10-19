@@ -46,7 +46,7 @@ const banks: Bank[] = [
     id: "idr",
     name: "Mandiri Rupiah",
     kind: "Rekening Indonesia · IDR",
-    role: "Cocok jika LPDP hanya bisa mentransfer ke rekening Rupiah.",
+    role: "Pilihan pencairan Rupiah: dana $6.000 dikonversi LPDP dengan kurs dolar saat pencairan.",
     pros: [
       "Sudah dimiliki hampir semua peserta, tidak perlu buka rekening baru",
       "Mudah dipantau lewat Livin' dan bisa dipakai membayar keperluan di Indonesia",
@@ -64,7 +64,7 @@ const banks: Bank[] = [
     id: "usd",
     name: "Mandiri Multicurrency",
     kind: "Rekening Indonesia · Multi mata uang",
-    role: "Paling hemat untuk menyimpan dana bila LPDP bisa mentransfer dalam USD.",
+    role: "Pilihan pencairan USD ke rekening Indonesia: dana diterima utuh dalam Dollar.",
     pros: [
       "Dibuka langsung dari aplikasi Livin', tanpa perlu ke cabang",
       "Satu tabungan untuk beberapa mata uang: saldo USD tetap dalam Dollar, tidak dikonversi ke Rupiah",
@@ -84,7 +84,7 @@ const banks: Bank[] = [
     id: "chase",
     name: "Chase Bank",
     kind: "Rekening Amerika · USD",
-    role: "Rekening operasional harian selama di Riverside.",
+    role: "Pilihan pencairan USD ke bank lokal AS: dana langsung siap dipakai di Riverside.",
     pros: [
       "Bisa Zelle: patungan sewa, tagihan HP & WiFi, dan bayar sesama peserta jadi instan",
       "Tarik tunai di semua ATM Chase gratis, berapa kali pun",
@@ -119,10 +119,28 @@ const rows: Row[] = [
   { label: "Setelah pulang", values: ["Tetap dipakai", "Tetap dipakai", "Perlu ditutup"] },
 ];
 
+const payouts = [
+  {
+    currency: "Rupiah",
+    bank: "Mandiri Rupiah",
+    note: "$6.000 dihitung dengan kurs dolar saat pencairan, lalu masuk sebagai Rupiah. Saat dipakai di AS, kena admin kurs lagi.",
+  },
+  {
+    currency: "Dollar",
+    bank: "Mandiri Multicurrency",
+    note: "$6.000 masuk utuh ke saldo USD di rekening Indonesia. Dipakai di AS lewat kartu debit Mandiri tanpa konversi.",
+  },
+  {
+    currency: "Dollar",
+    bank: "Chase (bank lokal AS)",
+    note: "$6.000 masuk langsung ke rekening AS, dipotong $15 sekali saat diterima. Rekening harus sudah dibuka sebelum pencairan.",
+  },
+];
+
 const steps = [
   {
     title: "Sebelum berangkat",
-    body: "Tanyakan ke LPDP rekening jenis apa yang diterima untuk pencairan (Rupiah atau valas USD). Jika USD bisa, buka Tabungan Mandiri Multicurrency lewat Livin', tambahkan saldo USD, lalu hubungkan kartu debit Mandiri yang sudah kamu punya ke saldo USD tersebut.",
+    body: "Tentukan mata uang pencairan ke LPDP. Kalau memilih USD ke Mandiri, buka Tabungan Mandiri Multicurrency lewat Livin', tambahkan saldo USD, lalu hubungkan kartu debit Mandiri yang sudah kamu punya ke saldo USD tersebut. Kalau memilih USD ke Chase, siapkan dulu rekening Chase-nya (langkah berikut) sebelum data rekening diserahkan ke LPDP.",
   },
   {
     title: "Minggu pertama di Riverside",
@@ -237,12 +255,30 @@ export default function LpdpFundsPage() {
               Rekomendasi
             </p>
             <p className="mt-2 text-sm leading-relaxed text-ink sm:text-[0.95rem]">
-              Pakai <strong>dua rekening</strong>. <strong>Mandiri Multicurrency</strong> (saldo USD, dihubungkan ke
-              kartu debit Mandiri yang sudah ada) untuk menerima dan menyimpan dana LPDP, dan <strong>Chase</strong> untuk kebutuhan harian
-              dan patungan lewat Zelle. Karena dana $6.000 cair sekaligus, pindahkan ke Chase sesekali saja dalam jumlah besar, sebab setiap transfer masuk ke Chase dipotong $15. Jika LPDP hanya bisa
-              mentransfer ke rekening Rupiah, terima di Mandiri Rupiah lalu kirim ke Chase lewat Wise supaya kursnya
-              lebih baik daripada belanja di AS langsung dari saldo Rupiah.
+              Pilih pencairan <strong>dalam Dollar</strong>. Pencairan Rupiah kena kurs dua kali: dikonversi LPDP saat
+              pencairan, lalu kena admin kurs lagi setiap dipakai di AS. Untuk tujuan USD-nya:{" "}
+              <strong>Mandiri Multicurrency</strong> paling hemat kalau tarik tunai cukup sekali sebulan dan sisanya
+              belanja pakai kartu. <strong>Chase</strong> lebih hemat kalau sering tarik tunai (2× sebulan atau lebih)
+              atau butuh Zelle untuk patungan sewa, HP, dan WiFi. Kalau dana masuk ke Mandiri tapi tetap butuh Chase,
+              pindahkan sesekali dalam jumlah besar, karena setiap transfer masuk ke Chase dipotong $15.
             </p>
+          </div>
+        </section>
+
+        {/* Opsi pencairan */}
+        <section className="pt-10 sm:pt-14">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Opsi pencairan dari LPDP</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
+            LPDP bisa mentransfer dalam Rupiah atau Dollar. Pilihan mata uang menentukan rekening tujuannya.
+          </p>
+          <div className="mt-5 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:mt-7 sm:grid-cols-3">
+            {payouts.map((o) => (
+              <div key={o.bank} className="bg-surface px-4 py-4">
+                <span className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-gold">{o.currency}</span>
+                <p className="mt-1 font-display text-base font-semibold text-ink">{o.bank}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{o.note}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -336,7 +372,8 @@ export default function LpdpFundsPage() {
               </li>
               <li>
                 &quot;Bisa dipakai di AS&quot; = dolar yang benar-benar sampai di tangan setelah semua biaya. Untuk
-                Mandiri Rupiah, ini bergantung pada kurs saat LPDP mengirim dana dalam Rupiah.
+                Mandiri Rupiah, ini bergantung pada kurs dolar yang dipakai LPDP saat pencairan. Isi kolom &quot;Dana
+                Rupiah 3 bulan&quot; dengan angka yang benar-benar diterima.
               </li>
               <li>Admin bulanan tabungan Rupiah biasa tidak dihitung, karena tetap dibayar dengan atau tanpa program.</li>
             </ul>
@@ -368,7 +405,7 @@ export default function LpdpFundsPage() {
               Perlu dicek ulang
             </p>
             <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
-              <li>Jenis rekening dan mata uang yang diterima LPDP untuk pencairan program ini.</li>
+              <li>Kurs dolar yang dipakai LPDP kalau memilih pencairan Rupiah, dan batas waktu menyerahkan data rekening.</li>
               <li>
                 Biaya transfer SWIFT dari Mandiri, biaya bank perantara, dan biaya terima wire internasional di Chase.
                 Angkanya berubah-ubah, jadi cek tarif resmi sebelum transfer pertama.
