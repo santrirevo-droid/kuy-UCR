@@ -142,6 +142,86 @@ const payouts = [
   },
 ];
 
+// Aplikasi transfer antar mata uang. Biaya & kurs berubah tiap hari —
+// selalu bandingkan kuotasi di aplikasi pada hari yang sama.
+const idrToUsd: Bank[] = [
+  {
+    id: "flip",
+    name: "Flip",
+    kind: "Rupiah → Dollar · Flip Globe",
+    role: "Kirim dari Mandiri Rupiah ke rekening Chase dengan alur yang familiar.",
+    pros: [
+      "Aplikasi Indonesia: bahasa Indonesia, layanan pelanggan lokal, terdaftar di Bank Indonesia",
+      "Bayar dari Mandiri Rupiah pakai transfer bank atau virtual account biasa",
+      "Biaya dan jumlah yang diterima ditampilkan di depan sebelum konfirmasi",
+      "Cocok untuk yang sudah biasa pakai Flip untuk transfer antarbank",
+    ],
+    cons: [
+      "Kurs yang dipakai Flip, bukan kurs tengah, jadi sebagian biaya tersembunyi di selisih kurs",
+      "Negara tujuan dan limit per transaksi lebih terbatas, jadi cek dulu apakah tujuan AS dan nominal yang mau dikirim tersedia",
+      "Perlu verifikasi identitas (KTP) sebelum transfer luar negeri pertama",
+      "Hanya untuk kirim; tidak bisa menyimpan saldo USD di aplikasi",
+    ],
+  },
+  {
+    id: "wise",
+    name: "Wise",
+    kind: "Rupiah → Dollar",
+    role: "Biasanya paling hemat untuk mengisi rekening Chase dari Rupiah.",
+    pros: [
+      "Memakai kurs tengah (sama dengan yang tampil di Google); biayanya terpisah dan transparan, contoh Wise: sekitar Rp62.741 untuk kirim Rp10 juta",
+      "Ke Chase biasanya dikirim sebagai transfer lokal AS (ACH), bukan wire internasional, jadi umumnya tidak kena potongan terima $15 dan bisa ikut dihitung sebagai transaksi promo",
+      "Bisa menyimpan saldo USD di akun Wise dan dipakai lagi nanti",
+      "Bisa dipakai dari Indonesia maupun saat sudah di AS",
+    ],
+    cons: [
+      "Perlu verifikasi identitas (KTP/paspor) yang bisa makan waktu, jadi daftar sebelum butuh",
+      "Ada biaya tetap + persentase, jadi kirim kecil-kecil berkali-kali lebih boros daripada sekali kirim besar",
+      "Transfer besar bisa diminta dokumen tambahan (mis. bukti sumber dana LPDP)",
+      "Bayar pakai transfer bank paling murah tapi bisa lebih lambat dibanding kartu",
+    ],
+  },
+];
+
+const usdToIdr: Bank[] = [
+  {
+    id: "remitly",
+    name: "Remitly",
+    kind: "Dollar → Rupiah",
+    role: "Kirim sisa dana dari Chase ke Mandiri, BCA, atau e-wallet di Indonesia.",
+    pros: [
+      "Biaya kirim ke rekening bank Indonesia rendah, sekitar $1,99",
+      "Dua pilihan: Economy (dibayar dari rekening Chase, lebih murah) atau Express (dibayar kartu debit, uang sampai dalam hitungan menit)",
+      "Kurs promo untuk transfer pertama, berlaku sampai $1.000",
+      "Tujuan bisa rekening bank maupun e-wallet",
+    ],
+    cons: [
+      "Kurs tetap mengandung margin di atas kurs tengah",
+      "Kurs promo hanya untuk transfer pertama; sisanya pakai kurs biasa",
+      "Express lewat kartu lebih mahal dibanding Economy",
+      "Transfer besar bisa tertahan untuk pemeriksaan tambahan",
+    ],
+  },
+  {
+    id: "panda",
+    name: "Panda Remit",
+    kind: "Dollar → Rupiah",
+    role: "Alternatif dengan kurs yang sering lebih bagus untuk nominal besar.",
+    pros: [
+      "Margin kurs kecil, sekitar 0,1–0,65% menurut ulasan Finder",
+      "Kurs promo untuk pengguna baru",
+      "Fokus ke negara Asia, termasuk Indonesia",
+      "Layak dibandingkan untuk kirim $1.000 ke atas",
+    ],
+    cons: [
+      "Biaya kirim sekitar $2–8,99, jadi kurang hemat untuk nominal kecil",
+      "Kurs yang tampil di situs sering kurs promo pengguna baru, bukan kurs biasa",
+      "Kurang dikenal dibanding Remitly atau Wise; layanan pelanggan tidak berbahasa Indonesia",
+      "Biaya dan kurs untuk rute AS → Indonesia sebaiknya dicek langsung di aplikasi",
+    ],
+  },
+];
+
 const promoSteps = [
   {
     title: "Tulis email di halaman promo",
@@ -351,6 +431,54 @@ export default function LpdpFundsPage() {
                 sudah punya rekening checking Chase.
               </span>
             </p>
+          </div>
+        </section>
+
+        {/* Transfer antar mata uang */}
+        <section id="transfer" className="scroll-mt-20 pt-10 sm:pt-14">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Transfer antar mata uang</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
+            Kalau dana diterima dalam Rupiah tapi perlu Dollar di rekening Chase, atau sebaliknya ingin mengirim sisa
+            Dollar pulang ke Indonesia.
+          </p>
+
+          <h3 className="mt-6 flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-gold sm:mt-8">
+            Rupiah → Dollar
+            <span className="h-px flex-1 bg-line" />
+          </h3>
+          <div className="mt-3 grid gap-4 md:grid-cols-2">
+            {idrToUsd.map((b) => (
+              <BankCard key={b.id} bank={b} />
+            ))}
+          </div>
+
+          <h3 className="mt-8 flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-eyebrow text-gold">
+            Dollar → Rupiah
+            <span className="h-px flex-1 bg-line" />
+          </h3>
+          <div className="mt-3 grid gap-4 md:grid-cols-2">
+            {usdToIdr.map((b) => (
+              <BankCard key={b.id} bank={b} />
+            ))}
+          </div>
+
+          <div className="mt-6 rounded-lg border border-brand/30 bg-brand-soft px-4 py-4 sm:px-5">
+            <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-brand">
+              <Icon name="bulb" className="h-4 w-4" />
+              Tips memilih
+            </p>
+            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+              <li>
+                Bandingkan <strong>jumlah yang diterima</strong>, bukan hanya biayanya. Kurs yang jelek bisa lebih mahal
+                daripada biaya kirim.
+              </li>
+              <li>Cek kuotasi di kedua aplikasi pada hari dan jam yang sama, karena kurs bergerak terus.</li>
+              <li>Kirim sekali dalam jumlah besar lebih hemat daripada berkali-kali, karena ada biaya tetap per transfer.</li>
+              <li>
+                Daftar dan selesaikan verifikasi identitas sebelum benar-benar butuh, karena verifikasi bisa makan waktu
+                beberapa hari.
+              </li>
+            </ul>
           </div>
         </section>
 
