@@ -9,6 +9,12 @@ import {
   MONTHLY_USD,
   TOTAL_USD,
   CHASE_PROMO_BONUS,
+  CHASE_INCOMING_WIRE_FEE,
+  CHASE_MONTHLY_FEE,
+  MANDIRI_IDR_ATM_FEE,
+  MULTI_ATM_FEE,
+  MULTI_MONTHLY_FEE,
+  US_ATM_FEE,
   cardRateOf,
   computeCosts,
   type Assumptions,
@@ -69,8 +75,96 @@ export default function FeeCalculator() {
     setAuto(!auto);
   }
 
+  const byId = Object.fromEntries(costs.map((c) => [c.id, c])) as Record<BankCost["id"], BankCost>;
+  const n = a.withdrawalsPerMonth;
+  const dec = (v: number) => v.toLocaleString("id-ID", { minimumFractionDigits: 2 });
+  // Ringkasan berdampingan: satu kolom per rekening, angka ikut asumsi di bawah.
+  const summary: { label: string; values: [string, string, string] }[] = [
+    { label: "Admin kurs", values: [`+${effective.markupPct.toLocaleString("id-ID")}%`, "Gratis", "Gratis"] },
+    { label: "Biaya bulanan", values: ["—", `$${MULTI_MONTHLY_FEE}`, `$${dec(CHASE_MONTHLY_FEE)}`] },
+    { label: "Dana masuk", values: ["—", "—", `$${CHASE_INCOMING_WIRE_FEE} sekali`] },
+    {
+      label: "Per tarik tunai",
+      values: [
+        idr(MANDIRI_IDR_ATM_FEE + US_ATM_FEE * cardRate),
+        `$${MULTI_ATM_FEE + US_ATM_FEE}`,
+        "Gratis",
+      ],
+    },
+    { label: "Bonus promo", values: ["—", "—", a.chasePromo ? `+$${CHASE_PROMO_BONUS}` : "Tidak dihitung"] },
+    {
+      label: `Total ${MONTHS} bulan`,
+      values: [
+        `${idr(byId.idr.totalFees)} (≈ ${usd(byId.idr.totalFeesUsd)})`,
+        usd(byId.multi.totalFees),
+        usd(byId.chase.totalFees),
+      ],
+    },
+  ];
+
   return (
     <div>
+      <div className="overflow-hidden rounded-lg border border-line bg-surface">
+        <table className="w-full table-fixed border-collapse text-left text-[0.8rem] sm:text-sm">
+          <caption className="border-b border-line px-3 py-2.5 text-left text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle sm:px-4">
+            Ringkasan · tarik tunai {n}× per bulan
+          </caption>
+          <colgroup>
+            <col className="w-[26%] sm:w-[22%]" />
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead className="bg-surface-2">
+            <tr>
+              <th className="px-3 py-2.5 sm:px-4" />
+              {costs.map((c) => (
+                <th key={c.id} className="px-2 py-2.5 align-bottom break-words font-display font-semibold text-ink sm:px-4">
+                  {c.id === "multi" ? "Multi\u00ADcurrency" : c.name.replace("Mandiri ", "")}
+                  <span className="block font-sans text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+                    {c.id === "chase" ? "Bank AS" : "Mandiri"}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {summary.map((r) => (
+              <tr key={r.label} className="border-t border-line">
+                <th scope="row" className="px-3 py-2.5 font-medium text-ink-muted sm:px-4">
+                  {r.label}
+                </th>
+                {r.values.map((v, i) => (
+                  <td key={i} className="tnum break-words px-2 py-2.5 text-ink sm:px-4">
+                    {v}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <tr className="border-t-2 border-line-strong bg-surface-2">
+              <th scope="row" className="px-3 py-3 font-semibold text-ink sm:px-4">
+                Bisa dipakai di AS
+              </th>
+              {costs.map((c) => (
+                <td key={c.id} className="tnum px-2 py-3 sm:px-4">
+                  <span className={`block font-semibold ${c.id === best.id ? "text-success" : "text-ink"}`}>
+                    {usd(c.spendableUsd)}
+                  </span>
+                  {c.id === best.id && (
+                    <span className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-success">
+                      Paling hemat
+                    </span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p className="mb-3 mt-8 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+        Ubah asumsi
+      </p>
       <div className="grid gap-4 rounded-lg border border-line bg-surface p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-4">
         <div>
           <div className="flex items-center justify-between gap-2">
@@ -179,7 +273,10 @@ export default function FeeCalculator() {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <p className="mb-3 mt-8 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+        Rincian per rekening
+      </p>
+      <div className="grid gap-4 lg:grid-cols-3">
         {costs.map((c) => (
           <article
             key={c.id}

@@ -557,8 +557,8 @@ export default function LpdpFundsPage() {
           <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Rincian biaya admin</h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
             Simulasi untuk dana ${MONTHLY.toLocaleString("id-ID")} per bulan yang seluruhnya dipakai di AS selama{" "}
-            {MONTHS} bulan. Angka bisa diubah. Coba naikkan jumlah tarik tunai per bulan untuk melihat kapan Chase
-            jadi lebih hemat.
+            {MONTHS} bulan. Ringkasan di atas langsung membandingkan ketiga rekening; ubah asumsi di bawahnya
+            (mis. jumlah tarik tunai per bulan) dan semua angka ikut berubah.
           </p>
 
           <div className="mt-5 sm:mt-7">
