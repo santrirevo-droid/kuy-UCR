@@ -7,7 +7,7 @@ import UserBadge from "@/components/UserBadge";
 export const metadata = {
   title: "Dana LPDP & Rekening",
   description:
-    "Penerimaan living allowance LPDP $2.000/bulan selama 3 bulan, dan perbandingan Mandiri Rupiah, Mandiri Valas, dan Chase.",
+    "Penerimaan living allowance LPDP $2.000/bulan selama 3 bulan, dan perbandingan Mandiri Rupiah, Mandiri Multicurrency, dan Chase.",
 };
 
 const MONTHLY = 2000;
@@ -49,17 +49,18 @@ const banks: Bank[] = [
   },
   {
     id: "usd",
-    name: "Mandiri Valas USD",
-    kind: "Rekening Indonesia · USD",
+    name: "Mandiri Multicurrency",
+    kind: "Rekening Indonesia · Multi mata uang",
     role: "Paling hemat untuk menyimpan dana bila LPDP bisa mentransfer dalam USD.",
     pros: [
-      "Dana tetap dalam Dollar, tidak ada konversi ke Rupiah",
+      "Dibuka langsung dari aplikasi Livin', tanpa perlu ke cabang",
+      "Satu tabungan untuk beberapa mata uang: saldo USD tetap dalam Dollar, tidak dikonversi ke Rupiah",
       "Bisa dihubungkan ke Mandiri Debit Multicurrency (Visa): belanja di AS langsung memotong saldo USD tanpa konversi",
       "Transfer valas ke luar negeri bisa dari Livin', termasuk kirim ke rekening Chase sendiri",
       "Sisa dana di akhir program tetap aman di Indonesia, tidak perlu dipindahkan saat pulang",
     ],
     cons: [
-      "Harus dibuka di Indonesia, jadi idealnya sebelum berangkat",
+      "Kartu Debit Multicurrency fisik sebaiknya diurus sebelum berangkat; kalau belum sempat, kartu virtual bisa diaktifkan dari Livin'",
       "Tarik tunai di ATM AS tetap bisa kena biaya ATM",
       "Transfer USD ke rekening AS (SWIFT) bisa kena biaya bank perantara dan biaya terima di Chase",
       "Tetap tidak bisa Zelle; untuk patungan tetap perlu rekening AS atau uang tunai",
@@ -93,14 +94,14 @@ const rows: Row[] = [
   { label: "Belanja di AS", values: ["Bisa, kena kurs", "Bisa, tanpa konversi", "Bisa, tanpa biaya"] },
   { label: "Zelle / patungan", values: ["Tidak", "Tidak", "Ya"] },
   { label: "Biaya bulanan", values: ["Biaya admin biasa", "Biaya admin biasa", "$15 kecuali dibebaskan"] },
-  { label: "Perlu dibuka", values: ["Sudah ada", "Sebelum berangkat", "Setelah tiba"] },
+  { label: "Perlu dibuka", values: ["Sudah ada", "Lewat Livin'", "Setelah tiba di AS"] },
   { label: "Setelah pulang", values: ["Tetap dipakai", "Tetap dipakai", "Perlu ditutup"] },
 ];
 
 const steps = [
   {
     title: "Sebelum berangkat",
-    body: "Tanyakan ke LPDP rekening jenis apa yang diterima untuk pencairan (Rupiah atau valas USD). Jika valas bisa, buka Mandiri Valas USD dan sambungkan ke kartu Mandiri Debit Multicurrency.",
+    body: "Tanyakan ke LPDP rekening jenis apa yang diterima untuk pencairan (Rupiah atau valas USD). Jika USD bisa, buka Tabungan Mandiri Multicurrency lewat Livin', tambahkan saldo USD, dan sambungkan ke kartu Mandiri Debit Multicurrency.",
   },
   {
     title: "Minggu pertama di Riverside",
@@ -193,7 +194,7 @@ export default function LpdpFundsPage() {
           </h1>
           <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-ink-muted sm:text-lg">
             Setiap peserta menerima ${MONTHLY.toLocaleString("id-ID")} per bulan selama {MONTHS} bulan. Halaman ini
-            membandingkan tiga tempat menampung dana itu: Mandiri Rupiah, Mandiri Valas USD, dan Chase, beserta
+            membandingkan tiga tempat menampung dana itu: Mandiri Rupiah, Mandiri Multicurrency, dan Chase, beserta
             kelebihan dan kekurangannya.
           </p>
 
@@ -215,7 +216,7 @@ export default function LpdpFundsPage() {
               Rekomendasi
             </p>
             <p className="mt-2 text-sm leading-relaxed text-ink sm:text-[0.95rem]">
-              Pakai <strong>dua rekening</strong>. <strong>Mandiri Valas USD</strong> (dengan kartu Debit
+              Pakai <strong>dua rekening</strong>. <strong>Mandiri Multicurrency</strong> (saldo USD, dengan kartu Debit
               Multicurrency) untuk menerima dan menyimpan dana LPDP, dan <strong>Chase</strong> untuk kebutuhan harian
               dan patungan lewat Zelle. Pindahkan ke Chase hanya sebanyak kebutuhan tiap bulan. Jika LPDP hanya bisa
               mentransfer ke rekening Rupiah, terima di Mandiri Rupiah lalu kirim ke Chase lewat Wise supaya kursnya

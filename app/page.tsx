@@ -116,7 +116,7 @@ export default async function Home() {
               </span>
               <span>
                 <span className="block text-sm font-semibold text-ink">Dana LPDP &amp; Pilihan Rekening</span>
-                <span className="block text-xs text-ink-muted">$2.000 × 3 bulan — Mandiri Rupiah, Mandiri Valas, atau Chase</span>
+                <span className="block text-xs text-ink-muted">$2.000 × 3 bulan — Mandiri Rupiah, Mandiri Multicurrency, atau Chase</span>
               </span>
             </span>
             <Icon name="arrow-right" className="h-4 w-4 text-ink-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-brand" />
