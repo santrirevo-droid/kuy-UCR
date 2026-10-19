@@ -1,8 +1,20 @@
 import Link from "next/link";
+import FeeCalculator from "@/components/FeeCalculator";
 import Icon from "@/components/Icon";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 import UserBadge from "@/components/UserBadge";
+import {
+  CHASE_INCOMING_WIRE_FEE,
+  CHASE_MONTHLY_FEE,
+  DEFAULT_ASSUMPTIONS,
+  MANDIRI_IDR_ATM_FEE,
+  MONTHLY_USD as MONTHLY,
+  MONTHS,
+  MULTI_ATM_FEE,
+  MULTI_MONTHLY_FEE,
+  US_ATM_FEE,
+} from "@/lib/dana-lpdp";
 
 export const metadata = {
   title: "Dana LPDP & Rekening",
@@ -10,8 +22,8 @@ export const metadata = {
     "Penerimaan living allowance LPDP $2.000/bulan selama 3 bulan, dan perbandingan Mandiri Rupiah, Mandiri Multicurrency, dan Chase.",
 };
 
-const MONTHLY = 2000;
-const MONTHS = 3;
+const rp = (n: number) => `Rp${n.toLocaleString("id-ID")}`;
+const { idrReceived, rate, markup } = DEFAULT_ASSUMPTIONS;
 
 const facts = [
   { label: "Dana bulanan", value: `$${MONTHLY.toLocaleString("id-ID")}` },
@@ -39,11 +51,12 @@ const banks: Bank[] = [
       "Sudah dimiliki hampir semua peserta, tidak perlu buka rekening baru",
       "Mudah dipantau lewat Livin' dan bisa dipakai membayar keperluan di Indonesia",
       "Kartu debit berlogo Visa/Mastercard tetap bisa dipakai belanja dan tarik tunai di AS",
+      `Dana diterima dalam Rupiah (${rp(idrReceived)} untuk 3 bulan), langsung bisa dipakai untuk keperluan di Indonesia`,
     ],
     cons: [
       "Kena konversi dua kali: USD → IDR saat dana masuk, lalu IDR → USD saat dipakai di AS",
-      "Tiap transaksi luar negeri kena selisih kurs jaringan kartu + markup bank",
-      "Tarik tunai di ATM AS kena biaya dari Mandiri dan biasanya dari pemilik ATM ($3–5)",
+      `Admin kurs +1,5–2% di setiap transaksi di AS, mis. kurs normal ${rp(rate)} jadi ${rp(rate + markup)} per $1`,
+      `Tarik tunai di ATM AS kena admin Mandiri ${rp(MANDIRI_IDR_ATM_FEE)} + admin ATM AS $${US_ATM_FEE} (ikut kena admin kurs): sekitar ${rp(MANDIRI_IDR_ATM_FEE + US_ATM_FEE * (rate + markup))} per tarikan, belum termasuk admin kurs atas uang yang ditarik`,
       "Tidak bisa dipakai Zelle untuk patungan sewa, HP, atau WiFi",
     ],
   },
@@ -55,12 +68,14 @@ const banks: Bank[] = [
     pros: [
       "Dibuka langsung dari aplikasi Livin', tanpa perlu ke cabang",
       "Satu tabungan untuk beberapa mata uang: saldo USD tetap dalam Dollar, tidak dikonversi ke Rupiah",
+      "Bebas admin kurs: belanja dan tarik tunai di AS langsung memotong saldo USD",
       "Cukup satu kartu debit Mandiri untuk semua tabungan: tinggal hubungkan ke saldo USD di Livin', lalu belanja di AS langsung memotong saldo USD tanpa konversi",
       "Transfer valas ke luar negeri bisa dari Livin', termasuk kirim ke rekening Chase sendiri",
       "Sisa dana di akhir program tetap aman di Indonesia, tidak perlu dipindahkan saat pulang",
     ],
     cons: [
-      "Tarik tunai di ATM AS tetap bisa kena biaya ATM",
+      `Biaya bulanan saldo USD $${MULTI_MONTHLY_FEE}`,
+      `Tarik tunai di ATM AS kena admin Mandiri $${MULTI_ATM_FEE} + admin ATM AS $${US_ATM_FEE} per tarikan`,
       "Transfer USD ke rekening AS (SWIFT) bisa kena biaya bank perantara dan biaya terima di Chase",
       "Tetap tidak bisa Zelle; untuk patungan tetap perlu rekening AS atau uang tunai",
     ],
@@ -72,14 +87,15 @@ const banks: Bank[] = [
     role: "Rekening operasional harian selama di Riverside.",
     pros: [
       "Bisa Zelle: patungan sewa, tagihan HP & WiFi, dan bayar sesama peserta jadi instan",
-      "Kartu debit lokal: tanpa biaya transaksi luar negeri, ATM Chase gratis",
+      "Tarik tunai di semua ATM Chase gratis, berapa kali pun",
+      "Kartu debit lokal: tanpa biaya transaksi luar negeri",
       "Bisa dibuka tanpa SSN, cukup paspor + DS-2019/I-20 + alamat AS",
       "Cabang dan ATM Chase banyak di Riverside",
     ],
     cons: [
-      "Total Checking kena biaya $15/bulan kecuali syarat bebas biaya terpenuhi (mis. saldo minimum harian)",
-      "College Checking (bebas biaya) dibatasi usia 17–24, jadi kebanyakan peserta tidak memenuhi syarat",
-      "Dana harus dipindahkan dulu dari Indonesia (Wise atau SWIFT), jadi ada biaya dan jeda waktu",
+      `Setiap dana masuk (transfer internasional) dipotong $${CHASE_INCOMING_WIRE_FEE}`,
+      `Biaya bulanan $${CHASE_MONTHLY_FEE.toFixed(2)}`,
+      "Tarik tunai di ATM selain Chase tetap kena biaya",
       "Wajib ditutup sebelum pulang dan sisa saldo dipindahkan, padahal program cuma 3 bulan",
     ],
   },
@@ -92,7 +108,13 @@ const rows: Row[] = [
   { label: "Konversi kurs", values: ["2 kali", "Tidak ada", "Saat dana dipindah"] },
   { label: "Belanja di AS", values: ["Bisa, kena kurs", "Bisa, tanpa konversi", "Bisa, tanpa biaya"] },
   { label: "Zelle / patungan", values: ["Tidak", "Tidak", "Ya"] },
-  { label: "Biaya bulanan", values: ["Biaya admin biasa", "Biaya admin biasa", "$15 kecuali dibebaskan"] },
+  { label: "Admin kurs", values: ["+1,5–2% (≈Rp324/$)", "Gratis", "Gratis"] },
+  { label: "Biaya bulanan", values: ["Admin tabungan biasa", `$${MULTI_MONTHLY_FEE}`, `$${CHASE_MONTHLY_FEE.toFixed(2)}`] },
+  { label: "Biaya dana masuk", values: ["—", "—", `$${CHASE_INCOMING_WIRE_FEE} per transfer`] },
+  {
+    label: "Tarik tunai di AS",
+    values: [`${rp(MANDIRI_IDR_ATM_FEE)} + $${US_ATM_FEE} ATM`, `$${MULTI_ATM_FEE} + $${US_ATM_FEE} ATM`, "Gratis di ATM Chase"],
+  },
   { label: "Perlu dibuka", values: ["Sudah ada", "Lewat Livin'", "Setelah tiba di AS"] },
   { label: "Setelah pulang", values: ["Tetap dipakai", "Tetap dipakai", "Perlu ditutup"] },
 ];
@@ -104,7 +126,7 @@ const steps = [
   },
   {
     title: "Minggu pertama di Riverside",
-    body: "Buka Chase Total Checking di cabang terdekat. Bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS.",
+    body: "Buka rekening Chase di cabang terdekat. Bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS.",
   },
   {
     title: "Setiap dana LPDP cair",
@@ -270,6 +292,55 @@ export default function LpdpFundsPage() {
           </div>
         </section>
 
+        {/* Rincian biaya admin */}
+        <section id="biaya" className="scroll-mt-20 pt-10 sm:pt-14">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Rincian biaya admin</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
+            Simulasi untuk dana ${MONTHLY.toLocaleString("id-ID")} per bulan yang seluruhnya dipakai di AS selama{" "}
+            {MONTHS} bulan. Angka bisa diubah. Coba naikkan jumlah tarik tunai per bulan untuk melihat kapan Chase
+            jadi lebih hemat.
+          </p>
+
+          <div className="mt-5 sm:mt-7">
+            <FeeCalculator />
+          </div>
+
+          <div className="mt-6 rounded-lg border border-line bg-surface px-4 py-4 sm:px-5">
+            <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+              <Icon name="info" className="h-4 w-4" />
+              Asumsi perhitungan
+            </p>
+            <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+              <li>
+                Dana LPDP cair {MONTHS}× (sebulan sekali), masing-masing ${MONTHLY.toLocaleString("id-ID")}. Untuk
+                Mandiri Rupiah, total yang masuk dianggap {rp(idrReceived)} (≈{" "}
+                {rp(Math.round(idrReceived / MONTHS))} per bulan).
+              </li>
+              <li>
+                Seluruh dana bulanan ditarik tunai atau dibelanjakan di AS. Jumlah tarikan dibagi rata, jadi
+                tarik 2× berarti $1.000 sekali tarik.
+              </li>
+              <li>
+                Mandiri Rupiah: setiap dolar dibeli dengan kurs normal + admin kurs ({rp(rate)} + {rp(markup)}).
+                Admin ATM AS $3 juga ditagih dalam Dollar, jadi ikut kena admin kurs.
+              </li>
+              <li>
+                Admin ATM AS $3 memakai contoh ATM SchoolsFirst FCU. ATM lain bisa lebih mahal, dan beberapa ATM
+                membatasi jumlah sekali tarik, jadi $2.000 mungkin perlu ditarik lebih dari sekali.
+              </li>
+              <li>
+                Chase: dana LPDP dikirim langsung ke Chase setiap bulan, sehingga ada {MONTHS}× potongan terima
+                transfer ${CHASE_INCOMING_WIRE_FEE}. Tarik tunai selalu di ATM Chase.
+              </li>
+              <li>
+                &quot;Bisa dipakai di AS&quot; = dolar yang benar-benar sampai di tangan setelah semua biaya. Untuk
+                Mandiri Rupiah, ini bergantung pada kurs saat LPDP mengirim dana dalam Rupiah.
+              </li>
+              <li>Admin bulanan tabungan Rupiah biasa tidak dihitung, karena tetap dibayar dengan atau tanpa program.</li>
+            </ul>
+          </div>
+        </section>
+
         {/* Alur */}
         <section className="pt-10 sm:pt-14">
           <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Alur yang disarankan</h2>
@@ -300,8 +371,11 @@ export default function LpdpFundsPage() {
                 Biaya transfer SWIFT dari Mandiri, biaya bank perantara, dan biaya terima wire internasional di Chase.
                 Angkanya berubah-ubah, jadi cek tarif resmi sebelum transfer pertama.
               </li>
-              <li>Syarat terbaru agar Chase Total Checking bebas biaya bulanan $15.</li>
-              <li>Biaya tarik tunai Mandiri di ATM luar negeri.</li>
+              <li>
+                Biaya bulanan dan biaya terima transfer di Chase untuk jenis rekening yang dibuka, serta apakah ada
+                cara membebaskannya.
+              </li>
+              <li>Biaya tarik tunai Mandiri di ATM luar negeri dan batas tarik tunai harian kartu debit.</li>
             </ul>
           </div>
         </section>
