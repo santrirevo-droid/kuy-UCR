@@ -55,12 +55,11 @@ const banks: Bank[] = [
     pros: [
       "Dibuka langsung dari aplikasi Livin', tanpa perlu ke cabang",
       "Satu tabungan untuk beberapa mata uang: saldo USD tetap dalam Dollar, tidak dikonversi ke Rupiah",
-      "Bisa dihubungkan ke Mandiri Debit Multicurrency (Visa): belanja di AS langsung memotong saldo USD tanpa konversi",
+      "Cukup satu kartu debit Mandiri untuk semua tabungan: tinggal hubungkan ke saldo USD di Livin', lalu belanja di AS langsung memotong saldo USD tanpa konversi",
       "Transfer valas ke luar negeri bisa dari Livin', termasuk kirim ke rekening Chase sendiri",
       "Sisa dana di akhir program tetap aman di Indonesia, tidak perlu dipindahkan saat pulang",
     ],
     cons: [
-      "Kartu Debit Multicurrency fisik sebaiknya diurus sebelum berangkat; kalau belum sempat, kartu virtual bisa diaktifkan dari Livin'",
       "Tarik tunai di ATM AS tetap bisa kena biaya ATM",
       "Transfer USD ke rekening AS (SWIFT) bisa kena biaya bank perantara dan biaya terima di Chase",
       "Tetap tidak bisa Zelle; untuk patungan tetap perlu rekening AS atau uang tunai",
@@ -101,7 +100,7 @@ const rows: Row[] = [
 const steps = [
   {
     title: "Sebelum berangkat",
-    body: "Tanyakan ke LPDP rekening jenis apa yang diterima untuk pencairan (Rupiah atau valas USD). Jika USD bisa, buka Tabungan Mandiri Multicurrency lewat Livin', tambahkan saldo USD, dan sambungkan ke kartu Mandiri Debit Multicurrency.",
+    body: "Tanyakan ke LPDP rekening jenis apa yang diterima untuk pencairan (Rupiah atau valas USD). Jika USD bisa, buka Tabungan Mandiri Multicurrency lewat Livin', tambahkan saldo USD, lalu hubungkan kartu debit Mandiri yang sudah kamu punya ke saldo USD tersebut.",
   },
   {
     title: "Minggu pertama di Riverside",
@@ -216,11 +215,11 @@ export default function LpdpFundsPage() {
               Rekomendasi
             </p>
             <p className="mt-2 text-sm leading-relaxed text-ink sm:text-[0.95rem]">
-              Pakai <strong>dua rekening</strong>. <strong>Mandiri Multicurrency</strong> (saldo USD, dengan kartu Debit
-              Multicurrency) untuk menerima dan menyimpan dana LPDP, dan <strong>Chase</strong> untuk kebutuhan harian
+              Pakai <strong>dua rekening</strong>. <strong>Mandiri Multicurrency</strong> (saldo USD, dihubungkan ke
+              kartu debit Mandiri yang sudah ada) untuk menerima dan menyimpan dana LPDP, dan <strong>Chase</strong> untuk kebutuhan harian
               dan patungan lewat Zelle. Pindahkan ke Chase hanya sebanyak kebutuhan tiap bulan. Jika LPDP hanya bisa
               mentransfer ke rekening Rupiah, terima di Mandiri Rupiah lalu kirim ke Chase lewat Wise supaya kursnya
-              lebih baik daripada memakai kartu debit Rupiah langsung di AS.
+              lebih baik daripada belanja di AS langsung dari saldo Rupiah.
             </p>
           </div>
         </section>
