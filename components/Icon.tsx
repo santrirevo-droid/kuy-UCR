@@ -61,6 +61,12 @@ const paths: Record<string, JSX.Element> = {
       <path d="M21 9.5h-4a2.5 2.5 0 0 0 0 5h4z" />
     </>
   ),
+  camera: (
+    <>
+      <path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z" />
+      <circle cx="12" cy="12.5" r="3.2" />
+    </>
+  ),
   flag: (
     <>
       <path d="M5.5 21V3.5" />
