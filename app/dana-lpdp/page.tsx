@@ -259,7 +259,69 @@ const steps = [
   },
 ];
 
+type StoreApp = { name: string; playStore: string; appStore: string };
+
+// Link resmi aplikasi, dicek ke Play Store & App Store (Okt 2026).
+// Link App Store tanpa kode negara supaya terbuka di toko negara pengguna.
+const livin: StoreApp = {
+  name: "Livin' by Mandiri",
+  playStore: "https://play.google.com/store/apps/details?id=id.bmri.livin",
+  appStore: "https://apps.apple.com/app/id1555414743",
+};
+
+const storeApps: Record<string, StoreApp> = {
+  idr: livin,
+  usd: livin,
+  chase: {
+    name: "Chase Mobile",
+    playStore: "https://play.google.com/store/apps/details?id=com.chase.sig.android",
+    appStore: "https://apps.apple.com/app/id298867247",
+  },
+  flip: {
+    name: "Flip",
+    playStore: "https://play.google.com/store/apps/details?id=id.flip",
+    appStore: "https://apps.apple.com/app/id1439301290",
+  },
+  wise: {
+    name: "Wise",
+    playStore: "https://play.google.com/store/apps/details?id=com.transferwise.android",
+    appStore: "https://apps.apple.com/app/id612261027",
+  },
+  remitly: {
+    name: "Remitly",
+    playStore: "https://play.google.com/store/apps/details?id=com.remitly.androidapp",
+    appStore: "https://apps.apple.com/app/id674258465",
+  },
+  panda: {
+    name: "Panda Remit",
+    playStore: "https://play.google.com/store/apps/details?id=com.wotransfer.pandaremit",
+    appStore: "https://apps.apple.com/app/id1446518392",
+  },
+};
+
+// Livin' muncul sekali saja di daftar unduhan.
+const downloadList = Object.values(storeApps).filter((app, i, all) => all.indexOf(app) === i);
+
+const storeBtn =
+  "inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1.5 text-xs font-semibold text-ink transition hover:border-brand/40 hover:bg-brand-soft hover:text-brand";
+
+function StoreLinks({ app }: { app: StoreApp }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <a href={app.playStore} target="_blank" rel="noopener noreferrer" className={storeBtn}>
+        Play Store
+        <Icon name="arrow-up-right" className="h-3 w-3" />
+      </a>
+      <a href={app.appStore} target="_blank" rel="noopener noreferrer" className={storeBtn}>
+        App Store
+        <Icon name="arrow-up-right" className="h-3 w-3" />
+      </a>
+    </div>
+  );
+}
+
 function BankCard({ bank }: { bank: Bank }) {
+  const app = storeApps[bank.id];
   return (
     <article className="flex flex-col rounded-lg border border-line bg-surface">
       <header className="border-b border-line px-4 py-4 sm:px-5">
@@ -291,6 +353,14 @@ function BankCard({ bank }: { bank: Bank }) {
           </ul>
         </div>
       </div>
+      {app && (
+        <footer className="border-t border-line px-4 py-3 sm:px-5">
+          <p className="mb-2 text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+            Unduh {app.name}
+          </p>
+          <StoreLinks app={app} />
+        </footer>
+      )}
     </article>
   );
 }
@@ -618,6 +688,25 @@ export default function LpdpFundsPage() {
               <li>Admin bulanan tabungan Rupiah biasa tidak dihitung, karena tetap dibayar dengan atau tanpa program.</li>
             </ul>
           </div>
+        </section>
+
+        {/* Unduh aplikasi */}
+        <section id="aplikasi" className="scroll-mt-20 pt-10 sm:pt-14">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Unduh aplikasi</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
+            Semua aplikasi yang disebut di halaman ini, langsung ke toko resminya.
+          </p>
+          <ul className="mt-5 divide-y divide-line overflow-hidden rounded-lg border border-line bg-surface sm:mt-7">
+            {downloadList.map((app) => (
+              <li
+                key={app.name}
+                className="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+              >
+                <span className="text-sm font-semibold text-ink">{app.name}</span>
+                <StoreLinks app={app} />
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* Alur */}
