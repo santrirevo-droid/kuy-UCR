@@ -221,6 +221,26 @@ const usdToIdr: Bank[] = [
   },
 ];
 
+// Nomor HP AS: dibutuhkan untuk Zelle dan kode OTP bank. Link memakai kode
+// referral pengurus — pendaftar baru dapat kredit Tello setelah pesanan pertama.
+const TELLO_REFERRAL_URL = "https://tello.com/account/register?_referral=P3RGHSQ6";
+
+const telloPoints = {
+  pros: [
+    "Prabayar tanpa kontrak: bayar per bulan, bisa ganti paket atau berhenti kapan saja",
+    "Pakai jaringan T-Mobile, yang sinyalnya bagus di Riverside dan sekitarnya",
+    "Mendukung eSIM, jadi biasanya bisa diaktifkan sebelum berangkat dan nomor AS sudah siap saat mendarat",
+    "Bisa pilih kode area, mis. 951 untuk Riverside",
+    "Daftar lewat link referral dapat kredit Tello untuk pesanan pertama",
+  ],
+  cons: [
+    "HP harus tidak terkunci operator (unlocked) dan mendukung eSIM atau jaringan T-Mobile",
+    "Paket perorangan, terpisah dari paket nomor HP rombongan di halaman Tagihan",
+    "Pembayaran pakai kartu; kartu debit/kredit Indonesia kadang ditolak, jadi siapkan cadangan (mis. kartu Chase setelah tiba)",
+    "Layanan pelanggan hanya berbahasa Inggris, lewat chat atau situs",
+  ],
+};
+
 const promoSteps = [
   {
     title: "Tulis email di halaman promo",
@@ -247,7 +267,7 @@ const steps = [
   },
   {
     title: "Minggu pertama di Riverside",
-    body: `Daftarkan email di halaman promo Chase untuk dapat kode promo $${CHASE_PROMO_BONUS}, lalu buka rekening Chase Secure Banking di cabang terdekat. Tunjukkan email kode promo ke banker, bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS.`,
+    body: `Daftarkan email di halaman promo Chase untuk dapat kode promo $${CHASE_PROMO_BONUS}, lalu buka rekening Chase Secure Banking di cabang terdekat. Tunjukkan email kode promo ke banker, bawa paspor, DS-2019/I-20, dan bukti alamat AS. Aktifkan Zelle dengan nomor HP AS (mis. dari Tello).`,
   },
   {
     title: "Saat dana LPDP cair (bulan pertama)",
@@ -516,6 +536,70 @@ export default function LpdpFundsPage() {
               </span>
             </p>
           </div>
+        </section>
+
+        {/* Nomor HP AS */}
+        <section id="nomor-us" className="scroll-mt-20 pt-10 sm:pt-14">
+          <h2 className="font-display text-xl font-semibold text-ink sm:text-display-sm">Punya nomor HP AS</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-muted">
+            Nomor AS dibutuhkan untuk mengaktifkan Zelle, menerima kode OTP dari Chase, dan dihubungi pihak kampus
+            atau housing. Salah satu opsinya adalah <strong>Tello</strong>.
+          </p>
+
+          <article className="mt-5 flex flex-col rounded-lg border border-line bg-surface sm:mt-7">
+            <header className="flex flex-col gap-4 border-b border-line px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div>
+                <span className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-ink-subtle">
+                  Operator prabayar AS · eSIM
+                </span>
+                <h3 className="mt-1 font-display text-lg font-semibold text-ink">Tello</h3>
+                <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-ink-muted">
+                  Daftar lewat link referral di samping supaya dapat kredit Tello untuk pesanan pertama.
+                </p>
+              </div>
+              <a
+                href={TELLO_REFERRAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-brand px-4 py-2.5 text-sm font-semibold text-brand-on shadow-subtle transition hover:bg-brand-hover"
+              >
+                Daftar Tello (referral)
+                <Icon name="arrow-up-right" className="h-4 w-4" />
+              </a>
+            </header>
+            <div className="grid gap-5 px-4 py-4 sm:grid-cols-2 sm:px-5">
+              <div>
+                <h4 className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-success">Kelebihan</h4>
+                <ul className="mt-2 space-y-2">
+                  {telloPoints.pros.map((p) => (
+                    <li key={p} className="flex gap-2 text-sm leading-relaxed text-ink">
+                      <Icon name="check" className="mt-[0.2rem] h-3.5 w-3.5 shrink-0 text-success" />
+                      <span>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-[0.62rem] font-semibold uppercase tracking-eyebrow text-danger">Kekurangan</h4>
+                <ul className="mt-2 space-y-2">
+                  {telloPoints.cons.map((c) => (
+                    <li key={c} className="flex gap-2 text-sm leading-relaxed text-ink">
+                      <Icon name="x" className="mt-[0.2rem] h-3.5 w-3.5 shrink-0 text-danger" />
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <p className="border-t border-line px-4 py-3 text-xs leading-relaxed text-ink-muted sm:px-5">
+              Kode referral: <span className="tnum font-semibold text-ink">P3RGHSQ6</span>. Cek dulu harga paket dan
+              syarat kredit referral terbaru di situs Tello sebelum membeli.{" "}
+              <Link href="/tagihan" className="underline hover:text-brand">
+                Lihat juga paket nomor HP rombongan
+              </Link>
+              .
+            </p>
+          </article>
         </section>
 
         {/* Transfer antar mata uang */}
